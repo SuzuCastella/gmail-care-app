@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/ui.css"; // ✅ ボタンスタイル適用
+import "../styles/ui.css"; // ✅ ボタン・見た目強化用CSS
 
 interface Mail {
   id: string;
@@ -8,6 +8,7 @@ interface Mail {
   snippet: string;
   body?: string;
   emotion?: string;
+  date?: string;
 }
 
 interface Props {
@@ -65,10 +66,13 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
 
   return (
     <div className="bg-white p-6 rounded-xl shadow-md space-y-6">
-      {/* 件名と送信者 */}
-      <div>
+      {/* 件名・送信者・日付・感情 */}
+      <div className="space-y-1">
         <h2 className="text-xl font-bold text-gray-800">{mail.subject}</h2>
         <p className="text-sm text-gray-600">From: {mail.from}</p>
+        {mail.date && (
+          <p className="text-sm text-gray-500">Date: {mail.date}</p>
+        )}
         {mail.emotion && (
           <p className="text-sm text-blue-700">
             感情: {emotionEmoji(mail.emotion)} {mail.emotion}
@@ -87,8 +91,11 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
       </div>
 
       {/* 本文 */}
-      <div className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed border-t pt-4">
-        {mail.body || mail.snippet}
+      <div className="pt-4 border-t">
+        <p className="text-sm font-semibold text-gray-700 mb-2">📩 本文：</p>
+        <div className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed">
+          {mail.body || mail.snippet}
+        </div>
       </div>
 
       {/* 要約表示 */}

@@ -54,3 +54,24 @@
 .detail-card:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
 }
+
+/* テキストエリア（返信文入力） */
+.reply-area {
+  width: 100%;
+  min-height: 8rem;
+  padding: 1rem;
+  font-size: 1rem;
+  font-family: inherit;
+  background-color: #f9fafb;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  line-height: 1.5;
+  resize: vertical;
+  transition: border 0.2s, box-shadow 0.2s;
+}
+
+.reply-area:focus {
+  outline: none;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+}

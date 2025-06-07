@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/ui.css"; // ✅ 必須：ボタン・テキストエリアのリッチスタイルを適用
+import "../styles/ui.css";
 
 interface Mail {
   id: string;
@@ -15,6 +15,7 @@ interface Props {
 const ReplyForm: React.FC<Props> = ({ mail }) => {
   const [replyText, setReplyText] = useState<string>("");
   const [loading, setLoading] = useState(false);
+  const [chatInput, setChatInput] = useState<string>(""); // 🤖指示用
 
   const handleGenerate = async () => {
     if (!mail) return;
@@ -46,6 +47,31 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
     alert("返信文をコピーしました！");
   };
 
+  const handleRefineReply = async () => {
+    if (!chatInput || !replyText) return;
+
+    try {
+      const res = await fetch("http://localhost:8000/reply/refine", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          original: replyText,
+          instruction: chatInput,
+        }),
+      });
+
+      const data = await res.json();
+      if (data?.reply) {
+        setReplyText(data.reply);
+      } else {
+        alert("再生成に失敗しました。");
+      }
+    } catch (err) {
+      console.error("再生成エラー:", err);
+      alert("再生成中にエラーが発生しました。");
+    }
+  };
+
   if (!mail) {
     return (
       <div className="p-4 text-gray-500">
@@ -55,11 +81,11 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
   }
 
   return (
-    <div className="p-6 bg-white rounded-xl shadow-md mt-6">
-      <h3 className="text-xl font-bold mb-4 text-gray-800">✍️ 返信文を作成</h3>
+    <div className="p-6 bg-white rounded-xl shadow-md mt-6 space-y-4">
+      <h3 className="text-xl font-bold text-gray-800">✍️ 返信文を作成</h3>
 
       {/* ボタン群 */}
-      <div className="flex flex-wrap items-center gap-3 mb-4">
+      <div className="flex flex-wrap gap-3">
         <button
           onClick={handleGenerate}
           className={`fancy-btn primary-btn ${
@@ -86,14 +112,35 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
         </button>
       </div>
 
-      {/* テキストエリア */}
-      <textarea
-        value={replyText}
-        onChange={(e) => setReplyText(e.target.value)}
-        rows={6}
-        className="fancy-area"
-        placeholder="ここに返信文が表示されます"
-      />
+      {/* 本文 + チャットBotエリア */}
+      <div className="flex flex-col md:flex-row gap-4">
+        {/* 返信文テキストボックス */}
+        <textarea
+          value={replyText}
+          onChange={(e) => setReplyText(e.target.value)}
+          className="reply-area flex-1"
+          placeholder="ここに返信文が表示されます"
+          rows={8}
+        />
+
+        {/* AIボット：指示入力 */}
+        <div className="w-full md:w-1/3 space-y-2">
+          <p className="text-sm text-gray-600 font-semibold">🤖 AIへの指示</p>
+          <input
+            type="text"
+            value={chatInput}
+            onChange={(e) => setChatInput(e.target.value)}
+            placeholder="例：「もっと丁寧に」「ありがとうを入れて」"
+            className="w-full p-2 border rounded-md text-sm"
+          />
+          <button
+            onClick={handleRefineReply}
+            className="fancy-btn outline-btn w-full"
+          >
+            🔁 GPTで再生成
+          </button>
+        </div>
+      </div>
     </div>
   );
 };

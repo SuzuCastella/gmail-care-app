@@ -10,7 +10,11 @@ interface Mail {
   emotion?: string;
 }
 
-const MailListPage: React.FC = () => {
+interface Props {
+  reloadKey: number; // ✅ Appから渡される「再読み込みキー」
+}
+
+const MailListPage: React.FC<Props> = ({ reloadKey }) => {
   const [selectedMail, setSelectedMail] = useState<Mail | null>(null);
   const navigate = useNavigate();
 
@@ -26,6 +30,7 @@ const MailListPage: React.FC = () => {
         <MailListGrouped
           onSelect={handleSelectMail}
           selectedMail={selectedMail}
+          reloadKey={reloadKey} // ✅ ここで子に渡すことで一覧更新
         />
       </aside>
 

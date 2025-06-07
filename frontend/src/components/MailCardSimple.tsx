@@ -1,5 +1,4 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
 import "../styles/mailcard.css"; // 💅 四角囲み＋ホバー影スタイル
 
 interface Mail {
@@ -12,16 +11,15 @@ interface Mail {
 
 interface Props {
   mail: Mail;
-  isSelected?: boolean; // 現在未使用だが保持
+  onViewDetail: () => void; // ✅ 外部からクリック処理を受け取る
+  isSelected?: boolean;
 }
 
-const MailCardSimple: React.FC<Props> = ({ mail, isSelected }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate(`/mail/${mail.id}`);
-  };
-
+const MailCardSimple: React.FC<Props> = ({
+  mail,
+  isSelected,
+  onViewDetail,
+}) => {
   const emotionEmoji = (emotion: string) => {
     const map: Record<string, string> = {
       感謝: "🙏",
@@ -40,7 +38,7 @@ const MailCardSimple: React.FC<Props> = ({ mail, isSelected }) => {
   return (
     <div
       className={`mail-card ${isSelected ? "selected" : ""}`}
-      onClick={handleClick}
+      onClick={onViewDetail} // ✅ 呼び出し元の関数で画面遷移などを制御
     >
       <div className="text-xl w-6 text-center">
         {emotionEmoji(mail.emotion || "")}
@@ -61,3 +59,4 @@ const MailCardSimple: React.FC<Props> = ({ mail, isSelected }) => {
 };
 
 export default MailCardSimple;
+//

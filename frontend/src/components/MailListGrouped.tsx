@@ -13,6 +13,7 @@ interface Mail {
 interface Props {
   onSelect: (mail: Mail) => void;
   selectedMail: Mail | null;
+  reloadKey?: number; // ✅ 再読み込みトリガーを受け取る
 }
 
 const groupBy = <T,>(array: T[], groupSize: number): T[][] => {
@@ -23,7 +24,11 @@ const groupBy = <T,>(array: T[], groupSize: number): T[][] => {
   return result;
 };
 
-const MailListGrouped: React.FC<Props> = ({ onSelect, selectedMail }) => {
+const MailListGrouped: React.FC<Props> = ({
+  onSelect,
+  selectedMail,
+  reloadKey,
+}) => {
   const [emails, setEmails] = useState<Mail[]>([]);
   const [loading, setLoading] = useState(false);
   const [expandedGroupIndex, setExpandedGroupIndex] = useState<number>(0); // 先頭だけ展開
@@ -44,7 +49,7 @@ const MailListGrouped: React.FC<Props> = ({ onSelect, selectedMail }) => {
       }
     };
     fetchEmails();
-  }, []);
+  }, [reloadKey]); // ✅ reloadKey が更新されるたびに再取得
 
   const groupedEmails = groupBy(emails, 20);
 
