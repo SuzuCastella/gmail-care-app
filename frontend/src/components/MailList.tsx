@@ -10,9 +10,10 @@ interface Mail {
 
 interface Props {
   onSelect: (mail: Mail) => void;
+  selectedMail: Mail | null;
 }
 
-const MailList: React.FC<Props> = ({ onSelect }) => {
+const MailList: React.FC<Props> = ({ onSelect, selectedMail }) => {
   const [emails, setEmails] = useState<Mail[]>([]);
   const [loading, setLoading] = useState(false);
 
@@ -31,7 +32,6 @@ const MailList: React.FC<Props> = ({ onSelect }) => {
         setLoading(false);
       }
     };
-
     fetchEmails();
   }, []);
 
@@ -51,25 +51,37 @@ const MailList: React.FC<Props> = ({ onSelect }) => {
   };
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-md h-full overflow-y-auto">
-      <h2 className="text-xl font-bold mb-2">受信メール一覧</h2>
-      {loading && <p>読み込み中...</p>}
-      <ul className="space-y-2">
-        {emails.map((mail) => (
-          <li
-            key={mail.id}
-            className="p-2 border rounded hover:bg-blue-100 cursor-pointer"
-            onClick={() => onSelect(mail)}
-          >
-            <p className="font-semibold">{mail.subject}</p>
-            <p className="text-sm text-gray-600">From: {mail.from}</p>
-            {mail.emotion && (
-              <p className="text-sm">
-                {emotionEmoji(mail.emotion)} {mail.emotion}
+    <div className="p-4 border rounded-xl bg-white shadow-lg h-full overflow-y-auto">
+      <h2 className="text-2xl font-bold mb-3 text-primary">
+        📥 受信メール一覧
+      </h2>
+      {loading && <p className="text-gray-500">読み込み中...</p>}
+      <ul className="space-y-3">
+        {emails.map((mail) => {
+          const isSelected = selectedMail?.id === mail.id;
+          return (
+            <li
+              key={mail.id}
+              className={`p-4 rounded-lg border transition-all duration-200 cursor-pointer
+                ${
+                  isSelected
+                    ? "bg-blue-100 border-blue-500 shadow-inner"
+                    : "bg-gray-50 hover:bg-blue-50"
+                }`}
+              onClick={() => onSelect(mail)}
+            >
+              <p className="text-md font-semibold text-gray-800">
+                {mail.subject}
               </p>
-            )}
-          </li>
-        ))}
+              <p className="text-sm text-gray-600">From: {mail.from}</p>
+              {mail.emotion && (
+                <span className="inline-block mt-1 px-2 py-0.5 text-sm rounded-full bg-blue-100 text-blue-700">
+                  {emotionEmoji(mail.emotion)} {mail.emotion}
+                </span>
+              )}
+            </li>
+          );
+        })}
       </ul>
     </div>
   );
