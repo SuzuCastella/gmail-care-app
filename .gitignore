@@ -1,0 +1,10 @@
+# .gitignore（ルートに作成 or 追記）
+.env
+backend/.env
+frontend/.env
+token.json
+credentials.json
+__pycache__/
+node_modules/
+dist/
+frontend/node_modules/
