@@ -1,4 +1,6 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import "../styles/mailcard.css"; // 💅 四角囲み＋ホバー影スタイル
 
 interface Mail {
   id: string;
@@ -10,15 +12,16 @@ interface Mail {
 
 interface Props {
   mail: Mail;
-  onViewDetail: () => void;
-  isSelected?: boolean;
+  isSelected?: boolean; // 現在未使用だが保持
 }
 
-const MailCardSimple: React.FC<Props> = ({
-  mail,
-  onViewDetail,
-  isSelected,
-}) => {
+const MailCardSimple: React.FC<Props> = ({ mail, isSelected }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/mail/${mail.id}`);
+  };
+
   const emotionEmoji = (emotion: string) => {
     const map: Record<string, string> = {
       感謝: "🙏",
@@ -36,32 +39,23 @@ const MailCardSimple: React.FC<Props> = ({
 
   return (
     <div
-      className={`flex items-center justify-between px-4 py-3 border-b 
-        transition-all duration-150 cursor-pointer group 
-        ${
-          isSelected
-            ? "bg-blue-100 border-l-4 border-blue-500 shadow-inner"
-            : "hover:bg-blue-50"
-        }`}
-      onClick={onViewDetail}
+      className={`mail-card ${isSelected ? "selected" : ""}`}
+      onClick={handleClick}
     >
-      {/* アイコン */}
-      <div className="text-xl mr-4">{emotionEmoji(mail.emotion || "")}</div>
-
-      {/* メール内容 */}
-      <div className="flex-grow">
-        <div className="text-sm font-medium text-gray-800 truncate group-hover:text-blue-700">
-          {mail.subject}
-        </div>
-        <div className="text-xs text-gray-500 truncate group-hover:text-blue-500">
-          {mail.from}
-        </div>
+      <div className="text-xl w-6 text-center">
+        {emotionEmoji(mail.emotion || "")}
       </div>
 
-      {/* 右矢印アイコン風 */}
-      <div className="ml-4 text-gray-300 group-hover:text-blue-400 text-lg">
-        ▶
+      <div className="w-[160px] text-sm font-semibold text-gray-800 truncate">
+        {mail.from}
       </div>
+
+      <div className="flex-1 text-sm truncate">
+        <span className="font-semibold text-gray-900 mr-1">{mail.subject}</span>
+        <span className="text-gray-500">{mail.snippet}</span>
+      </div>
+
+      <div className="w-16 text-xs text-gray-400 text-right">6月7日</div>
     </div>
   );
 };

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/ui.css"; // ✅ 必須：ボタン・テキストエリアのリッチスタイルを適用
 
 interface Mail {
   id: string;
@@ -54,43 +55,43 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
   }
 
   return (
-    <div className="p-4 border rounded-lg bg-white shadow-md mt-4">
-      <h3 className="text-lg font-bold mb-2">✍️ 返信文を作成</h3>
+    <div className="p-6 bg-white rounded-xl shadow-md mt-6">
+      <h3 className="text-xl font-bold mb-4 text-gray-800">✍️ 返信文を作成</h3>
 
-      <div className="flex items-center gap-3 mb-3">
+      {/* ボタン群 */}
+      <div className="flex flex-wrap items-center gap-3 mb-4">
         <button
           onClick={handleGenerate}
-          className={`px-4 py-2 rounded text-white ${
-            loading
-              ? "bg-blue-300 cursor-not-allowed"
-              : "bg-blue-500 hover:bg-blue-600"
+          className={`fancy-btn primary-btn ${
+            loading ? "opacity-50 cursor-not-allowed" : ""
           }`}
           disabled={loading}
         >
-          {loading ? "生成中..." : "GPTで返信を作成"}
+          {loading ? "生成中..." : "🧠 GPTで返信を作成"}
         </button>
 
         <button
           onClick={handleCopy}
-          className="px-3 py-2 bg-green-500 text-white rounded hover:bg-green-600"
+          className="fancy-btn secondary-btn"
           disabled={!replyText}
         >
-          コピー
+          📋 コピー
         </button>
 
         <button
           onClick={() => alert("送信処理はまだ実装されていません")}
-          className="px-3 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
+          className="fancy-btn gray-btn"
         >
-          仮の送信
+          📤 仮の送信
         </button>
       </div>
 
+      {/* テキストエリア */}
       <textarea
         value={replyText}
         onChange={(e) => setReplyText(e.target.value)}
         rows={6}
-        className="w-full p-3 border rounded resize-y focus:outline-none focus:ring-2 focus:ring-blue-300"
+        className="fancy-area"
         placeholder="ここに返信文が表示されます"
       />
     </div>

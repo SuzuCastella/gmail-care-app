@@ -26,9 +26,7 @@ const groupBy = <T,>(array: T[], groupSize: number): T[][] => {
 const MailListGrouped: React.FC<Props> = ({ onSelect, selectedMail }) => {
   const [emails, setEmails] = useState<Mail[]>([]);
   const [loading, setLoading] = useState(false);
-  const [expandedGroupIndex, setExpandedGroupIndex] = useState<number | null>(
-    null
-  );
+  const [expandedGroupIndex, setExpandedGroupIndex] = useState<number>(0); // 先頭だけ展開
 
   useEffect(() => {
     const fetchEmails = async () => {
@@ -51,46 +49,43 @@ const MailListGrouped: React.FC<Props> = ({ onSelect, selectedMail }) => {
   const groupedEmails = groupBy(emails, 20);
 
   return (
-    <div className="bg-white rounded-lg shadow overflow-hidden">
-      <h2 className="px-6 py-4 text-xl font-semibold text-gray-800 border-b border-gray-200 bg-blue-50 flex items-center gap-2">
-        📁 メールグループ一覧
-      </h2>
-      {loading && <p className="text-gray-500 px-6 py-3">読み込み中...</p>}
-      <ul className="divide-y divide-gray-200">
-        {groupedEmails.map((group, index) => (
-          <li key={index} className="">
-            <div className="flex justify-between items-center px-6 py-3 bg-gray-100">
-              <h3 className="text-sm font-medium text-gray-700">
-                メール {index * 20 + 1}〜{index * 20 + group.length} 件
-              </h3>
-              <button
-                className="px-3 py-1 text-sm bg-blue-600 text-white rounded hover:bg-blue-700 transition"
-                onClick={() =>
-                  setExpandedGroupIndex(
-                    expandedGroupIndex === index ? null : index
-                  )
-                }
-              >
-                {expandedGroupIndex === index
-                  ? "閉じる"
-                  : "このグループの詳細を見る"}
-              </button>
+    <div className="text-sm">
+      {loading && (
+        <p className="px-4 py-2 text-gray-500">📩 メールを読み込み中...</p>
+      )}
+
+      {groupedEmails.map((group, index) => (
+        <div key={index}>
+          {/* グループヘッダー */}
+          <div className="flex justify-between items-center px-4 py-2 bg-white border-y text-gray-500 text-xs font-medium">
+            <span>
+              📂 {index * 20 + 1}〜{index * 20 + group.length} 件
+            </span>
+            <button
+              onClick={() =>
+                setExpandedGroupIndex(expandedGroupIndex === index ? -1 : index)
+              }
+              className="text-blue-600 hover:underline text-xs"
+            >
+              {expandedGroupIndex === index ? "閉じる" : "表示する"}
+            </button>
+          </div>
+
+          {/* メール一覧 */}
+          {expandedGroupIndex === index && (
+            <div className="bg-white">
+              {group.map((mail) => (
+                <MailCardSimple
+                  key={mail.id}
+                  mail={mail}
+                  onViewDetail={() => onSelect(mail)}
+                  isSelected={selectedMail?.id === mail.id}
+                />
+              ))}
             </div>
-            {expandedGroupIndex === index && (
-              <ul>
-                {group.map((mail) => (
-                  <MailCardSimple
-                    key={mail.id}
-                    mail={mail}
-                    onViewDetail={() => onSelect(mail)}
-                    isSelected={selectedMail?.id === mail.id}
-                  />
-                ))}
-              </ul>
-            )}
-          </li>
-        ))}
-      </ul>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

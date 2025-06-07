@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "../styles/ui.css"; // ✅ ボタンスタイル適用
 
 interface Mail {
   id: string;
@@ -19,13 +20,23 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
 
   if (!mail) {
     return (
-      <div className="p-4 bg-white rounded shadow text-gray-500">
-        メールを選択してください。
+      <div className="p-6 text-gray-500 text-center">
+        📩 メールを選択してください
       </div>
     );
   }
 
   const handleSummarize = async () => {
+    const res = await fetch("http://localhost:8000/gpt/summarize", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text: mail.body || mail.snippet }),
+    });
+    const data = await res.json();
+    if (data?.summary) setSummary(data.summary);
+  };
+
+  const handleSpeak = async () => {
     const res = await fetch("http://localhost:8000/voice/speak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -34,18 +45,6 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
     const data = await res.json();
     if (data?.filename) {
       setAudioSrc(`http://localhost:8000/voice/audio/${data.filename}`);
-    }
-  };
-
-  const handleGetSimplifiedSummary = async () => {
-    const res = await fetch("http://localhost:8000/gpt/summarize", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: mail.body || mail.snippet }),
-    });
-    const data = await res.json();
-    if (data?.summary) {
-      setSummary(data.summary);
     }
   };
 
@@ -65,44 +64,44 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
   };
 
   return (
-    <div className="p-4 border rounded-xl bg-white shadow-md">
-      <h2 className="text-xl font-bold mb-2">{mail.subject}</h2>
-      <p className="text-sm text-gray-600 mb-1">From: {mail.from}</p>
-      {mail.emotion && (
-        <p className="text-sm text-blue-700 mb-2">
-          感情: {emotionEmoji(mail.emotion)} {mail.emotion}
-        </p>
-      )}
-      <hr className="my-3" />
+    <div className="bg-white p-6 rounded-xl shadow-md space-y-6">
+      {/* 件名と送信者 */}
+      <div>
+        <h2 className="text-xl font-bold text-gray-800">{mail.subject}</h2>
+        <p className="text-sm text-gray-600">From: {mail.from}</p>
+        {mail.emotion && (
+          <p className="text-sm text-blue-700">
+            感情: {emotionEmoji(mail.emotion)} {mail.emotion}
+          </p>
+        )}
+      </div>
 
-      <div className="text-gray-800 whitespace-pre-wrap text-sm leading-relaxed mb-4">
+      {/* 操作ボタン */}
+      <div className="flex flex-wrap gap-3">
+        <button onClick={handleSummarize} className="fancy-btn primary-btn">
+          🧠 やさしい要約
+        </button>
+        <button onClick={handleSpeak} className="fancy-btn secondary-btn">
+          🔊 読み上げ
+        </button>
+      </div>
+
+      {/* 本文 */}
+      <div className="text-gray-800 text-sm whitespace-pre-wrap leading-relaxed border-t pt-4">
         {mail.body || mail.snippet}
       </div>
 
-      <div className="space-x-2 mb-4">
-        <button
-          onClick={handleGetSimplifiedSummary}
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-        >
-          やさしい要約を表示
-        </button>
-        <button
-          onClick={handleSummarize}
-          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600"
-        >
-          読み上げる
-        </button>
-      </div>
-
+      {/* 要約表示 */}
       {summary && (
-        <div className="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 rounded">
+        <div className="mt-4 p-4 bg-blue-50 border-l-4 border-blue-400 rounded">
           <p className="text-sm font-semibold text-blue-800 mb-1">
-            やさしい要約:
+            📝 やさしい要約
           </p>
           <p className="whitespace-pre-wrap">{summary}</p>
         </div>
       )}
 
+      {/* 音声再生 */}
       {audioSrc && (
         <div className="mt-4">
           <audio controls src={audioSrc} className="w-full" />
