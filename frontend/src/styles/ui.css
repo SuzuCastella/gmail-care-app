@@ -75,3 +75,36 @@
   border-color: #3b82f6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
 }
+
+/* frontend/styles/ui.css に追加 */
+.start-container {
+  height: 100vh;
+  width: 100vw;
+  background-color: #fff8ef;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  flex-direction: column;
+}
+
+.start-logo {
+  width: 320px;
+  max-width: 80%;
+  margin-bottom: 2rem;
+}
+
+.start-button {
+  background-color: #2563eb;
+  color: white;
+  font-size: 1.2rem;
+  padding: 1rem 2rem;
+  border-radius: 9999px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.start-button:hover {
+  background-color: #1d4ed8;
+}

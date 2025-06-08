@@ -31,3 +31,12 @@ OPENAI_API_KEY=sk-xxx
 GCS_BUCKET_NAME=your-bucket-name
 SOVITS_SERVER_URL=http://localhost:5000/synthesize
 ```
+
+## 実行方法
+
+~/Downloads/gmail-care-app において、
+uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
+~/Downloads/gmail-care-app/frontend において、
+npm run dev
+
+& "C:\Program Files\MySQL\MySQL Server 9.3\bin\mysql.exe" -u root -p
