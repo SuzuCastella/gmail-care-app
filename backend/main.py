@@ -34,7 +34,7 @@ app.include_router(voice.router, prefix="/voice", tags=["Voice"])
 app.include_router(gpt.router, prefix="/gpt", tags=["GPT"])
 app.include_router(emotion.router, prefix="/emotion", tags=["Emotion"])
 app.include_router(kotori.router)
-app.include_router(auth.router, prefix="/auth", tags=["Auth"])  # ✅ authルーターを追加
+app.include_router(auth.router, tags=["Auth"])  # ✅ authルーターを追加
 
 @app.get("/")
 def read_root():

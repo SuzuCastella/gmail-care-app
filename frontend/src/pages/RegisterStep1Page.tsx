@@ -20,7 +20,7 @@ const RegisterStep1Page: React.FC = () => {
     setError(""); // 入力変更でエラー消す
   };
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (!form.nameKanji || !form.nameKana || !form.email || !form.password) {
       setError("すべての項目を入力してください");
       return;
@@ -34,7 +34,31 @@ const RegisterStep1Page: React.FC = () => {
       return;
     }
 
-    navigate("/register/confirm", { state: form });
+    // ✅ 新規登録APIに送信
+    try {
+      const res = await fetch("http://localhost:8000/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          name: form.nameKanji,
+        }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json();
+        setError(`登録失敗: ${data.detail || "不明なエラー"}`);
+        return;
+      }
+
+      navigate("/register/confirm", { state: form });
+    } catch (err) {
+      console.error("登録エラー:", err);
+      setError("通信エラーが発生しました");
+    }
   };
 
   return (

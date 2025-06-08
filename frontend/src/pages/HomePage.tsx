@@ -33,7 +33,7 @@ const HomePage: React.FC = () => {
         <img
           src="/images/home.png"
           alt="FUMI"
-          onClick={() => handleNavigate("/inbox")}
+          onClick={() => handleNavigate("/home")}
           style={{
             height: "60px",
             cursor: "pointer",

@@ -8,9 +8,9 @@ import React, {
 
 // ユーザー型の定義（今後アイコンや名前など追加も可能）
 interface User {
-  id: number;
   email: string;
-  created_at: string;
+  name: string;
+  token: string;
 }
 
 interface UserContextType {
@@ -71,3 +71,5 @@ export const useUser = (): UserContextType => {
   }
   return context;
 };
+
+export { UserContext };

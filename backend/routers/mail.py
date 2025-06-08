@@ -1,43 +1,45 @@
 from fastapi import APIRouter, HTTPException
-from backend.gmail_utils import fetch_and_cache_emails, load_cached_emails
+from pydantic import BaseModel
+from typing import List
+import json
+import os
 
-router = APIRouter()
+router = APIRouter(prefix="/mail", tags=["mail"])  # ← router に統一
 
+MAIL_CACHE_PATH = os.path.join("data", "mail_cache.json")
 
-@router.get("/list")
-def get_cached_emails():
-    """
-    キャッシュされた全メールを取得
-    """
+class Mail(BaseModel):
+    id: str
+    from_: str
+    to: str
+    subject: str
+    snippet: str
+    emotion: str = "neutral"
+
+class MailRequest(BaseModel):
+    email: str
+
+@router.post("/list", response_model=List[Mail])
+def list_mails(request: MailRequest):
     try:
-        emails = load_cached_emails()
-        return {"status": "success", "emails": emails}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Failed to load emails: {str(e)}")
+        with open(MAIL_CACHE_PATH, "r", encoding="utf-8") as f:
+            all_mails = json.load(f)
 
+        # 指定された email 宛てのメールのみ抽出
+        user_mails = [
+            Mail(
+                id=mail["id"],
+                from_=mail["from"],
+                to=mail["to"],
+                subject=mail["subject"],
+                snippet=mail["snippet"],
+                emotion=mail.get("emotion", "neutral"),
+            )
+            for mail in all_mails
+            if mail.get("to") == request.email
+        ]
 
-@router.post("/fetch")
-def fetch_emails():
-    """
-    Gmail APIから最新メールを取得してキャッシュ保存
-    """
-    try:
-        fetched_count = fetch_and_cache_emails()
-        return {"status": "success", "fetched": fetched_count}
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=f"Gmail fetch error: {str(e)}")
+        return user_mails
 
-
-@router.get("/{mail_id}")
-def get_mail_by_id(mail_id: str):
-    """
-    メールIDを指定して1件のメール詳細を取得
-    """
-    try:
-        emails = load_cached_emails()
-        for mail in emails:
-            if mail.get("id") == mail_id:
-                return {"status": "success", "mail": mail}
-        raise HTTPException(status_code=404, detail="指定されたメールが見つかりません")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"メール取得エラー: {str(e)}")

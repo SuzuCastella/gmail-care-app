@@ -40,3 +40,5 @@ uvicorn backend.main:app --reload --host 127.0.0.1 --port 8000
 npm run dev
 
 & "C:\Program Files\MySQL\MySQL Server 9.3\bin\mysql.exe" -u root -p
+
+PYTHONPATH=. python backend/create_tables.py
