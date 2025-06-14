@@ -1,56 +1,14 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { useParams, useNavigate } from "react-router-dom";
-
-interface Mail {
-  id: string;
-  from_: string;
-  subject: string;
-  body: string;
-  date: string;
-}
+import MailViewer from "../components/MailViewer";
 
 const MailDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
-  const [mail, setMail] = useState<Mail | null>(null);
-  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchMailDetail = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/mail/detail/${id}`);
-        const data = await res.json();
-        setMail(data);
-      } catch (e) {
-        console.error("メール詳細取得失敗:", e);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchMailDetail();
-  }, [id]);
 
   const handleGoHome = () => {
     navigate("/home");
   };
-
-  if (loading) {
-    return (
-      <div style={{ padding: "2rem", fontSize: "1.5rem", textAlign: "center" }}>
-        📩 メールを読み込み中です...
-      </div>
-    );
-  }
-
-  if (!mail) {
-    return (
-      <div style={{ padding: "2rem", fontSize: "1.5rem", textAlign: "center" }}>
-        ⚠ メールが見つかりませんでした
-      </div>
-    );
-  }
 
   return (
     <div
@@ -64,7 +22,7 @@ const MailDetailPage: React.FC = () => {
         fontFamily: "'Noto Sans JP', sans-serif",
       }}
     >
-      {/* ✅ ヘッダー統一 */}
+      {/* ヘッダー部分 */}
       <div
         style={{
           display: "flex",
@@ -97,57 +55,25 @@ const MailDetailPage: React.FC = () => {
               maxWidth: "400px",
             }}
           >
-            メール詳細画面です！
+            メールの内容をAIでやさしくお手伝いします！
           </div>
         </div>
       </div>
 
-      {/* ✅ メール詳細本体 */}
+      {/* メール詳細＋AI操作部 */}
       <div
         style={{
-          background: "#ffffff",
-          border: "2px solid #d1d5db",
-          borderRadius: "1.5rem",
-          padding: "2rem",
           marginTop: "3rem",
           width: "100%",
           maxWidth: "900px",
+          backgroundColor: "#fff",
+          borderRadius: "1rem",
           boxShadow: "0 4px 16px rgba(0,0,0,0.1)",
+          padding: "2rem",
         }}
       >
-        <h2
-          style={{
-            fontSize: "1.8rem",
-            fontWeight: "bold",
-            marginBottom: "1rem",
-            color: "#111827",
-          }}
-        >
-          {mail.subject}
-        </h2>
-
-        <p style={{ marginBottom: "0.5rem", color: "#374151" }}>
-          📧 From: {mail.from_}
-        </p>
-
-        <p style={{ marginBottom: "1rem", color: "#6b7280" }}>
-          📅 Date: {mail.date}
-        </p>
-
-        <div
-          style={{
-            background: "#f9fafb",
-            padding: "1.5rem",
-            borderRadius: "1rem",
-            fontSize: "1.2rem",
-            lineHeight: 1.8,
-            whiteSpace: "pre-wrap",
-            color: "#111827",
-            border: "1px solid #d1d5db",
-          }}
-        >
-          {mail.body}
-        </div>
+        {/* MailViewer統合 */}
+        <MailViewer key={id} />
       </div>
     </div>
   );

@@ -33,6 +33,7 @@ const LoginPage: React.FC = () => {
         email: data.user.email,
         name: data.user.name,
         token: data.access_token,
+        icon: "",
       });
 
       navigate("/home");

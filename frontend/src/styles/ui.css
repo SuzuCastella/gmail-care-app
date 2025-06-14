@@ -1,6 +1,4 @@
-/* ui.css */
-
-/* 🌟 全体フォント少し大きめ */
+/* 全体フォント・背景・色味 */
 body {
   font-size: 18px;
   line-height: 1.6;
@@ -9,7 +7,7 @@ body {
   color: #333333;
 }
 
-/* 汎用ボタンのスタイル（統一フォーマット） */
+/* ボタン共通デザイン */
 .fancy-btn {
   padding: 1rem 2rem;
   border-radius: 0.75rem;
@@ -20,7 +18,6 @@ body {
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* メインアクション（青） */
 .primary-btn {
   background-color: #2563eb;
   color: white;
@@ -31,17 +28,6 @@ body {
   transform: scale(1.05);
 }
 
-/* アウトライン型（青枠白抜き） */
-.outline-btn {
-  background-color: white;
-  color: #2563eb;
-  border: 2px solid #2563eb;
-}
-.outline-btn:hover {
-  background-color: #eff6ff;
-}
-
-/* セカンダリ（薄グレー） */
 .secondary-btn {
   background-color: #e5e7eb;
   color: #374151;
@@ -51,17 +37,17 @@ body {
   background-color: #d1d5db;
 }
 
-/* グレー系（戻る・閉じる） */
-.gray-btn {
-  background-color: #f3f4f6;
-  color: #374151;
-  border: 1px solid #d1d5db;
+.ai-btn {
+  background-color: #f472b6;
+  color: white;
+  border: none;
 }
-.gray-btn:hover {
-  background-color: #e5e7eb;
+.ai-btn:hover {
+  background-color: #be185d;
+  transform: scale(1.05);
 }
 
-/* 詳細カード全体（メール詳細など） */
+/* メール詳細カード全体 */
 .detail-card {
   background-color: white;
   border-radius: 1rem;
@@ -70,56 +56,109 @@ body {
   border: 1px solid #e5e7eb;
 }
 
-/* テキストエリア（返信文入力） */
-.reply-area {
-  width: 100%;
-  min-height: 10rem;
-  padding: 1.5rem;
-  font-size: 1.1rem;
-  background-color: #f9fafb;
-  border: 2px solid #d1d5db;
-  border-radius: 1rem;
-  line-height: 1.6;
-  resize: vertical;
-  transition: border 0.2s, box-shadow 0.2s;
-}
-
-.reply-area:focus {
-  outline: none;
-  border-color: #2563eb;
-  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
-}
-
-/* スタート画面デザイン（柔らか系） */
-.start-container {
-  height: 100vh;
-  width: 100vw;
-  background-color: #fff8ef;
+/* ✅ 吹き出し（ことりAIアシスト） */
+.kotori-assist-with-icon {
   display: flex;
   align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  text-align: center;
+  background-color: #e0f2fe;
+  border: 2px solid #38bdf8;
+  border-radius: 20px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  gap: 1.5rem;
 }
 
-.start-logo {
-  width: 320px;
-  max-width: 80%;
-  margin-bottom: 2rem;
+.kotori-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #60a5fa;
 }
 
-.start-button {
-  background-color: #2563eb;
+.kotori-text {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* ✅ AI返信生成カード */
+.reply-card {
+  background: #fefefe;
+  border: 2px solid #cbd5e1;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  margin-top: 2rem;
+}
+
+.reply-card h3 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  color: #1e3a8a;
+}
+
+.reply-textarea {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.75rem;
+  font-size: 1rem;
+  background: #f9fafb;
+  resize: vertical;
+}
+
+/* ✅ 編集指示入力とAI再編集ボタン */
+.instruction-area {
+  display: flex;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.instruction-input {
+  flex-grow: 1;
+  padding: 0.8rem;
+  border-radius: 0.75rem;
+  border: 1px solid #d1d5db;
+  font-size: 1rem;
+  background: #ffffff;
+}
+
+.refine-button {
+  background: #22c55e;
   color: white;
-  font-size: 1.5rem;
-  padding: 1.2rem 3rem;
-  border-radius: 9999px;
+  padding: 0.8rem 1.2rem;
+  border-radius: 0.75rem;
+  font-weight: bold;
   border: none;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  cursor: pointer;
-  transition: all 0.3s ease;
+  font-size: 1rem;
+  transition: all 0.2s ease-in-out;
 }
-.start-button:hover {
-  background-color: #1d4ed8;
+.refine-button:hover {
+  background-color: #15803d;
   transform: scale(1.05);
+}
+
+/* ✅ 要約・読み上げ部分のカード枠 */
+.summary-card {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  border: 2px solid #60a5fa;
+  border-radius: 1rem;
+  background-color: #f0f9ff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.summary-card h3 {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2563eb;
+}
+
+.user-icon {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  border: 2px solid #a3a3a3; /* ← ことりより少し薄いグレーで自然に */
 }

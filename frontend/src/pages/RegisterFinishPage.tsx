@@ -1,10 +1,28 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const RegisterFinishPage: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleGoToLogin = () => {
+    const form = location.state;
+
+    if (!form) {
+      alert("情報が不足しています");
+      return;
+    }
+
+    // ユーザー情報をlocalStorageなどに保存
+    const userData = {
+      email: form.email,
+      name: form.name,
+      token: form.token, // ← このトークンは今後API設計により柔軟に
+      icon: form.icon, // ✅ ここで選んだアイコンを保存！
+    };
+
+    localStorage.setItem("user", JSON.stringify(userData));
+
     navigate("/login");
   };
 
