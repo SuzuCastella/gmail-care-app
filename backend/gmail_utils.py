@@ -12,11 +12,11 @@ from googleapiclient.discovery import build
 from dotenv import load_dotenv
 load_dotenv()
 
-# スコープとパス定義
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
-CREDENTIALS_PATH = Path("backend/credentials.json")
-CACHE_PATH = Path("data/mail_cache.json")
-TOKEN_DIR = Path("backend/token_store")
+BASE_DIR = Path(__file__).resolve().parent.parent
+CREDENTIALS_PATH = BASE_DIR / "backend" / "credentials.json"
+CACHE_PATH = BASE_DIR / "data" / "mail_cache.json"
+TOKEN_DIR = BASE_DIR / "backend" / "token_store"
 TOKEN_DIR.mkdir(parents=True, exist_ok=True)
 
 def get_token_path(email: str) -> Path:

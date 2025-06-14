@@ -36,14 +36,14 @@ def list_mails(request: MailRequest):
         raise HTTPException(status_code=500, detail=f"メール一覧取得失敗: {str(e)}")
 
 @router.post("/fetch")
-def fetch_mails(request: MailRequest):
+def fetch_mails(mail_request: MailRequest):
     try:
         # ✅ ここを修正
-        token_path = get_token_path(request.email)
+        token_path = get_token_path(mail_request.email)
         if not os.path.exists(token_path):
             raise HTTPException(status_code=400, detail="Gmail認証トークンが存在しません")
 
-        fetched_count = fetch_and_cache_emails(user_email=request.email, token_override=token_path)
+        fetched_count = fetch_and_cache_emails(user_email=mail_request.email)
         return {"status": "success", "fetched": fetched_count}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"メール取得エラー: {str(e)}")
