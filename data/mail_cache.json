@@ -1,7 +1,17 @@
 [
   {
+    "id": "1974f8f6dfe61273",
+    "from_": "c0b231008b <notifications@github.com>",
+    "to": "\"matsuoinstitute/s-gui-emr\" <s-gui-emr@noreply.github.com>",
+    "subject": "Re: [matsuoinstitute/s-gui-emr] [EMR-208] 構造化精度改善|未含有箇所に対する出力事例の改善(追加検証版) (PR #173)",
+    "snippet": "@c0b231008b approved this pull request. 修正お疲れさまでした！ LGTMです！ image.png (view on web) — Reply to this email directly, view it on GitHub, or unsubscribe. You are receiving this because you authored the",
+    "date": "Sun, 08 Jun 2025 05:41:28 -0700",
+    "body": "@c0b231008b approved this pull request.\r\n\r\n修正お疲れさまでした！\r\nLGTMです！\r\n![image](https://github.com/user-attachments/assets/05584be3-552d-4c7c-b0d5-74e21c509e76)\r\n\r\n\r\n\r\n\r\n-- \r\nReply to this email directly or view it on GitHub:\r\nhttps://github.com/matsuoinstitute/s-gui-emr/pull/173#pullrequestreview-2908452497\r\nYou are receiving this because you authored the thread.\r\n\r\nMessage ID: <matsuoinstitute/s-gui-emr/pull/173/review/2908452497@github.com>"
+  },
+  {
     "id": "1974355561d501bf",
-    "from": "(Unknown Sender)",
+    "from_": "noreply@donuts.ne.jp",
+    "to": "t.omiya496@gmail.com",
     "subject": "出退勤が承認されました｜ジョブカン勤怠管理",
     "snippet": "─────────────┐ □■ 出退勤の申請のご案内─────────────┘ 大宮 拓朝さん2025年5月度の出退勤が承認されました。 https://ssl.jobcan.jp/login/pc-employee/?client_id=96840 ※なお、万が一すでに締め処理の終わっているグループに申請してしまっていた場合、その部分については却下されています。 ──────────────",
     "date": "Fri, 06 Jun 2025 03:42:35 +0000 (UTC)",
@@ -9,7 +19,8 @@
   },
   {
     "id": "1974063604c2f5a0",
-    "from": "GitHub <noreply@github.com>",
+    "from_": "GitHub <noreply@github.com>",
+    "to": "SuzuCastella <t.omiya496@gmail.com>",
     "subject": "GitHub Copilot: What’s in your free plan 🤖",
     "snippet": "How to get started with GitHub Copilot. Welcome to GitHub Copilot. Here&#39;s how to get started. You now have access to GitHub Copilot in VS Code and github.com for free as part of your GitHub user",
     "date": "Thu, 05 Jun 2025 06:59:03 -0700",
@@ -17,7 +28,8 @@
   },
   {
     "id": "1974032a94a4e642",
-    "from": "GitHub <noreply@github.com>",
+    "from_": "GitHub <noreply@github.com>",
+    "to": "SuzuCastella <t.omiya496@gmail.com>",
     "subject": "[GitHub] An email address was added to your account.",
     "snippet": "Hey SuzuCastella! An email address (omiya-takuto8128@g.ecc.u-tokyo.ac.jp) was added to your account. Visit https://github.com/settings/emails to review email addresses currently associated with your",
     "date": "Thu, 05 Jun 2025 06:05:50 -0700",
@@ -25,7 +37,8 @@
   },
   {
     "id": "1973df817a4af914",
-    "from": "<Akira_Shiraishi@education.metro.tokyo.jp>",
+    "from_": "<Akira_Shiraishi@education.metro.tokyo.jp>",
+    "to": "<tani-227@g.ecc.u-tokyo.ac.jp>, <g92993632@gmail.com>, <sato@satoken.jp>, <westsonority@g.ecc.u-tokyo.ac.jp>, <reireika.11056@ezweb.ne.jp>, <izuru.tech634882@gmail.com>, <ryousei.kakipi.13@gmail.com>, <t.omiya496@gmail.com>",
     "subject": "中学３年生対象　駿台模試過去問演習（英語・数学）の解説授業依頼",
     "snippet": "都立武蔵チューターのみなさま（CC:中川先生、企画室 小谷さん） お世話になっております、学習進路部の白石です。 チューターのみなさまに２点ご連絡があります。 先日提出いただいた承諾書などの書類が、企画室の都合上、 日付を空欄にして提出していただく必要があったようです。 次回以降チューターで来られる際でいいので、日付を書いてしまった方は 書類の再提出をお願いします。お手数おかけします。 新しい書類は",
     "date": "Thu, 5 Jun 2025 02:42:34 +0000",
@@ -33,7 +46,8 @@
   },
   {
     "id": "197352ac55333092",
-    "from": "Google Groups <noreply@groups.google.com>",
+    "from_": "Google Groups <noreply@groups.google.com>",
+    "to": "t.omiya496@gmail.com",
     "subject": "あなたが「AIエンジニアリング実践講座_最終課題用」にメンバーとして追加されました",
     "snippet": "AIエンジニアリング実践講座_最終課題用 Google グループ Google グループのロゴ t.omiya496@gmail.com さん chika.wada@weblab.tu-tokyo.ac.jp さんがあなたをグループ「AIエンジニアリング実践講座_最終課題用」に追加しました。 このグループについて AIエンジニアリング実践講座、最終課題データ公開用のメーリングリストです。",
     "date": "Tue, 03 Jun 2025 02:41:24 -0700",
@@ -41,7 +55,8 @@
   },
   {
     "id": "19730e9af2a3d3f2",
-    "from": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "from_": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "to": "\"小笠原ボニネンシストラベル\" <info@bonitra.jp>",
     "subject": "Re: 小笠原ボニネンシストラベル 予約フォーム",
     "snippet": "林様 ご連絡いただきまして、ありがとうございます。 予約確定とのこと、承知いたしました。 当日は宜しくお願い致します。 2025年5月30日(金) 16:28 小笠原ボニネンシストラベル &lt;info@bonitra.jp&gt;: 大宮様 ご予約頂き有難う御座います。 小笠原ボニネンシストラベルの林です。 申し訳御座いません。 学割は御座いませんが、クーポン利用は￥1000割引です。 ツアーの",
     "date": "Mon, 2 Jun 2025 22:51:50 +0900",
@@ -49,7 +64,8 @@
   },
   {
     "id": "19730e4605250d97",
-    "from": "\"東京大学工学系WEB出願システム\" <application.t@ic.t.u-tokyo.ac.jp>",
+    "from_": "\"東京大学工学系WEB出願システム\" <application.t@ic.t.u-tokyo.ac.jp>",
+    "to": "t.omiya496@gmail.com",
     "subject": "【東京大学工学系】出願の確定について［GSE,UTokyo］Application Confirmed",
     "snippet": "※このメールへの返信はできませんのでご了承ください。 This is an automatically generated email; please do not reply to this message. ----------------------------------------------------------------- 2026年度東京大学大学院工学系研究科入試への下記の受付",
     "date": "Mon, 02 Jun 2025 22:46:01 +0900",
@@ -57,7 +73,8 @@
   },
   {
     "id": "19730600294261e2",
-    "from": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "from_": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "to": "\"大宮海青\" <k.omiya1284@gmail.com>",
     "subject": "研究計画書レビューのお願い",
     "snippet": "研究計画書案のレビューをお願いします&lt;m(__)m&gt;",
     "date": "Mon, 2 Jun 2025 20:21:27 +0900",
@@ -65,7 +82,8 @@
   },
   {
     "id": "197303138f72e552",
-    "from": "(Unknown Sender)",
+    "from_": "noreply@donuts.ne.jp",
+    "to": "t.omiya496@gmail.com",
     "subject": "出退勤が承認されました｜ジョブカン勤怠管理",
     "snippet": "─────────────┐ □■ 出退勤の申請のご案内─────────────┘ 大宮 拓朝さん2025年5月度の出退勤が承認されました。 https://ssl.jobcan.jp/login/pc-employee/?client_id=96840 ※なお、万が一すでに締め処理の終わっているグループに申請してしまっていた場合、その部分については却下されています。 ──────────────",
     "date": "Mon, 02 Jun 2025 10:30:20 +0000 (UTC)",
@@ -73,7 +91,8 @@
   },
   {
     "id": "1972f2ede4edd5c9",
-    "from": "\"松尾研_優秀生講座案内\" <lecture_honors_list@weblab.t.u-tokyo.ac.jp>",
+    "from_": "\"松尾研_優秀生講座案内\" <lecture_honors_list@weblab.t.u-tokyo.ac.jp>",
+    "to": "\"松尾研_優秀生講座案内\" <lecture_honors_list@weblab.t.u-tokyo.ac.jp>",
     "subject": "松尾研_優秀生講座案内 | 2024年講座優秀生_松尾研講座無償提供についてのご案内【松尾・岩澤研究室】",
     "snippet": "各位 東京大学 松尾・岩澤研究室 教育PFチームです。 この度、2024年度優秀生の皆様向けに「松尾研講座の無償提供」を今年7月開講講座よりスタートいたします。 社会人優秀生の皆様には、個別で「松尾研講座の無償提供」についてのご案内を送付しておりました。今後は本メーリングリストにて対象講座の募集スタート時に、優秀生向けの申込URLをご案内いたします。 一部対象外の講座はございますが、ご案内予定の講座",
     "date": "Sun, 1 Jun 2025 22:48:05 -0700 (PDT)",
@@ -81,7 +100,8 @@
   },
   {
     "id": "1972eaef9c8f24b0",
-    "from": "TOEFL Updates <toeflservices@ets.org>",
+    "from_": "TOEFL Updates <toeflservices@ets.org>",
+    "to": "Takuto Omiya <t.omiya496@gmail.com>",
     "subject": "Your TOEFL Order Confirmation",
     "snippet": "Hi Takuto Omiya, Thank you for ordering additional score reports. Your order details are provided below. We wish you all the best as you pursue your academic dreams! -----------------------------------",
     "date": "Mon, 2 Jun 2025 03:28:27 +0000",
@@ -89,7 +109,8 @@
   },
   {
     "id": "1972b09439d94bbf",
-    "from": "IDaaS-noreply <idaas-noreply@ets.org>",
+    "from_": "IDaaS-noreply <idaas-noreply@ets.org>",
+    "to": "t.omiya496@gmail.com",
     "subject": "ETS Password Change",
     "snippet": "Dear ETS User, Your account password has been changed. If you did not initiate this password change or have received this message in error, please go to the link shown below and locate your",
     "date": "Sun, 01 Jun 2025 10:28:34 +0000",
@@ -97,7 +118,8 @@
   },
   {
     "id": "19729e8548bce0ed",
-    "from": "\"マスオ冨田\" <katarimasu55@gmail.com>",
+    "from_": "\"マスオ冨田\" <katarimasu55@gmail.com>",
+    "to": "\"Takuto O.\" <t.omiya496@gmail.com>",
     "subject": "Re: 新しいメッセージ https://masuo-san.jimdofree.com/ご予約-お問い合わせ/",
     "snippet": "大宮様（7月28日18:00ナイト） ご返信、ありがとうございます。 それでは、7月28日のナイトツアーは、よろしくお願いします。 マスオ 2025年5月31日(土) 18:35 Takuto O. &lt;t.omiya496@gmail.com&gt;: 冨田様 ご連絡ありがとうございます。 7/28のナイトツアーは予約確定ということで、楽しみにしております。 当日は宜しくお願いいたします。",
     "date": "Sun, 1 Jun 2025 14:12:49 +0900",
@@ -105,7 +127,8 @@
   },
   {
     "id": "19728f2bf9effde3",
-    "from": "\"イーサービスサポートセンター\" <e-customer@e-shiharai.net>",
+    "from_": "\"イーサービスサポートセンター\" <e-customer@e-shiharai.net>",
+    "to": "t.omiya496@gmail.com",
     "subject": "E-支払い申し込みを受け付けました。",
     "snippet": "オオミヤ タクト様 E-支払いサービスにて申し込みを受け付けました。 同時にクレジットカードにてお支払いも完了いたしました。 受付番号: 000002580734 お支払金額: \\30500- ※携帯サイトで申込まれた方は、プリンター出力できるＰＣ環境において 下記「申込内容照会」にアクセスし、印刷してください。 ※お申込み内容の確認はこちら！ https://e-shiharai.net/",
     "date": "Sun, 1 Jun 2025 00:44:45 +0000",
@@ -113,7 +136,8 @@
   },
   {
     "id": "19725b1b6c6b2e2f",
-    "from": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "from_": "\"Takuto O.\" <t.omiya496@gmail.com>",
+    "to": "\"マスオ冨田\" <katarimasu55@gmail.com>",
     "subject": "Re: 新しいメッセージ https://masuo-san.jimdofree.com/ご予約-お問い合わせ/",
     "snippet": "冨田様 ご連絡ありがとうございます。 7/28のナイトツアーは予約確定ということで、楽しみにしております。 当日は宜しくお願いいたします。 2025年5月31日(土) 15:42 マスオ冨田 &lt;katarimasu55@gmail.com&gt;: 大宮さま ご返信、ありがとうございます。 では、7/28サンセットからのナイトツアーという事で、 18:00頃オーベルジュ佐藤さんにお迎えに行き",
     "date": "Sat, 31 May 2025 18:34:52 +0900",
@@ -121,7 +145,8 @@
   },
   {
     "id": "197251414b621813",
-    "from": "\"マスオ冨田\" <katarimasu55@gmail.com>",
+    "from_": "\"マスオ冨田\" <katarimasu55@gmail.com>",
+    "to": "\"Takuto O.\" <t.omiya496@gmail.com>",
     "subject": "Re: 新しいメッセージ https://masuo-san.jimdofree.com/ご予約-お問い合わせ/",
     "snippet": "大宮さま ご返信、ありがとうございます。 では、7/28サンセットからのナイトツアーという事で、 18:00頃オーベルジュ佐藤さんにお迎えに行きます。 その後、夕陽を見に行き、ナイトツアーになります。 ナショナルランドクーポンという事で、10%引きいたします。 それでは、よろしくお願いします。 マスオ 2025年5月29日(木) 22:26 Takuto O. &lt;t.omiya496@",
     "date": "Sat, 31 May 2025 15:42:30 +0900",
@@ -129,7 +154,8 @@
   },
   {
     "id": "19721015b39069a9",
-    "from": "Google Groups <noreply@groups.google.com>",
+    "from_": "Google Groups <noreply@groups.google.com>",
+    "to": "t.omiya496@gmail.com",
     "subject": "あなたが「松尾研_優秀生講座案内」にメンバーとして追加されました",
     "snippet": "松尾研_優秀生講座案内 Google グループ Google グループのロゴ t.omiya496@gmail.com さん chika.wada@weblab.tu-tokyo.ac.jp さんがあなたをグループ「松尾研_優秀生講座案内」に追加しました。 このグループについて 優秀生講座案内用 Google グループでは、オンライン フォーラムやメールベースのグループを作成したり、これらに参加し",
     "date": "Fri, 30 May 2025 04:43:45 -0700",
@@ -137,7 +163,8 @@
   },
   {
     "id": "1972017f84747889",
-    "from": "\"小笠原ボニネンシストラベル\" <info@bonitra.jp>",
+    "from_": "\"小笠原ボニネンシストラベル\" <info@bonitra.jp>",
+    "to": "t.omiya496@gmail.com",
     "subject": "Re: 小笠原ボニネンシストラベル 予約フォーム",
     "snippet": "大宮様 ご予約頂き有難う御座います。 小笠原ボニネンシストラベルの林です。 申し訳御座いません。 学割は御座いませんが、クーポン利用は￥1000割引です。 ツアーの予約が確定しましたので詳細等お知らせして致します。 7/26PM 森フィールドツアー半日 ・時間 13時～16時半 ・集合時間 13時 ・料金 大人1人￥5000（クーポン利用時） ・集合場所 船客待合所クジラのモニュメント ・料金に含ま",
     "date": "Fri, 30 May 2025 16:28:37 +0900",
@@ -145,18 +172,11 @@
   },
   {
     "id": "1971f550de678a0e",
-    "from": "\"ナショナルランド予約済\" <booked@04998.net>",
+    "from_": "\"ナショナルランド予約済\" <booked@04998.net>",
+    "to": "\"Takuto O.\" <t.omiya496@gmail.com>",
     "subject": "Re: 予約確認書兼請求書の添付 及び お申込み手続きのご案内／ナショナルランドより",
     "snippet": "大宮 拓朝 様 お世話になっております。 添付にて学生証ファイル2件を確認いたしました。 ご送付いただきましてありがとうございます。 昨日クレジットカード決済リンクをお送りさせていただきましたので、 金額をご確認いただき、お手続きのほどよろしくお願いいたします。 その他、ご不明点等ございましたらご連絡ください。 よろしくお願いいたします。 https://www.04998.net/naichi/",
     "date": "Fri, 30 May 2025 12:55:32 +0900",
     "body": "大宮 拓朝 様\r\n\r\nお世話になっております。\r\n\r\n添付にて学生証ファイル2件を確認いたしました。\r\nご送付いただきましてありがとうございます。\r\n\r\n昨日クレジットカード決済リンクをお送りさせていただきましたので、\r\n金額をご確認いただき、お手続きのほどよろしくお願いいたします。\r\n\r\nその他、ご不明点等ございましたらご連絡ください。\r\nよろしくお願いいたします。\r\n\r\n[image: https://www.04998.net/naichi/25rakugo/]\r\n<https://www.04998.net/naichi/25rakugo/> [image:\r\nhttps://www.04998.net/naichi/25rakugo/]\r\n<https://www.04998.net/naichi/25rakugo/>\r\n[image: https://www.instagram.com/ogasawara_nationalland/]\r\n<https://www.instagram.com/ogasawara_nationalland/> [image:\r\nhttps://twitter.com/national_04998?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor]\r\n<https://twitter.com/national_04998?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor>\r\n[image:\r\nhttps://www.facebook.com/ogasawara04998]\r\n<https://www.facebook.com/ogasawara04998> [image:\r\nhttps://note.com/nationallad04998] <https://note.com/nationallad04998>\r\n■□■□■□■□■□■□■□■□■□■□■\r\n東京都知事登録旅行業2-2174 小笠原諸島専門旅行会社\r\n* 株式会社ナショナルランド*\r\n池田 志穂\r\n〒105-0022 東京都港区海岸1-16-1 ニューピア竹芝サウスタワー3階\r\nE-MAIL：nationalland@04998.net TEL：03-3431-3001\r\nURL：https://www.04998.net/\r\n営業時間：10：00～16：00（土日祝日除く）\r\n登録番号：T2010001025241\r\n■□■□■□■□■□■□■□■□■□■□■\r\n\r\n\r\n2025年5月29日(木) 19:16 Takuto O. <t.omiya496@gmail.com>:\r\n\r\n> ご担当者様\r\n>\r\n> ご連絡ありがとうございます。\r\n>\r\n> 先程、フォームの入力が完了しましたので、ご連絡させていただきました。\r\n> また、2名分の学生証に関しても、画像を本メールに添付いたしましたので、ご確認のほどよろしくお願いします。\r\n>\r\n> 2025年5月28日(水) 11:36 ナショナルランド予約済 <booked@04998.net>:\r\n>\r\n>> 代表者：大宮 拓朝 様【予約No.74309】\r\n>>\r\n>> この度はナショナルランドにお申込みいただき、誠にありがとうございます。\r\n>> さて、本メールにてご予約手続きの流れをご案内申し上げます。\r\n>>\r\n>> ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝\r\n>> *①予約確認書兼請求書のご確認*（添付ファイル）\r\n>> *②旅行業約款、**旅行取引条件書のご確認*（PDFダウンロード）\r\n>> *③お支払いについて*（テキスト）\r\n>> *④旅行参加申込書のご入力*（入力フォーム）\r\n>> *⑤ご契約の成立*（テキスト）\r\n>> *⑥確定書面の交付*（テキスト）\r\n>> ＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝＝\r\n>>\r\n>>\r\n>>\r\n>> *①予約確認書兼請求書のご確認 （添付ファイル） *\r\n>> ・添付の『予約確認書兼請求書』で、予約内容と旅行代金のご確認をお願いします。\r\n>> ・『予約確認書兼請求書』に記載された期日内にお手続きをお済ませください。\r\n>>\r\n>>\r\n>> *②旅行業約款、旅行取引条件書のご確認（PDFダウンロード） *\r\n>> ・今回のご旅行は*「募集型企画旅行」*です。\r\n>> 必ずご一読いただき、取消料などについてご確認ください。\r\n>>\r\n>> *【標準旅行業約款】：募集型企画旅行・受注型企画旅行・手配旅行・特別補償規程\r\n>> <https://www.04998.net/app/download/10226149291/%E6%97%85%E8%A1%8C%E6%A5%AD%E7%B4%84%E6%AC%BE20200520.pdf?t=1645409859>【旅行取引条件書】：募集型企画旅行・受注型企画旅行・手配旅行\r\n>> <https://www.04998.net/app/download/10225937091/National+Land+%E6%97%85%E8%A1%8C%E6%9D%A1%E4%BB%B6%E6%9B%B8+20220512.pdf?t=1652322395>*\r\n>>\r\n>>\r\n>>\r\n>> * ③お支払い方法について（テキスト）*\r\n>>\r\n>> *⇒｢銀行振込｣「クレジットカード決済」からお選びいただけます。*\r\n>> * 下記をお読みいただき、お手続き④「旅行参加申込書」ご入力フォーム内で*\r\n>> * ご希望のお支払い方法を選択してください。*\r\n>>\r\n>> *【銀行振込の場合】*\r\n>> ・参加申込書にて「銀行振込」をご選択ください。\r\n>> ・振込先口座は *みずほ銀行 浜松町支店（148）普通 1513312* です。\r\n>> ・振込お手続きの際は振込人名の前に5桁の「予約No」をご入力ください。\r\n>> ・お申込金と残金の記載がある場合でも、全額のお振込みも可能です。\r\n>> *※お申込金を銀行振込、残金をクレジットカード決済でお支払いいただくことは出来ません。*\r\n>>\r\n>>\r\n>> *【クレジットカード決済の場合】*\r\n>> ・参加申込書にて「クレジットカード決済」をご選択ください。\r\n>> ・クレジットカード決済は旅行代金全額を一括払いのみ対応となります。\r\n>> ※決済ご案内は*参加申込書受領後に順次*【booked@04998.net】または【no-reply@veritrans.jp】のアドレス\r\n>> からお送りいたします。\r\n>>\r\n>> ※当社の決済システムでは高いセキュリティを提供する本人認証サービス\r\n>> 「3-D Secure 2.0（3Dセキュア）」を標準で搭載しております。\r\n>> * 3Dセキュア2.0対応のクレジットカードをご利用ください。＜*詳細は*こちら\r\n>> <https://www.04998.net/%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F/#2>＞*\r\n>>\r\n>>\r\n>>\r\n>> *④旅行参加申込書のご入力 （入力フォーム）*\r\n>> ・参加者様全員の氏名、住所、連絡先等を下記の入力フォームからお願いいたします。\r\n>> ・割引を適用する場合に必要な【学生証(*中学生以上)】や【障がい者手帳】は、\r\n>> 本メールの返信の際に、スマートフォン等で撮影した画像データ(※)をお送りください。\r\n>> (※)お名前・有効期限がわかるデータをご用意ください。\r\n>> ※コピーを郵送でご提出いただいても構いません。\r\n>> ・参加者様のうちで国籍を日本以外としている方がいらっしゃる場合は、\r\n>> 本メールの返信の際に【国籍及び旅券番号】をお知らせください。\r\n>>\r\n>>\r\n>> 【*参加申込書入力フォームはこちら\r\n>> <https://www.04998.net/%E4%BA%88%E7%B4%84%E6%B8%88%E3%81%BF%E7%94%B3%E8%BE%BC%E6%9B%B8/%E6%97%85%E8%A1%8C%E5%8F%82%E5%8A%A0%E7%94%B3%E8%BE%BC%E3%81%BF%E6%89%8B%E7%B6%9A%E3%81%8Da2/>】*\r\n>>\r\n>>\r\n>> *⑤ご契約の成立（テキスト）  *\r\n>> ・上記①②④のお手続きと旅行代金の入金確認が完了したときに、正式な旅行契約が成立します。\r\n>> ※当社からの「手続き完了通知」はいたしておりません。期日までにお手続きが未完了の場合のみお客様へご連絡いたします。\r\n>> ※①②の各書面はご契約書面ですので、旅行終了後まで必ず保管（または保存）しておいてください。\r\n>>\r\n>>\r\n>> ⑥確定書面（=最終日程表）の交付（テキスト）\r\n>> *＜出発のご案内（最終確定書面）のご案内＞*\r\n>> ・出発日の1週間前位に「出発のご案内（PDF）」をメールにてご案内いたします。\r\n>> この「出発のご案内」は代表者様のみにお送りいたします。\r\n>>\r\n>> *＜クーポン券＞*\r\n>> 下記のリンクをクリックしてPDFファイルをダウンロードし、内容をご確認ください。\r\n>> 現地アクティビティに事前予約される場合は、クーポン券利用希望の旨を*予約時に*ショップへお申し出ください。\r\n>> ※クーポン券（おひとり様あたり1セット10枚）の原本は乗船当日に当社受付カウンターにてお渡しいたします。\r\n>>\r\n>> ★*加盟店一覧はこちら*\r\n>> <https://www.04998.net/app/download/12213688891/2025NL%E3%82%AF%E3%83%BC%E3%83%9D%E3%83%B3%E5%8A%A0%E7%9B%9F%E5%BA%97%E4%B8%80%E8%A6%A7+%E6%9C%80%E6%96%B0%E7%89%880317.pdf?t=1742277743>\r\n>> ★*小笠原アクティビティのご案内*\r\n>> <https://www.04998.net/app/download/11879764691/2025%E5%B0%8F%E7%AC%A0%E5%8E%9F%E3%82%A2%E3%82%AF%E3%83%86%E3%82%A3%E3%83%93%E3%83%86%E3%82%A3%E3%81%AE%E3%81%94%E6%A1%88%E5%86%85.pdf?t=1744344670>\r\n>>\r\n>>\r\n>> 以上、ご案内でご不明な点などございましたら、メールまたは電話にてお問い合わせください。\r\n>>\r\n>>\r\n>> どうぞ宜しくお願いいたします。\r\n>>\r\n>> ★\r\n>> *よくある質問はこちら*\r\n>> <https://www.04998.net/%E3%82%88%E3%81%8F%E3%81%82%E3%82%8B%E8%B3%AA%E5%95%8F/>\r\n>> [image: https://www.04998.net/naichi/25rakugo/]\r\n>> <https://www.04998.net/naichi/25rakugo/> [image:\r\n>> https://www.04998.net/naichi/25rakugo/]\r\n>> <https://www.04998.net/naichi/25rakugo/>\r\n>> [image: https://www.instagram.com/ogasawara_nationalland/]\r\n>> <https://www.instagram.com/ogasawara_nationalland/> [image:\r\n>> https://twitter.com/national_04998?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor]\r\n>> <https://twitter.com/national_04998?ref_src=twsrc%5Egoogle%7Ctwcamp%5Eserp%7Ctwgr%5Eauthor> [image:\r\n>> https://www.facebook.com/ogasawara04998]\r\n>> <https://www.facebook.com/ogasawara04998> [image:\r\n>> https://note.com/nationallad04998] <https://note.com/nationallad04998>\r\n>> ■□■□■□■□■□■□■□■□■□■□■\r\n>> 東京都知事登録旅行業2-2174 小笠原諸島専門旅行会社\r\n>> * 株式会社ナショナルランド*\r\n>> 〒105-0022 東京都港区海岸1-16-1 ニューピア竹芝サウスタワー3階\r\n>> E-MAIL：nationalland@04998.net TEL：03-3431-3001\r\n>> URL：https://www.04998.net/\r\n>> 営業時間：10：00～16：00（土日祝日除く）\r\n>> 登録番号：T2010001025241\r\n>> ■□■□■□■□■□■□■□■□■□■□■\r\n>>\r\n>\r\n"
-  },
-  {
-    "id": "1971c4003fa08044",
-    "from": "\"ボニンブルーシマ\" <info@boninblue.com>",
-    "subject": "ボニンブルーシマ \"お問い合わせを送信しました\"",
-    "snippet": "問い合わせフォームから、下記の通り送信いたしました。 ------------------------------------------------------ 申込者：大宮拓朝 （[your-name-kana]）男 20-24才連絡先：07028257065 住所〒184-0014 東京都小金井市貫井南町4-9-22(13) 宿泊先：オーベルジュSato 参加希望日： 7/30(水)の午前中に",
-    "date": "Thu, 29 May 2025 13:34:04 +0000",
-    "body": "問い合わせフォームから、下記の通り送信いたしました。\r\n\r\n------------------------------------------------------\r\n申込者：大宮拓朝 （[your-name-kana]）男 20-24才\r\n連絡先：07028257065\r\n\r\n住所\r\n〒184-0014 東京都小金井市貫井南町4-9-22(13)\r\n\r\n宿泊先：オーベルジュSato\r\n\r\n参加希望日：\r\n7/30(水)の午前中に戦跡ツアーの開催予定がありましたら、ツアーをお願いしたいです。\r\n7/30(水)は小笠原出港予定日ですので、出港時刻前まででしたら、午前中でない時間帯でも構いません。\r\n\r\n参加人数：\r\n2人\r\n・男(50歳) 社会人大学院生\r\n・男(21歳) 大学生\r\n\r\nメッセージ:\r\n\r\n\r\n------------------------------------------------------\r\nあなたのメールアドレスを使用して、私たちのウェブサイト (ボニンブルーシマ https://boninblue.com) のコンタクトフォームに送信がありましたので、その控えとして本メールを送ります。送信について心当たりのない場合は、このメッセージを無視してください。\r\n\r\n"
   }
 ]

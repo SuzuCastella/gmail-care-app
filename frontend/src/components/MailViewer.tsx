@@ -28,7 +28,7 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
   }
 
   const handleSummarize = async () => {
-    const res = await fetch("http://localhost:8000/gpt/summarize", {
+    const res = await fetch("/gpt/summarize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: mail.body || mail.snippet }),
@@ -38,7 +38,7 @@ const MailViewer: React.FC<Props> = ({ mail }) => {
   };
 
   const handleSpeak = async () => {
-    const res = await fetch("http://localhost:8000/voice/speak", {
+    const res = await fetch("/voice/speak", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ text: mail.body || mail.snippet }),

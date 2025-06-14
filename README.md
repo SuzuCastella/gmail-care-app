@@ -42,3 +42,7 @@ npm run dev
 & "C:\Program Files\MySQL\MySQL Server 9.3\bin\mysql.exe" -u root -p
 
 PYTHONPATH=. python backend/create_tables.py
+
+git add .
+git commit -m "任意のコミットメッセージ"
+git push origin main

@@ -17,7 +17,7 @@ const KotoriChat: React.FC<Props> = ({ onClose }) => {
     setLoading(true);
 
     try {
-      const res = await fetch("http://localhost:8000/kotori/chat", {
+      const res = await fetch("/kotori/chat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ message: input }),

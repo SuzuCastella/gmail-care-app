@@ -18,7 +18,7 @@ const MailDetailExpandable: React.FC<Props> = ({ mail, onClose }) => {
   const [audioSrc, setAudioSrc] = useState<string>("");
 
   const handleSummarize = async () => {
-    const res = await fetch("http://localhost:8000/gpt/summarize", {
+    const res = await fetch("/gpt/summarize", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -32,7 +32,7 @@ const MailDetailExpandable: React.FC<Props> = ({ mail, onClose }) => {
   };
 
   const handleSpeak = async () => {
-    const res = await fetch("http://localhost:8000/voice/speak", {
+    const res = await fetch("/voice/speak", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

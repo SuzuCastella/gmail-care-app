@@ -1,35 +1,54 @@
 /* ui.css */
 
-/* 汎用ボタンのスタイル */
+/* 🌟 全体フォント少し大きめ */
+body {
+  font-size: 18px;
+  line-height: 1.6;
+  font-family: "Noto Sans JP", "Hiragino Kaku Gothic ProN", sans-serif;
+  background-color: #f9fafb;
+  color: #333333;
+}
+
+/* 汎用ボタンのスタイル（統一フォーマット） */
 .fancy-btn {
-  padding: 0.5rem 1.25rem;
-  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 0.75rem;
   font-weight: 600;
-  font-size: 0.95rem;
+  font-size: 1.2rem;
   transition: all 0.2s ease-in-out;
   cursor: pointer;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 /* メインアクション（青） */
 .primary-btn {
-  background-color: #3b82f6; /* blue-500 */
+  background-color: #2563eb;
   color: white;
   border: none;
 }
 .primary-btn:hover {
-  background-color: #2563eb; /* blue-600 */
-  box-shadow: 0 2px 6px rgba(59, 130, 246, 0.4);
-  transform: scale(1.02);
+  background-color: #1e40af;
+  transform: scale(1.05);
 }
 
-/* アウトライン型（青） */
+/* アウトライン型（青枠白抜き） */
 .outline-btn {
   background-color: white;
-  color: #3b82f6;
-  border: 1px solid #3b82f6;
+  color: #2563eb;
+  border: 2px solid #2563eb;
 }
 .outline-btn:hover {
-  background-color: #eff6ff; /* blue-50 */
+  background-color: #eff6ff;
+}
+
+/* セカンダリ（薄グレー） */
+.secondary-btn {
+  background-color: #e5e7eb;
+  color: #374151;
+  border: 1px solid #d1d5db;
+}
+.secondary-btn:hover {
+  background-color: #d1d5db;
 }
 
 /* グレー系（戻る・閉じる） */
@@ -40,43 +59,38 @@
 }
 .gray-btn:hover {
   background-color: #e5e7eb;
-  transform: scale(1.01);
 }
 
-/* 詳細パネル全体 */
+/* 詳細カード全体（メール詳細など） */
 .detail-card {
   background-color: white;
-  border-radius: 0.75rem;
-  padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.06);
-  transition: box-shadow 0.3s ease;
-}
-.detail-card:hover {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+  border-radius: 1rem;
+  padding: 2rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
 }
 
 /* テキストエリア（返信文入力） */
 .reply-area {
   width: 100%;
-  min-height: 8rem;
-  padding: 1rem;
-  font-size: 1rem;
-  font-family: inherit;
+  min-height: 10rem;
+  padding: 1.5rem;
+  font-size: 1.1rem;
   background-color: #f9fafb;
-  border: 1px solid #d1d5db;
-  border-radius: 0.75rem;
-  line-height: 1.5;
+  border: 2px solid #d1d5db;
+  border-radius: 1rem;
+  line-height: 1.6;
   resize: vertical;
   transition: border 0.2s, box-shadow 0.2s;
 }
 
 .reply-area:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.3);
+  border-color: #2563eb;
+  box-shadow: 0 0 0 5px rgba(59, 130, 246, 0.3);
 }
 
-/* frontend/styles/ui.css に追加 */
+/* スタート画面デザイン（柔らか系） */
 .start-container {
   height: 100vh;
   width: 100vw;
@@ -84,8 +98,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  text-align: center;
   flex-direction: column;
+  text-align: center;
 }
 
 .start-logo {
@@ -97,14 +111,15 @@
 .start-button {
   background-color: #2563eb;
   color: white;
-  font-size: 1.2rem;
-  padding: 1rem 2rem;
+  font-size: 1.5rem;
+  padding: 1.2rem 3rem;
   border-radius: 9999px;
   border: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 .start-button:hover {
   background-color: #1d4ed8;
+  transform: scale(1.05);
 }

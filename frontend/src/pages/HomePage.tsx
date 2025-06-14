@@ -1,11 +1,42 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const HomePage: React.FC = () => {
+interface Props {
+  fetchMails: () => void;
+}
+
+const HomePage: React.FC<Props> = ({ fetchMails }) => {
   const navigate = useNavigate();
+  const [email, setEmail] = useState<string | null>(null);
+  const [gmailStatus, setGmailStatus] = useState<string>("");
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      setEmail(parsed.email);
+    }
+  }, []);
 
   const handleNavigate = (path: string) => {
     navigate(path);
+  };
+
+  const handleGmailAuth = async () => {
+    if (!email) return;
+    try {
+      const res = await fetch(
+        `/auth/gmail_auth?email=${encodeURIComponent(email)}`
+      );
+      const data = await res.json();
+      if (res.ok) {
+        setGmailStatus("✅ Gmail連携が完了しました！");
+      } else {
+        setGmailStatus(`❌ 失敗: ${data.error || "原因不明です"}`);
+      }
+    } catch (e) {
+      setGmailStatus("❌ ネットワークエラーです");
+    }
   };
 
   return (
@@ -67,6 +98,59 @@ const HomePage: React.FC = () => {
           </div>
         </div>
       </div>
+
+      {/* ✅ Gmail連携ボタン */}
+      {email && (
+        <div style={{ marginTop: "2rem", display: "flex", gap: "1.5rem" }}>
+          <button
+            onClick={handleGmailAuth}
+            style={{
+              backgroundColor: "#2563eb",
+              color: "white",
+              padding: "1rem 2rem",
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              borderRadius: "0.5rem",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+              transition: "background 0.2s ease",
+            }}
+          >
+            📧 Gmailと連携する
+          </button>
+
+          <button
+            onClick={fetchMails}
+            style={{
+              backgroundColor: "#22c55e",
+              color: "white",
+              padding: "1rem 2rem",
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              borderRadius: "0.5rem",
+              border: "none",
+              cursor: "pointer",
+              boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+              transition: "background 0.2s ease",
+            }}
+          >
+            Gmailを取得する
+          </button>
+        </div>
+      )}
+
+      {gmailStatus && (
+        <p
+          style={{
+            marginTop: "0.75rem",
+            fontSize: "1rem",
+            color: "#374151",
+          }}
+        >
+          {gmailStatus}
+        </p>
+      )}
 
       {/* メインボタン */}
       <div

@@ -43,7 +43,7 @@ const MemoryBook: React.FC = () => {
   useEffect(() => {
     const fetchTaggedEmails = async () => {
       try {
-        const res = await fetch("http://localhost:8000/emotion/tagged-list");
+        const res = await fetch("/emotion/tagged-list");
         const data = await res.json();
         if (data?.emails) {
           setEmails(data.emails);

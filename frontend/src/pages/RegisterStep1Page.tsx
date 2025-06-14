@@ -36,7 +36,7 @@ const RegisterStep1Page: React.FC = () => {
 
     // ✅ 新規登録APIに送信
     try {
-      const res = await fetch("http://localhost:8000/auth/register", {
+      const res = await fetch("/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

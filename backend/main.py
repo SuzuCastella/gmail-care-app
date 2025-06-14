@@ -29,6 +29,7 @@ app.add_middleware(
 
 # 各ルーターを登録
 app.include_router(mail.router, prefix="/mail", tags=["Mail"])
+
 app.include_router(reply.router, prefix="/reply", tags=["Reply"])
 app.include_router(voice.router, prefix="/voice", tags=["Voice"])
 app.include_router(gpt.router, prefix="/gpt", tags=["GPT"])

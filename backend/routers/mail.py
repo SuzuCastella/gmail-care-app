@@ -1,12 +1,12 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from typing import List
-import json
 import os
 
-router = APIRouter(prefix="/mail", tags=["mail"])  # ← router に統一
+from backend.gmail_utils import fetch_and_cache_emails, load_cached_emails, get_token_path
+from backend.emotion_analysis import tag_emotion_entries
 
-MAIL_CACHE_PATH = os.path.join("data", "mail_cache.json")
+router = APIRouter(tags=["Mail"])
 
 class Mail(BaseModel):
     id: str
@@ -22,24 +22,45 @@ class MailRequest(BaseModel):
 @router.post("/list", response_model=List[Mail])
 def list_mails(request: MailRequest):
     try:
-        with open(MAIL_CACHE_PATH, "r", encoding="utf-8") as f:
-            all_mails = json.load(f)
+        emails = load_cached_emails()
+        tagged = tag_emotion_entries(emails)
 
-        # 指定された email 宛てのメールのみ抽出
-        user_mails = [
-            Mail(
-                id=mail["id"],
-                from_=mail["from"],
-                to=mail["to"],
-                subject=mail["subject"],
-                snippet=mail["snippet"],
-                emotion=mail.get("emotion", "neutral"),
-            )
-            for mail in all_mails
-            if mail.get("to") == request.email
+        filtered = [
+            Mail(**e)
+            for e in tagged
+            if request.email in e.get("to", "")
         ]
 
-        return user_mails
+        return filtered
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"メール一覧取得失敗: {str(e)}")
 
+@router.post("/fetch")
+def fetch_mails(request: MailRequest):
+    try:
+        # ✅ ここを修正
+        token_path = get_token_path(request.email)
+        if not os.path.exists(token_path):
+            raise HTTPException(status_code=400, detail="Gmail認証トークンが存在しません")
+
+        fetched_count = fetch_and_cache_emails(user_email=request.email, token_override=token_path)
+        return {"status": "success", "fetched": fetched_count}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"メール取得エラー: {str(e)}")
+
+@router.get("/detail/{mail_id}")
+def get_mail_detail(mail_id: str):
+    try:
+        emails = load_cached_emails()
+        for mail in emails:
+            if str(mail["id"]) == str(mail_id):
+                return {
+                    "id": mail["id"],
+                    "from_": mail["from_"],
+                    "subject": mail["subject"],
+                    "body": mail.get("body") or mail.get("snippet", ""),
+                    "date": mail.get("date", ""),
+                }
+        raise HTTPException(status_code=404, detail="対象メールが見つかりませんでした")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"詳細取得失敗: {str(e)}")

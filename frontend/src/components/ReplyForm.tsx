@@ -3,9 +3,13 @@ import "../styles/ui.css";
 
 interface Mail {
   id: string;
-  from: string;
+  from_: string;
+  to: string;
   subject: string;
   snippet: string;
+  body: string;
+  date: string;
+  emotion?: string;
 }
 
 interface Props {
@@ -15,14 +19,14 @@ interface Props {
 const ReplyForm: React.FC<Props> = ({ mail }) => {
   const [replyText, setReplyText] = useState<string>("");
   const [loading, setLoading] = useState(false);
-  const [chatInput, setChatInput] = useState<string>(""); // 🤖指示用
+  const [chatInput, setChatInput] = useState<string>("");
 
   const handleGenerate = async () => {
     if (!mail) return;
 
     setLoading(true);
     try {
-      const res = await fetch("http://localhost:8000/reply/generate", {
+      const res = await fetch("/reply/generate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: mail.snippet }),
@@ -51,7 +55,7 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
     if (!chatInput || !replyText) return;
 
     try {
-      const res = await fetch("http://localhost:8000/reply/refine", {
+      const res = await fetch("/reply/refine", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -114,7 +118,6 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
 
       {/* 本文 + チャットBotエリア */}
       <div className="flex flex-col md:flex-row gap-4">
-        {/* 返信文テキストボックス */}
         <textarea
           value={replyText}
           onChange={(e) => setReplyText(e.target.value)}
@@ -123,7 +126,6 @@ const ReplyForm: React.FC<Props> = ({ mail }) => {
           rows={8}
         />
 
-        {/* AIボット：指示入力 */}
         <div className="w-full md:w-1/3 space-y-2">
           <p className="text-sm text-gray-600 font-semibold">🤖 AIへの指示</p>
           <input

@@ -1,11 +1,13 @@
 from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 from backend.db import get_db
 from backend.schemas.user import UserCreate, UserLogin, UserOut
 from backend.models.user import User
 from backend.utils.auth_utils import hash_password, verify_password, create_access_token
+from backend import gmail_utils
 
-router = APIRouter(prefix="/auth", tags=["auth"])  # ← 名前を router に統一
+router = APIRouter(prefix="/auth", tags=["auth"])
 
 @router.post("/register", response_model=UserOut)
 def register(user_create: UserCreate, db: Session = Depends(get_db)):
@@ -43,3 +45,11 @@ def login(user_login: UserLogin, db: Session = Depends(get_db)):
             "name": user.name
         }
     }
+
+@router.get("/gmail_auth")
+def gmail_auth(email: str):
+    try:
+        gmail_utils.get_gmail_service(user_email=email)
+        return JSONResponse(content={"status": "Gmail認証成功"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": f"Gmail認証失敗: {str(e)}"})
