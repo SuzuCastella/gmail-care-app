@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../components/UserContext"; // ✅ ここでユーザー情報からアイコン取得
 import "../styles/ui.css";
 
@@ -78,6 +78,11 @@ const MailViewer: React.FC = () => {
     }
   };
 
+  const navigate = useNavigate();
+  const handleBack = () => {
+    navigate(-1);
+  };
+
   const handleSpeak = async () => {
     if (!mail) return;
     try {
@@ -143,7 +148,13 @@ const MailViewer: React.FC = () => {
 
   return (
     <div className="detail-card space-y-6">
-      <div className="space-y-1">
+      <div className="flex items-center justify-between mb-2">
+        <button onClick={handleBack} className="back-button">
+          ← 戻る
+        </button>
+      </div>
+
+      <div className="space-y-2">
         <h2 className="text-2xl font-bold text-gray-800">{mail.subject}</h2>
         <p className="text-sm text-gray-600">送信元: {mail.from_}</p>
         <p className="text-sm text-gray-500">

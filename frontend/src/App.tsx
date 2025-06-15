@@ -39,7 +39,6 @@ const App: React.FC = () => {
       });
       const data = await res.json();
       if (data?.status === "success") {
-        alert(`📥 ${data.fetched} 件のメールを取得しました！`);
         setReloadKey((prev) => prev + 1);
       } else {
         alert("メールの取得に失敗しました。");

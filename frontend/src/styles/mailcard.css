@@ -1,8 +1,6 @@
-/* mailcard.css */
-
 /* 高齢者向け・白地＋黒枠・横長ボタンスタイル */
 .mail-card-button {
-  background-color: #ffffff;
+  /* background-color: #ffffff; ← ★削除 */
   color: #111111;
   border-radius: 1rem;
   padding: 1.5rem 2rem;
@@ -44,4 +42,23 @@
 .mail-card-button .from {
   font-size: 1rem;
   color: #666666;
+}
+
+.spam-warning {
+  background-color: #ffe5e5; /* 淡い赤 */
+  border: 2px solid #ff0000; /* 濃い赤枠 */
+}
+
+.back-button {
+  padding: 0.5rem 1.5rem;
+  background-color: #bfdbfe;
+  color: #1d4ed8;
+  font-weight: bold;
+  border-radius: 9999px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: 0.2s;
+}
+
+.back-button:hover {
+  background-color: #93c5fd;
 }

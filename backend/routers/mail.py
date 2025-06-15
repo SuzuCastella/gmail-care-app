@@ -15,6 +15,7 @@ class Mail(BaseModel):
     subject: str
     snippet: str
     emotion: str = "neutral"
+    spam_score: int = 0
 
 class MailRequest(BaseModel):
     email: str

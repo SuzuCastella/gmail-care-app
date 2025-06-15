@@ -10,6 +10,8 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 
 from dotenv import load_dotenv
+from backend.gpt_utils import detect_spam_score 
+
 load_dotenv()
 
 SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
@@ -19,9 +21,11 @@ CACHE_PATH = BASE_DIR / "data" / "mail_cache.json"
 TOKEN_DIR = BASE_DIR / "backend" / "token_store"
 TOKEN_DIR.mkdir(parents=True, exist_ok=True)
 
+
 def get_token_path(email: str) -> Path:
     safe_email = email.replace("@", "_at_").replace(".", "_dot_")
     return TOKEN_DIR / f"token_{safe_email}.json"
+
 
 def get_gmail_service(user_email: str) -> object:
     token_path = get_token_path(user_email)
@@ -41,6 +45,7 @@ def get_gmail_service(user_email: str) -> object:
 
     return build('gmail', 'v1', credentials=creds)
 
+
 def extract_plain_text(payload: dict) -> str:
     if "parts" in payload:
         for part in payload["parts"]:
@@ -52,6 +57,7 @@ def extract_plain_text(payload: dict) -> str:
         if data:
             return base64.urlsafe_b64decode(data.encode()).decode("utf-8", errors="ignore")
     return ""
+
 
 def fetch_and_cache_emails(user_email: str, max_results: int = 20) -> int:
     service = get_gmail_service(user_email)
@@ -71,6 +77,9 @@ def fetch_and_cache_emails(user_email: str, max_results: int = 20) -> int:
         date = next((h['value'] for h in headers if h['name'].lower() == 'date'), "(No Date)")
         body = extract_plain_text(payload)
 
+        # ★ LLMによる迷惑メール判定
+        spam_score = detect_spam_score(f"{subject}\n{body}")
+
         emails.append({
             "id": msg['id'],
             "from_": sender,
@@ -78,7 +87,8 @@ def fetch_and_cache_emails(user_email: str, max_results: int = 20) -> int:
             "subject": subject,
             "snippet": snippet,
             "date": date,
-            "body": body
+            "body": body,
+            "spam_score": spam_score
         })
 
     CACHE_PATH.parent.mkdir(parents=True, exist_ok=True)
@@ -86,6 +96,7 @@ def fetch_and_cache_emails(user_email: str, max_results: int = 20) -> int:
         json.dump(emails, f, ensure_ascii=False, indent=2)
 
     return len(emails)
+
 
 def load_cached_emails() -> List[dict]:
     if not CACHE_PATH.exists():

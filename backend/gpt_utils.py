@@ -32,6 +32,33 @@ def summarize_and_simplify(text: str) -> str:
     except Exception as e:
         return f"【エラー】要約に失敗しました: {e}"
 
+def detect_spam_score(text: str) -> int:
+    system_prompt = (
+        "あなたは迷惑メール判定の専門家です。\n"
+        "以下のメール本文について迷惑メール危険度を100点満点で数値評価してください。\n"
+        "0は全く安全、100は極めて危険です。数値のみ出力してください（単位・コメントは不要）。"
+    )
+
+    user_prompt = f"メール本文:\n{text}"
+
+    response = client.chat.completions.create(
+        model="gpt-4",
+        messages=[
+            {"role": "system", "content": system_prompt},
+            {"role": "user", "content": user_prompt},
+        ],
+        max_tokens=10,
+        temperature=0,
+    )
+
+    content = response.choices[0].message.content.strip()
+    try:
+        score = int(content)
+        score = max(0, min(score, 100))  # 念の為クリップ
+    except:
+        score = 0  # パース失敗時は安全寄りに
+    return score
+
 
 def generate_polite_reply(text: str) -> str:
     """

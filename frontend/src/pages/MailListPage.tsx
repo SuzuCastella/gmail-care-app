@@ -12,6 +12,7 @@ interface Mail {
   date: string;
   body: string;
   emotion?: string;
+  spam_score?: number;
 }
 
 interface Props {

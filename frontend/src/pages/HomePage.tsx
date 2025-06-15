@@ -9,6 +9,10 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
   const [gmailStatus, setGmailStatus] = useState<string>("");
+  const [kotoriMessage, setKotoriMessage] = useState<string>(
+    "分からないことがあったら、色々聞いてください！"
+  );
+  const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -36,6 +40,19 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
       }
     } catch (e) {
       setGmailStatus("❌ ネットワークエラーです");
+    }
+  };
+
+  const handleFetchMailsWithKotori = async () => {
+    setLoading(true);
+    setKotoriMessage("処理中です。しばらくお待ちください...");
+    try {
+      await fetchMails(); // 既存のfetchMails関数をそのまま利用
+      setKotoriMessage("メールを更新しました！");
+    } catch (e) {
+      setKotoriMessage("メール取得中にエラーが発生しました");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -94,7 +111,7 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
               maxWidth: "400px",
             }}
           >
-            「ことり」です。分からないことがあったら、色々聞いてください！
+            {kotoriMessage}
           </div>
         </div>
       </div>
@@ -117,25 +134,26 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
               transition: "background 0.2s ease",
             }}
           >
-            📧 Gmailと連携する
+            Gmailと連携する
           </button>
 
           <button
-            onClick={fetchMails}
+            onClick={handleFetchMailsWithKotori}
+            disabled={loading}
             style={{
-              backgroundColor: "#22c55e",
+              backgroundColor: loading ? "#a7f3d0" : "#22c55e",
               color: "white",
               padding: "1rem 2rem",
               fontSize: "1.25rem",
               fontWeight: "bold",
               borderRadius: "0.5rem",
               border: "none",
-              cursor: "pointer",
+              cursor: loading ? "not-allowed" : "pointer",
               boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
               transition: "background 0.2s ease",
             }}
           >
-            Gmailを取得する
+            {loading ? "更新中..." : "最新のGmailを取得する"}
           </button>
         </div>
       )}
