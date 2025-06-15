@@ -3,6 +3,7 @@ import json
 import base64
 from pathlib import Path
 from typing import List
+from email.mime.text import MIMEText
 
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
@@ -14,7 +15,12 @@ from backend.gpt_utils import detect_spam_score
 
 load_dotenv()
 
-SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
+# ✅ ここを修正 (送信・削除・取得まで対応可能に拡張)
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.modify',
+    'https://www.googleapis.com/auth/gmail.send'
+]
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 CREDENTIALS_PATH = BASE_DIR / "backend" / "credentials.json"
 CACHE_PATH = BASE_DIR / "data" / "mail_cache.json"
@@ -103,3 +109,18 @@ def load_cached_emails() -> List[dict]:
         return []
     with open(CACHE_PATH, "r", encoding="utf-8") as f:
         return json.load(f)
+
+
+# ✅ 送信用 MIME メール生成器（転送・返信で利用）
+def create_mime_message(sender: str, to: str, cc: str, bcc: str, subject: str, body: str) -> str:
+    message = MIMEText(body, "plain", "utf-8")
+    message["From"] = sender
+    message["To"] = to
+    if cc:
+        message["Cc"] = cc
+    if bcc:
+        message["Bcc"] = bcc
+    message["Subject"] = subject
+
+    raw_message = base64.urlsafe_b64encode(message.as_bytes()).decode()
+    return raw_message
