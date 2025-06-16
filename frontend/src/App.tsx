@@ -16,6 +16,8 @@ import LoginPage from "../src/pages/LoginPage";
 import HomePage from "../src/pages/HomePage";
 import MailListPage from "../src/pages/MailListPage";
 import MailDetailPage from "../src/pages/MailDetailPage";
+import MailListSentPage from "../src/pages/MailListSentPage";
+import MailListTrashPage from "../src/pages/MailListTrashPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useUser } from "./components/UserContext";
@@ -31,17 +33,31 @@ const App: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("/mail/fetch", {
-        // ← ✅ 相対パス化
+      // ✅ inbox
+      const resInbox = await fetch("/mail/fetch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
-      const data = await res.json();
-      if (data?.status === "success") {
+
+      // ✅ sent
+      const resSent = await fetch("/mail/fetch_sent", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email }),
+      });
+
+      // ✅ trash
+      const resTrash = await fetch("/mail/fetch_trash", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email: user.email }),
+      });
+
+      if (resInbox.ok && resSent.ok && resTrash.ok) {
         setReloadKey((prev) => prev + 1);
       } else {
-        alert("メールの取得に失敗しました。");
+        alert("一部のメール取得に失敗しました。");
       }
     } catch (err) {
       alert("通信エラーが発生しました");
@@ -73,7 +89,27 @@ const App: React.FC = () => {
           element={
             <ProtectedRoute>
               <LayoutWithHeaderFooter>
-                <MailListPage reloadKey={reloadKey} />
+                <MailListPage reloadKey={reloadKey} mode="inbox" />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sent"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <MailListSentPage reloadKey={reloadKey} />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/trash"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <MailListTrashPage reloadKey={reloadKey} />
               </LayoutWithHeaderFooter>
             </ProtectedRoute>
           }

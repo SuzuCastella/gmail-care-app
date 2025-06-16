@@ -17,20 +17,34 @@ interface Mail {
 
 interface Props {
   reloadKey: number;
+  mode: "inbox" | "sent" | "trash";
 }
 
-const MailListPage: React.FC<Props> = ({ reloadKey }) => {
+const MailListPage: React.FC<Props> = ({ reloadKey, mode }) => {
   const [mails, setMails] = useState<Mail[]>([]);
   const [loading, setLoading] = useState(true);
   const { user } = useUser();
   const navigate = useNavigate();
 
+  const getListEndpoint = (): string => {
+    if (mode === "inbox") return "/mail/list";
+    if (mode === "sent") return "/mail/list_sent";
+    if (mode === "trash") return "/mail/list_trash";
+    return "/mail/list";
+  };
+
+  const getDisplayText = () => {
+    if (mode === "inbox") return "最新の受信メール15件です！";
+    if (mode === "sent") return "最新の送信済みメール15件です！";
+    if (mode === "trash") return "ゴミ箱の最新15件です！";
+  };
+
   useEffect(() => {
-    const fetchMails = async () => {
+    const loadCachedMails = async () => {
       if (!user) return;
       setLoading(true);
       try {
-        const res = await fetch("/mail/list", {
+        const res = await fetch(getListEndpoint(), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: user.email }),
@@ -38,14 +52,14 @@ const MailListPage: React.FC<Props> = ({ reloadKey }) => {
         const data = await res.json();
         setMails(data.slice(0, 15));
       } catch (e) {
-        console.error("メール取得失敗:", e);
+        console.error("キャッシュ読み込み失敗:", e);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchMails();
-  }, [reloadKey, user]);
+    loadCachedMails();
+  }, [reloadKey, user, mode]);
 
   const handleGoHome = () => {
     navigate("/home");
@@ -63,7 +77,6 @@ const MailListPage: React.FC<Props> = ({ reloadKey }) => {
         fontFamily: "'Noto Sans JP', sans-serif",
       }}
     >
-      {/* ヘッダー統一部分 */}
       <div
         style={{
           display: "flex",
@@ -96,7 +109,7 @@ const MailListPage: React.FC<Props> = ({ reloadKey }) => {
               maxWidth: "400px",
             }}
           >
-            最新のメール15件です！
+            {getDisplayText()}
           </div>
         </div>
       </div>

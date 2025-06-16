@@ -1,24 +1,33 @@
 import React, { useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MailViewer from "../components/MailViewer";
 import { useUser } from "../components/UserContext";
 
 const MailDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const location = useLocation();
   const { user } = useUser();
+
+  // ✅ URLのパスからモード判定
+  const mode: "inbox" | "sent" | "trash" = location.pathname.includes("/trash")
+    ? "trash"
+    : location.pathname.includes("/sent")
+    ? "sent"
+    : "inbox";
 
   const [showReply, setShowReply] = useState(false);
   const [showForward, setShowForward] = useState(false);
   const [statusMessage, setStatusMessage] = useState<string | null>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
-  // 返信フォーム用
+  // 返信フォーム
   const [replyTo, setReplyTo] = useState("");
   const [replyCc, setReplyCc] = useState("");
   const [replyBcc, setReplyBcc] = useState("");
   const [replyBody, setReplyBody] = useState("");
 
-  // 転送フォーム用
+  // 転送フォーム
   const [forwardTo, setForwardTo] = useState("");
   const [forwardCc, setForwardCc] = useState("");
   const [forwardBcc, setForwardBcc] = useState("");
@@ -28,18 +37,14 @@ const MailDetailPage: React.FC = () => {
     setShowReply(false);
     setShowForward(false);
   };
-
   const handleReplyOpen = () => {
     setShowReply(true);
     setShowForward(false);
   };
-
   const handleForwardOpen = () => {
     setShowForward(true);
     setShowReply(false);
   };
-
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const handleDelete = async () => {
     setIsDeleting(true);
@@ -50,8 +55,24 @@ const MailDetailPage: React.FC = () => {
         headers: { "X-User-Email": user?.email || "" },
       });
       navigate("/inbox");
-    } catch (err) {
+    } catch {
       setStatusMessage("⚠ 削除失敗");
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
+  const handleRestore = async () => {
+    setIsDeleting(true);
+    setStatusMessage("復元中です。お待ちください！");
+    try {
+      await fetch(`/mail/restore/${id}`, {
+        method: "POST",
+        headers: { "X-User-Email": user?.email || "" },
+      });
+      navigate("/inbox");
+    } catch {
+      setStatusMessage("⚠ 復元失敗");
     } finally {
       setIsDeleting(false);
     }
@@ -92,11 +113,7 @@ const MailDetailPage: React.FC = () => {
           "Content-Type": "application/json",
           "X-User-Email": user?.email || "",
         },
-        body: JSON.stringify({
-          to: forwardTo,
-          cc: forwardCc,
-          bcc: forwardBcc,
-        }),
+        body: JSON.stringify({ to: forwardTo, cc: forwardCc, bcc: forwardBcc }),
       });
       const data = await res.json();
       if (res.ok) {
@@ -128,7 +145,7 @@ const MailDetailPage: React.FC = () => {
         </div>
       </div>
 
-      {/* メール本文 */}
+      {/* 本文 */}
       <div style={cardStyle}>
         <MailViewer key={id} />
 
@@ -147,13 +164,23 @@ const MailDetailPage: React.FC = () => {
           >
             転送
           </HoverButton>
-          <HoverButton
-            onClick={handleDelete}
-            color="#ef4444"
-            disabled={isDeleting}
-          >
-            削除
-          </HoverButton>
+          {mode === "trash" ? (
+            <HoverButton
+              onClick={handleRestore}
+              color="#f59e0b"
+              disabled={isDeleting}
+            >
+              受信トレイに戻す
+            </HoverButton>
+          ) : (
+            <HoverButton
+              onClick={handleDelete}
+              color="#ef4444"
+              disabled={isDeleting}
+            >
+              削除
+            </HoverButton>
+          )}
         </div>
       </div>
 
@@ -187,7 +214,8 @@ const MailDetailPage: React.FC = () => {
   );
 };
 
-// 共通入力フォーム
+// 共通入力フォーム等（※ほぼそのまま）
+
 const Input = ({ label, value, onChange }: any) => (
   <div style={{ margin: "0.5rem 0" }}>
     <label>{label}</label>
@@ -237,10 +265,10 @@ const FormSection = ({ title, onSend, onCancel, children }: any) => (
   </div>
 );
 
-// リッチボタン
-const HoverButton = ({ onClick, color, children }: any) => (
+const HoverButton = ({ onClick, color, disabled, children }: any) => (
   <button
     onClick={onClick}
+    disabled={disabled}
     style={{
       backgroundColor: color,
       color: "white",
@@ -248,17 +276,22 @@ const HoverButton = ({ onClick, color, children }: any) => (
       padding: "0.8rem 2rem",
       borderRadius: "0.5rem",
       border: "none",
+      opacity: disabled ? 0.5 : 1,
+      cursor: disabled ? "not-allowed" : "pointer",
       transition: "all 0.2s",
-      cursor: "pointer",
     }}
-    onMouseOver={(e) => (e.currentTarget.style.filter = "brightness(90%)")}
-    onMouseOut={(e) => (e.currentTarget.style.filter = "brightness(100%)")}
+    onMouseOver={(e) =>
+      !disabled && (e.currentTarget.style.filter = "brightness(90%)")
+    }
+    onMouseOut={(e) =>
+      !disabled && (e.currentTarget.style.filter = "brightness(100%)")
+    }
   >
     {children}
   </button>
 );
 
-// 🎨 スタイル定義はそのまま
+// スタイル定義そのまま
 const containerStyle = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
