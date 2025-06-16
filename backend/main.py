@@ -9,7 +9,8 @@ from backend.routers import (
     gpt,
     emotion,
     kotori,
-    auth
+    auth,
+    draft
 )
 
 app = FastAPI(
@@ -35,7 +36,8 @@ app.include_router(voice.router, prefix="/voice", tags=["Voice"])
 app.include_router(gpt.router, prefix="/gpt", tags=["GPT"])
 app.include_router(emotion.router, prefix="/emotion", tags=["Emotion"])
 app.include_router(kotori.router)
-app.include_router(auth.router, tags=["Auth"])  # ✅ authルーターを追加
+app.include_router(auth.router, tags=["Auth"])
+app.include_router(draft.router)
 
 @app.get("/")
 def read_root():

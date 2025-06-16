@@ -22,7 +22,7 @@ def summarize_and_simplify(text: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
             ],
@@ -42,7 +42,7 @@ def detect_spam_score(text: str) -> int:
     user_prompt = f"メール本文:\n{text}"
 
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[
             {"role": "system", "content": system_prompt},
             {"role": "user", "content": user_prompt},
@@ -72,7 +72,7 @@ def generate_polite_reply(text: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
             ],
@@ -95,7 +95,7 @@ def refine_reply(original: str, instruction: str) -> str:
 
     try:
         response = client.chat.completions.create(
-            model="gpt-4",
+            model="gpt-3.5-turbo",
             messages=[
                 {"role": "user", "content": prompt}
             ],
@@ -105,15 +105,34 @@ def refine_reply(original: str, instruction: str) -> str:
     except Exception as e:
         return f"【エラー】再生成に失敗しました: {e}"
 
+
+def call_gpt_compose_assist(text: str, instruction: str) -> str:
+    """
+    ✨新規Compose用のAI補助API（今回追加部分）
+    """
+    prompt = (
+        "あなたは文章作成をお手伝いするAIアシスタントです。\n"
+        "以下の既存のメール本文を参考にして、指示に従って文章を改善または追記してください。\n"
+        "やさしく読みやすい表現を心がけてください。\n\n"
+        f"【現状の本文】\n{text}\n\n【指示】\n{instruction}\n\n改善後の本文:"
+    )
+
+    try:
+        response = client.chat.completions.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "user", "content": prompt}
+            ],
+            temperature=0.65,
+        )
+        return response.choices[0].message.content.strip()
+    except Exception as e:
+        return f"【エラー】Compose補助に失敗しました: {e}"
+
+
 def call_gpt_api(prompt: str) -> str:
-    from openai import OpenAI
-    import os
-
-    api_key = os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=api_key)
-
     response = client.chat.completions.create(
-        model="gpt-4",
+        model="gpt-3.5-turbo",
         messages=[{"role": "user", "content": prompt}],
         temperature=0.7,
     )

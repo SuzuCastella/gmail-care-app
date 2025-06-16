@@ -1,29 +1,56 @@
-import React from "react";
+import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const RegisterFinishPage: React.FC = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const form = location.state;
 
-  const handleGoToLogin = () => {
-    const form = location.state;
+  const [error, setError] = useState("");
 
-    if (!form) {
-      alert("情報が不足しています");
-      return;
+  if (!form) {
+    return <div style={{ padding: "2rem" }}>情報がありません。</div>;
+  }
+
+  const handleRegister = async () => {
+    setError(""); // 一旦エラーをクリア
+    try {
+      const res = await fetch("/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: form.email,
+          password: form.password,
+          name: form.nameKanji,
+          name_kana: form.nameKana,
+          icon: form.icon,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        let detail = "登録に失敗しました";
+
+        if (Array.isArray(err.detail)) {
+          detail = err.detail
+            .map((e: any) => `${e.loc?.[1] ?? ""}: ${e.msg}`)
+            .join(", ");
+        } else if (typeof err.detail === "string") {
+          if (err.detail === "Email already registered") {
+            detail = "このアカウントは既に登録されています";
+          } else {
+            detail = err.detail;
+          }
+        }
+
+        setError(detail); // 🔥 ポップアップではなく画面に表示
+        return;
+      }
+
+      navigate("/login");
+    } catch (err: any) {
+      setError("通信エラー: " + err.message);
     }
-
-    // ユーザー情報をlocalStorageなどに保存
-    const userData = {
-      email: form.email,
-      name: form.name,
-      token: form.token, // ← このトークンは今後API設計により柔軟に
-      icon: form.icon, // ✅ ここで選んだアイコンを保存！
-    };
-
-    localStorage.setItem("user", JSON.stringify(userData));
-
-    navigate("/login");
   };
 
   const handleBack = () => {
@@ -56,7 +83,6 @@ const RegisterFinishPage: React.FC = () => {
           alignItems: "center",
         }}
       >
-        {/* ことり画像 */}
         <img
           src="/images/kotori.png"
           alt="ことり"
@@ -68,7 +94,6 @@ const RegisterFinishPage: React.FC = () => {
           }}
         />
 
-        {/* 吹き出し */}
         <div
           style={{
             backgroundColor: "#bee3f8",
@@ -86,8 +111,7 @@ const RegisterFinishPage: React.FC = () => {
           <br />
           これにて登録は終了です。
           <br />
-          使い方等が分からなければ、ぜひページ上部の「ことり」に話しかけてくださいね！
-          {/* 吹き出しのしっぽ */}
+          使い方等が分からなければ、ぜひ「ことり」に話しかけてくださいね！
           <div
             style={{
               position: "absolute",
@@ -103,10 +127,9 @@ const RegisterFinishPage: React.FC = () => {
           />
         </div>
 
-        {/* ボタン */}
         <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
           <button
-            onClick={handleGoToLogin}
+            onClick={handleRegister}
             style={{
               backgroundColor: "#3182ce",
               color: "#fff",
@@ -137,6 +160,13 @@ const RegisterFinishPage: React.FC = () => {
           >
             ⇦戻る
           </button>
+          {error && (
+            <div
+              style={{ color: "red", fontWeight: "bold", marginTop: "1rem" }}
+            >
+              ⚠️ {error}
+            </div>
+          )}
         </div>
       </div>
     </div>

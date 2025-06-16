@@ -9,6 +9,7 @@ from backend import gmail_utils
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
+
 @router.post("/register", response_model=UserOut)
 def register(user_create: UserCreate, db: Session = Depends(get_db)):
     existing_user = db.query(User).filter(User.email == user_create.email).first()
@@ -19,6 +20,8 @@ def register(user_create: UserCreate, db: Session = Depends(get_db)):
     user = User(
         email=user_create.email,
         name=user_create.name,
+        name_kana=user_create.name_kana,
+        icon=user_create.icon,
         hashed_password=hashed_password
     )
     db.add(user)
@@ -26,6 +29,7 @@ def register(user_create: UserCreate, db: Session = Depends(get_db)):
     db.refresh(user)
 
     return user
+
 
 @router.post("/login")
 def login(user_login: UserLogin, db: Session = Depends(get_db)):
@@ -42,9 +46,12 @@ def login(user_login: UserLogin, db: Session = Depends(get_db)):
         "access_token": token,
         "user": {
             "email": user.email,
-            "name": user.name
+            "name": user.name,
+            "name_kana": user.name_kana,
+            "icon": user.icon
         }
     }
+
 
 @router.get("/gmail_auth")
 def gmail_auth(email: str):

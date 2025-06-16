@@ -18,6 +18,10 @@ import MailListPage from "../src/pages/MailListPage";
 import MailDetailPage from "../src/pages/MailDetailPage";
 import MailListSentPage from "../src/pages/MailListSentPage";
 import MailListTrashPage from "../src/pages/MailListTrashPage";
+import ComposeMenuPage from "../src/pages/ComposeMenuPage";
+import ComposeEditorPage from "../src/pages/ComposeEditorPage";
+import ComposeDraftListPage from "../src/pages/ComposeDraftListPage";
+import ComposeEditPage from "../src/pages/ComposeEditPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useUser } from "./components/UserContext";
@@ -33,21 +37,18 @@ const App: React.FC = () => {
       return;
     }
     try {
-      // ✅ inbox
       const resInbox = await fetch("/mail/fetch", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 
-      // ✅ sent
       const resSent = await fetch("/mail/fetch_sent", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 
-      // ✅ trash
       const resTrash = await fetch("/mail/fetch_trash", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -76,6 +77,7 @@ const App: React.FC = () => {
         <Route path="/register/icon" element={<RegisterIconPage />} />
         <Route path="/register/finish" element={<RegisterFinishPage />} />
         <Route path="/login" element={<LoginPage />} />
+
         <Route
           path="/home"
           element={
@@ -120,6 +122,48 @@ const App: React.FC = () => {
             <ProtectedRoute>
               <LayoutWithHeaderFooter>
                 <MailDetailPage />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+
+        {/* Compose関連ルート（順序重要！） */}
+        <Route
+          path="/compose/edit/:draftId"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <ComposeEditPage />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/compose/new"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <ComposeEditorPage />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/compose/drafts"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <ComposeDraftListPage />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/compose"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <ComposeMenuPage />
               </LayoutWithHeaderFooter>
             </ProtectedRoute>
           }

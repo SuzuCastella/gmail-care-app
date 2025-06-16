@@ -17,10 +17,10 @@ const RegisterStep1Page: React.FC = () => {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    setError(""); // 入力変更でエラー消す
+    setError("");
   };
 
-  const handleNext = async () => {
+  const handleNext = () => {
     if (!form.nameKanji || !form.nameKana || !form.email || !form.password) {
       setError("すべての項目を入力してください");
       return;
@@ -34,31 +34,8 @@ const RegisterStep1Page: React.FC = () => {
       return;
     }
 
-    // ✅ 新規登録APIに送信
-    try {
-      const res = await fetch("/auth/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: form.email,
-          password: form.password,
-          name: form.nameKanji,
-        }),
-      });
-
-      if (!res.ok) {
-        const data = await res.json();
-        setError(`登録失敗: ${data.detail || "不明なエラー"}`);
-        return;
-      }
-
-      navigate("/register/confirm", { state: form });
-    } catch (err) {
-      console.error("登録エラー:", err);
-      setError("通信エラーが発生しました");
-    }
+    // ✅ ここではAPIを叩かずに、確認ページへ進むだけに修正！
+    navigate("/register/confirm", { state: form });
   };
 
   return (
@@ -70,7 +47,6 @@ const RegisterStep1Page: React.FC = () => {
         fontFamily: "sans-serif",
       }}
     >
-      {/* 吹き出し＋ことり */}
       <div
         style={{
           display: "flex",
@@ -121,7 +97,6 @@ const RegisterStep1Page: React.FC = () => {
         </div>
       </div>
 
-      {/* フォーム */}
       <div
         style={{
           maxWidth: "900px",
