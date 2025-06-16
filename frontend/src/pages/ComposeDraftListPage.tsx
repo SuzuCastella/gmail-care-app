@@ -39,7 +39,13 @@ const ComposeDraftListPage: React.FC = () => {
         `http://localhost:8000/drafts/${encodeURIComponent(userEmail)}`
       );
       if (res.ok) {
-        const data = await res.json();
+        let data = await res.json();
+
+        data.sort(
+          (a: Draft, b: Draft) =>
+            new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
+
         setDrafts(data);
       } else {
         console.error("下書き取得失敗");
@@ -56,6 +62,12 @@ const ComposeDraftListPage: React.FC = () => {
   return (
     <div style={containerStyle}>
       <KotoriHeader message="送信用メールの下書き一覧です" />
+
+      <div style={backButtonContainerStyle}>
+        <button onClick={() => navigate(-1)} style={backButtonStyle}>
+          戻る
+        </button>
+      </div>
 
       <div style={listStyle}>
         {drafts.length === 0 ? (
@@ -136,4 +148,19 @@ const dateStyle: React.CSSProperties = {
   color: "#999",
   marginTop: "1rem",
   fontSize: "0.85rem",
+};
+
+const backButtonContainerStyle: React.CSSProperties = {
+  marginTop: "1rem",
+  marginBottom: "1rem",
+};
+
+const backButtonStyle: React.CSSProperties = {
+  backgroundColor: "#6b7280",
+  color: "white",
+  fontSize: "1rem",
+  padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  cursor: "pointer",
 };

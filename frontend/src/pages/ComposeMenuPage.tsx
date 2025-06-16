@@ -56,8 +56,6 @@ const ActionButton = ({
   </button>
 );
 
-// ✅ スタイル統一
-
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
