@@ -41,12 +41,10 @@ const ComposeDraftListPage: React.FC = () => {
       );
       if (res.ok) {
         let data = await res.json();
-
         data.sort(
           (a: Draft, b: Draft) =>
             new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
         );
-
         setDrafts(data);
       } else {
         console.error("下書き取得失敗");
@@ -58,26 +56,6 @@ const ComposeDraftListPage: React.FC = () => {
 
   const handleOpenDraft = (draftId: number) => {
     navigate(`/compose/edit/${draftId}`);
-  };
-
-  const handleDeleteDraft = async (draftId: number) => {
-    if (!window.confirm("この下書きを削除しますか？")) return;
-
-    try {
-      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
-        method: "DELETE",
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        setError("削除失敗: " + (err.detail || "不明なエラー"));
-        return;
-      }
-      // 削除成功後リストを更新
-      await fetchDrafts();
-    } catch {
-      setError("通信エラーが発生しました");
-    }
   };
 
   return (
@@ -95,27 +73,22 @@ const ComposeDraftListPage: React.FC = () => {
           <div style={emptyTextStyle}>📭 下書きはまだありません</div>
         ) : (
           drafts.map((draft) => (
-            <div key={draft.id} style={cardStyle}>
+            <div
+              key={draft.id}
+              style={cardStyle}
+              onClick={() => handleOpenDraft(draft.id)}
+              onMouseOver={(e) =>
+                (e.currentTarget.style.backgroundColor = "#fff0f0")
+              }
+              onMouseOut={(e) =>
+                (e.currentTarget.style.backgroundColor = "#fff7f7")
+              }
+            >
               <div style={subjectStyle}>{draft.subject || "(件名なし)"}</div>
               <div style={toStyle}>To: {draft.to}</div>
               <div style={bodyStyle}>{draft.body.slice(0, 80)}...</div>
               <div style={dateStyle}>
                 保存日時: {new Date(draft.created_at).toLocaleString()}
-              </div>
-
-              <div style={buttonRowStyle}>
-                <button
-                  onClick={() => handleOpenDraft(draft.id)}
-                  style={editButtonStyle}
-                >
-                  編集
-                </button>
-                <button
-                  onClick={() => handleDeleteDraft(draft.id)}
-                  style={deleteButtonStyle}
-                >
-                  削除
-                </button>
               </div>
             </div>
           ))
@@ -163,6 +136,8 @@ const cardStyle: React.CSSProperties = {
   padding: "1.5rem",
   marginBottom: "1.5rem",
   border: "1px solid #e5e7eb",
+  cursor: "pointer",
+  transition: "background-color 0.2s",
 };
 
 const subjectStyle: React.CSSProperties = {
@@ -185,33 +160,6 @@ const dateStyle: React.CSSProperties = {
   color: "#999",
   marginTop: "1rem",
   fontSize: "0.85rem",
-};
-
-const buttonRowStyle: React.CSSProperties = {
-  display: "flex",
-  justifyContent: "flex-end",
-  gap: "1rem",
-  marginTop: "1rem",
-};
-
-const editButtonStyle: React.CSSProperties = {
-  backgroundColor: "#3b82f6",
-  color: "white",
-  border: "none",
-  padding: "0.5rem 1.5rem",
-  borderRadius: "0.5rem",
-  fontWeight: "bold",
-  cursor: "pointer",
-};
-
-const deleteButtonStyle: React.CSSProperties = {
-  backgroundColor: "#ef4444",
-  color: "white",
-  border: "none",
-  padding: "0.5rem 1.5rem",
-  borderRadius: "0.5rem",
-  fontWeight: "bold",
-  cursor: "pointer",
 };
 
 const backButtonContainerStyle: React.CSSProperties = {

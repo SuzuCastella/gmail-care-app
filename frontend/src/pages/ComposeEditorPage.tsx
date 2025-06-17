@@ -13,6 +13,8 @@ const ComposeEditorPage: React.FC = () => {
   const [body, setBody] = useState("");
   const [aiInstruction, setAiInstruction] = useState("");
   const [error, setError] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmDiscard, setConfirmDiscard] = useState(false); // ✅ 破棄確認フラグ追加
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -46,8 +48,8 @@ const ComposeEditorPage: React.FC = () => {
         setError("送信失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("メールを送信しました！");
-      navigate("/home");
+      setSuccessMessage("メールを送信しました！");
+      setTimeout(() => navigate("/home"), 1500);
     } catch (err) {
       setError("通信エラーが発生しました");
     }
@@ -77,17 +79,20 @@ const ComposeEditorPage: React.FC = () => {
         setError("下書き保存失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("下書きを保存しました！");
-      navigate("/compose/drafts");
+      setSuccessMessage("下書きを保存しました！");
+      setTimeout(() => navigate("/compose/drafts"), 1500);
     } catch (err) {
       setError("通信エラーが発生しました");
     }
   };
 
   const handleDiscard = () => {
-    if (window.confirm("本当に破棄してもよろしいですか？")) {
-      navigate("/home");
-    }
+    setConfirmDiscard(true);
+  };
+
+  const confirmAndDiscard = () => {
+    setConfirmDiscard(false);
+    navigate("/home");
   };
 
   const handleAiAssist = () => {
@@ -134,13 +139,30 @@ const ComposeEditorPage: React.FC = () => {
           <Button color="#f43f5e" text="破棄" onClick={handleDiscard} />
         </div>
 
-        {error && (
-          <div
-            style={{ color: "red", marginTop: "1.5rem", fontWeight: "bold" }}
-          >
-            ⚠ {error}
+        {confirmDiscard && (
+          <div style={{ marginTop: "1.5rem" }}>
+            <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
+              本当に破棄してもよろしいですか？
+            </div>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button onClick={confirmAndDiscard} style={yesButtonStyle}>
+                はい
+              </button>
+              <button
+                onClick={() => setConfirmDiscard(false)}
+                style={noButtonStyle}
+              >
+                キャンセル
+              </button>
+            </div>
           </div>
         )}
+
+        {successMessage && (
+          <div style={successMessageStyle}>✅ {successMessage}</div>
+        )}
+
+        {error && <div style={errorStyle}>⚠ {error}</div>}
       </div>
     </div>
   );
@@ -246,4 +268,35 @@ const buttonRowStyle: React.CSSProperties = {
   marginTop: "2rem",
   display: "flex",
   gap: "1.5rem",
+};
+
+const successMessageStyle: React.CSSProperties = {
+  color: "green",
+  marginTop: "1.5rem",
+  fontWeight: "bold",
+  fontSize: "1.2rem",
+};
+
+const errorStyle: React.CSSProperties = {
+  color: "red",
+  marginTop: "1.5rem",
+  fontWeight: "bold",
+};
+
+const yesButtonStyle: React.CSSProperties = {
+  backgroundColor: "#ef4444",
+  color: "white",
+  padding: "0.75rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  cursor: "pointer",
+};
+
+const noButtonStyle: React.CSSProperties = {
+  backgroundColor: "#6b7280",
+  color: "white",
+  padding: "0.75rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  cursor: "pointer",
 };

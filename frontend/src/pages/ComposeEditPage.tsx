@@ -9,6 +9,8 @@ const ComposeEditPage: React.FC = () => {
   const [userEmail, setUserEmail] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string>("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const [confirmDiscard, setConfirmDiscard] = useState(false); // 破棄確認の追加
 
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
@@ -59,6 +61,13 @@ const ComposeEditPage: React.FC = () => {
     fetchDraft();
   }, [draftId, userEmail]);
 
+  const deleteDraftAfterSend = async () => {
+    if (!draftId) return;
+    await fetch(`http://localhost:8000/drafts/${draftId}`, {
+      method: "DELETE",
+    });
+  };
+
   const handleSend = async () => {
     try {
       const res = await fetch("http://localhost:8000/mail/send", {
@@ -78,8 +87,10 @@ const ComposeEditPage: React.FC = () => {
         setError("送信失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("メールを送信しました！");
-      navigate("/home");
+
+      await deleteDraftAfterSend();
+      setSuccessMessage("メールを送信しました！");
+      setTimeout(() => navigate("/home"), 1500);
     } catch {
       setError("通信エラーが発生しました");
     }
@@ -110,16 +121,18 @@ const ComposeEditPage: React.FC = () => {
         setError("下書き更新失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("下書きを更新しました！");
-      navigate("/compose/drafts");
+      setSuccessMessage("下書きを更新しました！");
+      setTimeout(() => navigate("/compose/drafts"), 1500);
     } catch {
       setError("通信エラーが発生しました");
     }
   };
 
-  const handleDiscard = async () => {
-    if (!window.confirm("本当に破棄してもよろしいですか？")) return;
+  const handleDiscard = () => {
+    setConfirmDiscard(true);
+  };
 
+  const confirmAndDelete = async () => {
     if (!draftId) {
       navigate("/compose/drafts");
       return;
@@ -135,8 +148,9 @@ const ComposeEditPage: React.FC = () => {
         setError("破棄失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("下書きを削除しました");
-      navigate("/compose/drafts");
+      setSuccessMessage("下書きを削除しました！");
+      setConfirmDiscard(false);
+      setTimeout(() => navigate("/compose/drafts"), 1500);
     } catch {
       setError("通信エラーが発生しました");
     }
@@ -205,6 +219,38 @@ const ComposeEditPage: React.FC = () => {
           <Button color="#10b981" text="下書き保存" onClick={handleSaveDraft} />
           <Button color="#f43f5e" text="破棄" onClick={handleDiscard} />
         </div>
+
+        {confirmDiscard && (
+          <div style={{ marginTop: "1.5rem" }}>
+            <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
+              本当に破棄してもよろしいですか？
+            </div>
+            <div style={{ display: "flex", gap: "1rem" }}>
+              <button onClick={confirmAndDelete} style={yesButtonStyle}>
+                はい
+              </button>
+              <button
+                onClick={() => setConfirmDiscard(false)}
+                style={noButtonStyle}
+              >
+                キャンセル
+              </button>
+            </div>
+          </div>
+        )}
+
+        {successMessage && (
+          <div
+            style={{
+              color: "green",
+              marginTop: "1.5rem",
+              fontWeight: "bold",
+              fontSize: "1.2rem",
+            }}
+          >
+            ✅ {successMessage}
+          </div>
+        )}
 
         {error && (
           <div
@@ -293,6 +339,24 @@ const backButtonStyle: React.CSSProperties = {
   color: "white",
   fontSize: "1rem",
   padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  cursor: "pointer",
+};
+
+const yesButtonStyle: React.CSSProperties = {
+  backgroundColor: "#ef4444",
+  color: "white",
+  padding: "0.75rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  cursor: "pointer",
+};
+
+const noButtonStyle: React.CSSProperties = {
+  backgroundColor: "#6b7280",
+  color: "white",
+  padding: "0.75rem 1.5rem",
   borderRadius: "0.5rem",
   border: "none",
   cursor: "pointer",
