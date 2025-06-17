@@ -160,3 +160,17 @@ def check_today_diary(user_email: str, db: Session = Depends(get_db)):
     today_diary = None
 
     return {"registered": today_diary is not None}
+
+@router.get("/history")
+def get_diary_history(user_email: str, db: Session = Depends(get_db)):
+    diaries = db.query(KotoriDiary).filter(KotoriDiary.user_email == user_email).order_by(KotoriDiary.date.desc()).all()
+    result = [
+        {
+            "date": d.date.strftime("%Y-%m-%d"),
+            "condition": d.condition,
+            "sleep_hours": d.sleep_hours,
+            "condition_detail": d.condition_detail,
+            "diary_text": d.diary_text,
+        } for d in diaries
+    ]
+    return result

@@ -13,26 +13,22 @@ const KotoriDiaryPage: React.FC = () => {
   const [diaryText, setDiaryText] = useState("");
   const [successMsg, setSuccessMsg] = useState("");
   const [error, setError] = useState("");
-  const [registeredToday, setRegisteredToday] = useState<boolean | null>(null);
+  const [alreadySubmitted, setAlreadySubmitted] = useState(false);
+  const [showPointPopup, setShowPointPopup] = useState(false);
 
+  // ✅ 既存のAPI (/today/check) を使う
   useEffect(() => {
     if (!user) return;
-
-    const checkTodayDiary = async () => {
-      try {
-        const res = await fetch(
-          `/kotori-diary/today/check?user_email=${encodeURIComponent(
-            user.email
-          )}`
-        );
-        const data = await res.json();
-        setRegisteredToday(data.registered);
-      } catch {
-        setError("登録状況の確認に失敗しました");
-      }
-    };
-
-    checkTodayDiary();
+    fetch(
+      `/kotori-diary/today/check?user_email=${encodeURIComponent(user.email)}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        setAlreadySubmitted(data.already_submitted);
+      })
+      .catch(() => {
+        setError("判定失敗しました");
+      });
   }, [user]);
 
   const handleSubmit = async () => {
@@ -56,9 +52,12 @@ const KotoriDiaryPage: React.FC = () => {
         throw new Error(data.detail || "登録に失敗しました");
       }
 
+      setShowPointPopup(true);
+      setTimeout(() => setShowPointPopup(false), 1500);
+
       setSuccessMsg("日記を保存し、家族に送信しました！");
-      setRegisteredToday(true);
-      setTimeout(() => navigate("/home"), 2000);
+      setAlreadySubmitted(true);
+      setTimeout(() => navigate("/home"), 2500);
     } catch (err: any) {
       setError(err.message);
     }
@@ -68,13 +67,34 @@ const KotoriDiaryPage: React.FC = () => {
     <div style={containerStyle}>
       <KotoriHeader message="ことり日記を記入しましょう" />
 
+      {showPointPopup && (
+        <div style={popupStyle}>
+          <img
+            src="/images/kotori.png"
+            alt="ことり"
+            style={{ width: 60, marginBottom: 10 }}
+          />
+          <div
+            style={{ fontSize: "1.5rem", fontWeight: "bold", color: "#22c55e" }}
+          >
+            +1pt ↑
+          </div>
+        </div>
+      )}
+
+      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <button onClick={() => navigate(-1)} style={backButtonStyle}>
+          戻る
+        </button>
+      </div>
+
       <div style={formStyle}>
-        {registeredToday === null ? (
-          <p>確認中です...</p>
-        ) : registeredToday ? (
-          <p style={{ color: "green", fontWeight: "bold" }}>
-            ✅ 本日の日記はすでに登録済みです！
-          </p>
+        {alreadySubmitted ? (
+          <div
+            style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#22c55e" }}
+          >
+            ✅ 本日の日記は登録済みです！
+          </div>
         ) : (
           <>
             <Label>今日の体調</Label>
@@ -117,17 +137,13 @@ const KotoriDiaryPage: React.FC = () => {
             <button onClick={handleSubmit} style={submitButtonStyle}>
               日記を登録
             </button>
-
-            {successMsg && (
-              <p style={{ color: "green", marginTop: "1rem" }}>
-                ✅ {successMsg}
-              </p>
-            )}
-            {error && (
-              <p style={{ color: "red", marginTop: "1rem" }}>⚠ {error}</p>
-            )}
           </>
         )}
+
+        {successMsg && (
+          <p style={{ color: "green", marginTop: "1rem" }}>✅ {successMsg}</p>
+        )}
+        {error && <p style={{ color: "red", marginTop: "1rem" }}>⚠ {error}</p>}
       </div>
     </div>
   );
@@ -170,6 +186,31 @@ const submitButtonStyle: React.CSSProperties = {
   borderRadius: "0.5rem",
   padding: "1rem 2rem",
   border: "none",
+  cursor: "pointer",
+  fontSize: "1.2rem",
+};
+
+const popupStyle: React.CSSProperties = {
+  position: "fixed",
+  top: "20%",
+  left: "50%",
+  transform: "translateX(-50%)",
+  backgroundColor: "#fff",
+  border: "2px solid #22c55e",
+  padding: "2rem",
+  borderRadius: "1rem",
+  boxShadow: "0 0 10px rgba(0,0,0,0.3)",
+  zIndex: 9999,
+  textAlign: "center",
+};
+
+const backButtonStyle: React.CSSProperties = {
+  backgroundColor: "#6b7280",
+  color: "white",
+  padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  fontWeight: "bold",
   cursor: "pointer",
   fontSize: "1.2rem",
 };

@@ -182,6 +182,11 @@ const ComposeEditPage: React.FC = () => {
   return (
     <div style={containerStyle}>
       <KotoriHeader message="下書きメール編集ページです" />
+      <div style={{ textAlign: "center", marginBottom: "1rem" }}>
+        <button onClick={() => navigate(-1)} style={backButtonStyle}>
+          戻る
+        </button>
+      </div>
       <div style={contentStyle}>
         <Input label="送り先" value={to} onChange={setTo} />
         <Input label="Cc" value={cc} onChange={setCc} />
@@ -369,4 +374,14 @@ const noButtonStyle: React.CSSProperties = {
   borderRadius: "0.5rem",
   border: "none",
   cursor: "pointer",
+};
+const backButtonStyle: React.CSSProperties = {
+  backgroundColor: "#6b7280",
+  color: "white",
+  padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  border: "none",
+  fontWeight: "bold",
+  cursor: "pointer",
+  fontSize: "1.2rem",
 };

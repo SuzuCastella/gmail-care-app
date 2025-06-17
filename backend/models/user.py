@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, Boolean
 from backend.db import Base
 
 class User(Base):
@@ -10,3 +10,4 @@ class User(Base):
     name_kana = Column(String(100), nullable=False)
     icon = Column(String(255), nullable=False)
     hashed_password = Column(String(255), nullable=False)
+    kotori_enabled = Column(Boolean, default=True)
