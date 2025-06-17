@@ -190,68 +190,13 @@ const SettingsPage: React.FC = () => {
     <div style={containerStyle}>
       <KotoriHeader message="設定画面です" />
 
-      {/* ✅ ことりON/OFF改良版 */}
-      <div style={sectionStyle}>
-        <div
-          style={sectionHeaderStyle}
-          onClick={() => setOpenKotori(!openKotori)}
-        >
-          🐥 ことり日記のON/OFF {openKotori ? "▲" : "▼"}
-        </div>
-        {openKotori && (
-          <div style={innerBoxStyle}>
-            <label
-              style={{ display: "flex", alignItems: "center", gap: "1rem" }}
-            >
-              <div
-                style={{ position: "relative", width: "60px", height: "34px" }}
-              >
-                <input
-                  type="checkbox"
-                  checked={kotoriEnabled}
-                  onChange={(e) => handleToggleKotori(e.target.checked)}
-                  style={{ opacity: 0, width: 0, height: 0 }}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    backgroundColor: kotoriEnabled ? "#4ade80" : "#ccc",
-                    transition: ".4s",
-                    borderRadius: "34px",
-                  }}
-                />
-                <span
-                  style={{
-                    position: "absolute",
-                    left: kotoriEnabled ? "26px" : "4px",
-                    bottom: "4px",
-                    height: "26px",
-                    width: "26px",
-                    backgroundColor: "white",
-                    transition: ".4s",
-                    borderRadius: "50%",
-                  }}
-                />
-              </div>
-              ことり日記を有効にする
-            </label>
-
-            {saveMsg && <div style={toastStyle}>{saveMsg}</div>}
-          </div>
-        )}
-      </div>
-
       {/* アカウント情報 */}
       <div style={sectionStyle}>
         <div
           style={sectionHeaderStyle}
           onClick={() => setOpenAccount(!openAccount)}
         >
-          👤 アカウント情報 {openAccount ? "▲" : "▼"}
+          アカウント情報 {openAccount ? "▲" : "▼"}
         </div>
         {openAccount && (
           <div style={innerBoxStyle}>
@@ -285,7 +230,7 @@ const SettingsPage: React.FC = () => {
           style={sectionHeaderStyle}
           onClick={() => setOpenPassword(!openPassword)}
         >
-          🔑 パスワード変更 {openPassword ? "▲" : "▼"}
+          パスワード変更 {openPassword ? "▲" : "▼"}
         </div>
         {openPassword && (
           <div style={innerBoxStyle}>
@@ -329,7 +274,7 @@ const SettingsPage: React.FC = () => {
           style={sectionHeaderStyle}
           onClick={() => setOpenFamily(!openFamily)}
         >
-          🐣 ことり日記 家族メール設定 {openFamily ? "▲" : "▼"}
+          ことり日記 家族メール設定 {openFamily ? "▲" : "▼"}
         </div>
         {openFamily && (
           <div style={innerBoxStyle}>
@@ -351,16 +296,24 @@ const SettingsPage: React.FC = () => {
       </div>
 
       {/* ログアウト */}
-      <div style={sectionStyle}>
+      <div style={{ display: "flex", justifyContent: "center" }}>
         <button onClick={handleLogout} style={logoutButtonStyle}>
-          🚪 ログアウト
+          ログアウト
         </button>
       </div>
 
+      {/* 確認ダイアログ */}
       {confirmLogout && (
         <div style={confirmBoxStyle}>
           <div>本当にログアウトしますか？</div>
-          <div style={{ marginTop: "1rem", display: "flex", gap: "1rem" }}>
+          <div
+            style={{
+              marginTop: "1rem",
+              display: "flex",
+              gap: "1rem",
+              justifyContent: "center",
+            }}
+          >
             <button onClick={confirmAndLogout} style={yesButtonStyle}>
               はい
             </button>

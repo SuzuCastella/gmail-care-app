@@ -8,7 +8,6 @@ interface Mail {
   snippet: string;
   date: string;
   body: string;
-  emotion?: string;
   spam_score?: number; // ★ スコア型に変更
 }
 

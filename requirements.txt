@@ -9,6 +9,8 @@ google-api-python-client
 google-auth
 google-auth-oauthlib
 openai
+jinja2
+aiofiles
 gtts
 pydantic
 aiofiles

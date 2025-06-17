@@ -11,7 +11,6 @@ interface Mail {
   date: string;
   body: string;
   to: string;
-  emotion?: string;
 }
 
 interface Props {

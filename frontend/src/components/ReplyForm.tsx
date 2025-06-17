@@ -9,7 +9,6 @@ interface Mail {
   snippet: string;
   body: string;
   date: string;
-  emotion?: string;
 }
 
 interface Props {

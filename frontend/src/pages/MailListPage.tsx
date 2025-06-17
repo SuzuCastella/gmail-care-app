@@ -11,7 +11,6 @@ interface Mail {
   snippet: string;
   date: string;
   body: string;
-  emotion?: string;
   spam_score?: number;
 }
 

@@ -1,10 +1,21 @@
-# .gitignore（ルートに作成 or 追記）
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# 環境・機密ファイル
 .env
-backend/.env
-frontend/.env
+.env.*
+token_store/
 token.json
 credentials.json
-__pycache__/
+
+# キャッシュデータ
+data/mail_cache*.json
+frontend/static/audio/
+
+# Node.js
 node_modules/
+
+# ビルド成果物
 dist/
-frontend/node_modules/

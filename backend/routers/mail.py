@@ -7,7 +7,6 @@ from backend.gmail_utils import (
     fetch_and_cache_emails, load_cached_emails, get_token_path,
     get_gmail_service, create_mime_message
 )
-from backend.emotion_analysis import tag_emotion_entries
 
 router = APIRouter(tags=["Mail"])
 
@@ -18,7 +17,6 @@ class Mail(BaseModel):
     to: str
     subject: str
     snippet: str
-    emotion: str = "neutral"
     spam_score: int = 0
 
 class MailRequest(BaseModel):
@@ -80,9 +78,7 @@ def list_trash(request: MailRequest):
 def _list_common(mode: str, user_email: str, filter_fn):
     try:
         emails = load_cached_emails(mode)
-        tagged = tag_emotion_entries(emails)
-        filtered = [Mail(**e) for e in tagged if filter_fn(e)]
-        return filtered
+        return emails
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 

@@ -5,7 +5,6 @@ interface Mail {
   from: string;
   subject: string;
   snippet: string;
-  emotion?: string;
 }
 
 interface Props {
@@ -45,21 +44,6 @@ const MailDetailExpandable: React.FC<Props> = ({ mail, onClose }) => {
     }
   };
 
-  const emotionEmoji = (emotion: string) => {
-    const map: Record<string, string> = {
-      感謝: "🙏",
-      励まし: "💪",
-      祝福: "🎉",
-      悲しみ: "😢",
-      心配: "🤔",
-      お願い: "📩",
-      通知: "📢",
-      雑談: "💬",
-      その他: "❓",
-    };
-    return map[emotion] || "📧";
-  };
-
   return (
     <div className="bg-yellow-50 border border-yellow-300 rounded-2xl p-6 shadow-lg mt-4">
       <div className="flex justify-between items-center mb-2">
@@ -71,12 +55,6 @@ const MailDetailExpandable: React.FC<Props> = ({ mail, onClose }) => {
           閉じる ✖
         </button>
       </div>
-      <p className="text-gray-700 text-md mb-1">From: {mail.from}</p>
-      {mail.emotion && (
-        <p className="mb-2 text-blue-700">
-          感情: {emotionEmoji(mail.emotion)} {mail.emotion}
-        </p>
-      )}
       <hr className="my-2" />
       <p className="whitespace-pre-wrap text-gray-800">{mail.snippet}</p>
 

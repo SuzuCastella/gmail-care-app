@@ -9,7 +9,6 @@ interface MailDetail {
   subject: string;
   body: string;
   date: string;
-  emotion?: string;
 }
 
 const MailViewer: React.FC = () => {
