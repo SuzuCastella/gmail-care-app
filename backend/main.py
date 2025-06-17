@@ -12,7 +12,8 @@ from backend.routers import (
     auth,
     draft,
     user,
-    gpt_router
+    gpt_router,
+    kotori_diary
 )
 
 app = FastAPI(
@@ -42,6 +43,7 @@ app.include_router(auth.router, tags=["Auth"])
 app.include_router(draft.router)
 app.include_router(user.router)
 app.include_router(gpt_router.router)
+app.include_router(kotori_diary.router)
 
 @app.get("/")
 def read_root():

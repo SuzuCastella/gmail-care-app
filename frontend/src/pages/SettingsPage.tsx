@@ -10,13 +10,19 @@ const SettingsPage: React.FC = () => {
 
   const [openAccount, setOpenAccount] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
+  const [openFamily, setOpenFamily] = useState(false);
+  const [openKotori, setOpenKotori] = useState(false); // ✅ ことりON/OFF新規追加
 
   const [newName, setNewName] = useState("");
   const [newYomi, setNewYomi] = useState("");
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
+  const [familyEmail, setFamilyEmail] = useState("");
+  const [kotoriEnabled, setKotoriEnabled] = useState(true);
+
   const [error, setError] = useState<string>("");
+  const [saveMsg, setSaveMsg] = useState<string>("");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -25,8 +31,24 @@ const SettingsPage: React.FC = () => {
       setUserInfo(parsed);
       setNewName(parsed.name);
       setNewYomi(parsed.yomi || parsed.name_kana);
+      setKotoriEnabled(parsed.kotori_enabled ?? true);
+      fetchFamilyEmail(parsed.email);
     }
   }, []);
+
+  const fetchFamilyEmail = async (userEmail: string) => {
+    try {
+      const res = await fetch(
+        `http://localhost:8000/kotori-diary/family/get?user_email=${encodeURIComponent(
+          userEmail
+        )}`
+      );
+      const data = await res.json();
+      if (data?.family_email) setFamilyEmail(data.family_email);
+    } catch {
+      console.log("家族メール取得失敗");
+    }
+  };
 
   const handleSaveName = async () => {
     if (!newName || !newYomi) {
@@ -93,6 +115,67 @@ const SettingsPage: React.FC = () => {
     }
   };
 
+  const handleSaveFamilyEmail = async () => {
+    if (!familyEmail.includes("@")) {
+      setError("有効なメールアドレスを入力してください");
+      return;
+    }
+    try {
+      const res = await fetch(
+        "http://localhost:8000/kotori-diary/family/register",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            user_email: userInfo.email,
+            family_email: familyEmail,
+          }),
+        }
+      );
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError("登録失敗: " + (err.detail || "不明なエラー"));
+        return;
+      }
+      setSaveMsg("✅ 家族メールアドレスを保存しました");
+      setTimeout(() => setSaveMsg(""), 2000);
+    } catch {
+      setError("通信エラーが発生しました");
+    }
+  };
+
+  const handleToggleKotori = async (newStatus: boolean) => {
+    setKotoriEnabled(newStatus); // 即時反映
+    try {
+      const res = await fetch("http://localhost:8000/user/update_kotori_flag", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          user_email: userInfo.email,
+          enabled: newStatus,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError("ことり機能更新失敗: " + (err.detail || "不明なエラー"));
+        return;
+      }
+
+      setUserInfo({ ...userInfo, kotori_enabled: newStatus });
+      localStorage.setItem(
+        "user",
+        JSON.stringify({ ...userInfo, kotori_enabled: newStatus })
+      );
+      setError("");
+      setSaveMsg("✅ ことり機能を更新しました");
+      setTimeout(() => setSaveMsg(""), 3000);
+    } catch {
+      setError("通信エラーが発生しました");
+    }
+  };
+
   const handleLogout = () => {
     setConfirmLogout(true);
   };
@@ -106,6 +189,61 @@ const SettingsPage: React.FC = () => {
   return (
     <div style={containerStyle}>
       <KotoriHeader message="設定画面です" />
+
+      {/* ✅ ことりON/OFF改良版 */}
+      <div style={sectionStyle}>
+        <div
+          style={sectionHeaderStyle}
+          onClick={() => setOpenKotori(!openKotori)}
+        >
+          🐥 ことり日記のON/OFF {openKotori ? "▲" : "▼"}
+        </div>
+        {openKotori && (
+          <div style={innerBoxStyle}>
+            <label
+              style={{ display: "flex", alignItems: "center", gap: "1rem" }}
+            >
+              <div
+                style={{ position: "relative", width: "60px", height: "34px" }}
+              >
+                <input
+                  type="checkbox"
+                  checked={kotoriEnabled}
+                  onChange={(e) => handleToggleKotori(e.target.checked)}
+                  style={{ opacity: 0, width: 0, height: 0 }}
+                />
+                <span
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    right: 0,
+                    bottom: 0,
+                    backgroundColor: kotoriEnabled ? "#4ade80" : "#ccc",
+                    transition: ".4s",
+                    borderRadius: "34px",
+                  }}
+                />
+                <span
+                  style={{
+                    position: "absolute",
+                    left: kotoriEnabled ? "26px" : "4px",
+                    bottom: "4px",
+                    height: "26px",
+                    width: "26px",
+                    backgroundColor: "white",
+                    transition: ".4s",
+                    borderRadius: "50%",
+                  }}
+                />
+              </div>
+              ことり日記を有効にする
+            </label>
+
+            {saveMsg && <div style={toastStyle}>{saveMsg}</div>}
+          </div>
+        )}
+      </div>
 
       {/* アカウント情報 */}
       <div style={sectionStyle}>
@@ -185,6 +323,33 @@ const SettingsPage: React.FC = () => {
         )}
       </div>
 
+      {/* 家族メール設定 */}
+      <div style={sectionStyle}>
+        <div
+          style={sectionHeaderStyle}
+          onClick={() => setOpenFamily(!openFamily)}
+        >
+          🐣 ことり日記 家族メール設定 {openFamily ? "▲" : "▼"}
+        </div>
+        {openFamily && (
+          <div style={innerBoxStyle}>
+            <div>
+              家族メール:{" "}
+              <input
+                type="email"
+                value={familyEmail}
+                onChange={(e) => setFamilyEmail(e.target.value)}
+                style={inputStyle}
+              />
+            </div>
+            <button onClick={handleSaveFamilyEmail} style={buttonStyle}>
+              家族メールを保存
+            </button>
+            {saveMsg && <div style={{ color: "green" }}>{saveMsg}</div>}
+          </div>
+        )}
+      </div>
+
       {/* ログアウト */}
       <div style={sectionStyle}>
         <button onClick={handleLogout} style={logoutButtonStyle}>
@@ -216,14 +381,13 @@ const SettingsPage: React.FC = () => {
 
 export default SettingsPage;
 
-// --- CSSスタイル群 ---
+// 既存のCSSスタイル群（あなたの定義をそのまま残します）
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
   padding: "2rem",
   fontFamily: "'Noto Sans JP', sans-serif",
 };
-
 const sectionStyle: React.CSSProperties = {
   backgroundColor: "#fff",
   border: "1px solid #ccc",
@@ -231,27 +395,23 @@ const sectionStyle: React.CSSProperties = {
   padding: "1rem",
   marginBottom: "1.5rem",
 };
-
 const sectionHeaderStyle: React.CSSProperties = {
   fontWeight: "bold",
   fontSize: "1.2rem",
   cursor: "pointer",
 };
-
 const innerBoxStyle: React.CSSProperties = {
   marginTop: "1rem",
   display: "flex",
   flexDirection: "column",
   gap: "1rem",
 };
-
 const inputStyle: React.CSSProperties = {
   padding: "0.5rem",
   borderRadius: "0.5rem",
   border: "1px solid #ccc",
   width: "100%",
 };
-
 const buttonStyle: React.CSSProperties = {
   backgroundColor: "#3b82f6",
   color: "white",
@@ -261,7 +421,6 @@ const buttonStyle: React.CSSProperties = {
   fontWeight: "bold",
   cursor: "pointer",
 };
-
 const logoutButtonStyle: React.CSSProperties = {
   backgroundColor: "#ef4444",
   color: "white",
@@ -271,14 +430,12 @@ const logoutButtonStyle: React.CSSProperties = {
   fontWeight: "bold",
   cursor: "pointer",
 };
-
 const confirmBoxStyle: React.CSSProperties = {
   backgroundColor: "#fff0f0",
   border: "1px solid #ccc",
   padding: "1rem",
   borderRadius: "1rem",
 };
-
 const yesButtonStyle: React.CSSProperties = {
   backgroundColor: "#ef4444",
   color: "white",
@@ -287,7 +444,6 @@ const yesButtonStyle: React.CSSProperties = {
   border: "none",
   cursor: "pointer",
 };
-
 const noButtonStyle: React.CSSProperties = {
   backgroundColor: "#6b7280",
   color: "white",
@@ -296,9 +452,21 @@ const noButtonStyle: React.CSSProperties = {
   border: "none",
   cursor: "pointer",
 };
-
 const errorStyle: React.CSSProperties = {
   color: "red",
   marginTop: "1.5rem",
   fontWeight: "bold",
+};
+
+const toastStyle: React.CSSProperties = {
+  position: "fixed",
+  top: "20px",
+  right: "20px",
+  backgroundColor: "#333",
+  color: "#fff",
+  padding: "1rem 2rem",
+  borderRadius: "10px",
+  zIndex: 9999,
+  fontWeight: "bold",
+  boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
 };
