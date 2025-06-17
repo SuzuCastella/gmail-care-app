@@ -1,4 +1,4 @@
-# Python
+# Pythonキャッシュ
 __pycache__/
 *.pyc
 *.pyo
@@ -6,16 +6,21 @@ __pycache__/
 # 環境・機密ファイル
 .env
 .env.*
-token_store/
 token.json
 credentials.json
 
-# キャッシュデータ
+# Gmail認証トークン（backend/token_store/ 以下）
+backend/token_store/
+
+# メールキャッシュ（data/cache/ 以下）
+data/cache/
 data/mail_cache*.json
+
+# 録音データ
 frontend/static/audio/
 
-# Node.js
+# Node.js関連
 node_modules/
 
-# ビルド成果物
+# ビルド成果物など
 dist/
