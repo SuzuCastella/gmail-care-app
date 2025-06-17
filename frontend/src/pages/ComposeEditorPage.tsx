@@ -110,10 +110,10 @@ const ComposeEditorPage: React.FC = () => {
       </div>
 
       <div style={contentStyle}>
-        <Input label="To" value={to} onChange={setTo} />
+        <Input label="送り先" value={to} onChange={setTo} />
         <Input label="Cc" value={cc} onChange={setCc} />
         <Input label="Bcc" value={bcc} onChange={setBcc} />
-        <Input label="Subject" value={subject} onChange={setSubject} />
+        <Input label="件名" value={subject} onChange={setSubject} />
         <Textarea label="本文" value={body} onChange={setBody} />
 
         <div style={{ marginTop: "2rem" }}>

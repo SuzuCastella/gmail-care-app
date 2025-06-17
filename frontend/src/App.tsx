@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   BrowserRouter as Router,
   Routes,
@@ -22,6 +22,7 @@ import ComposeMenuPage from "../src/pages/ComposeMenuPage";
 import ComposeEditorPage from "../src/pages/ComposeEditorPage";
 import ComposeDraftListPage from "../src/pages/ComposeDraftListPage";
 import ComposeEditPage from "../src/pages/ComposeEditPage";
+import SettingsPage from "../src/pages/SettingsPage";
 
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useUser } from "./components/UserContext";
@@ -30,6 +31,18 @@ import "./styles/ui.css";
 const App: React.FC = () => {
   const [reloadKey, setReloadKey] = useState(0);
   const { user } = useUser();
+  const [theme, setTheme] = useState("light");
+
+  useEffect(() => {
+    const storedTheme = localStorage.getItem("theme") || "light";
+    setTheme(storedTheme);
+    applyTheme(storedTheme);
+  }, []);
+
+  const applyTheme = (mode: string) => {
+    document.body.style.backgroundColor = mode === "dark" ? "#222" : "#fefefe";
+    document.body.style.color = mode === "dark" ? "#fff" : "#000";
+  };
 
   const handleFetchMails = async () => {
     if (!user) {
@@ -86,6 +99,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/inbox"
           element={
@@ -96,6 +110,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/sent"
           element={
@@ -106,6 +121,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/trash"
           element={
@@ -116,6 +132,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/mail/:id"
           element={
@@ -127,7 +144,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* Compose関連ルート（順序重要！） */}
         <Route
           path="/compose/edit/:draftId"
           element={
@@ -138,6 +154,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/compose/new"
           element={
@@ -148,6 +165,7 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/compose/drafts"
           element={
@@ -158,12 +176,24 @@ const App: React.FC = () => {
             </ProtectedRoute>
           }
         />
+
         <Route
           path="/compose"
           element={
             <ProtectedRoute>
               <LayoutWithHeaderFooter>
                 <ComposeMenuPage />
+              </LayoutWithHeaderFooter>
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <LayoutWithHeaderFooter>
+                <SettingsPage />
               </LayoutWithHeaderFooter>
             </ProtectedRoute>
           }

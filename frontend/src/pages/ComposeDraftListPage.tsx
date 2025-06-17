@@ -85,7 +85,7 @@ const ComposeDraftListPage: React.FC = () => {
               }
             >
               <div style={subjectStyle}>{draft.subject || "(件名なし)"}</div>
-              <div style={toStyle}>To: {draft.to}</div>
+              <div style={toStyle}>送り先: {draft.to}</div>
               <div style={bodyStyle}>{draft.body.slice(0, 80)}...</div>
               <div style={dateStyle}>
                 保存日時: {new Date(draft.created_at).toLocaleString()}

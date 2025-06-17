@@ -10,7 +10,8 @@ from backend.routers import (
     emotion,
     kotori,
     auth,
-    draft
+    draft,
+    user
 )
 
 app = FastAPI(
@@ -38,6 +39,7 @@ app.include_router(emotion.router, prefix="/emotion", tags=["Emotion"])
 app.include_router(kotori.router)
 app.include_router(auth.router, tags=["Auth"])
 app.include_router(draft.router)
+app.include_router(user.router)
 
 @app.get("/")
 def read_root():
