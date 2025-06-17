@@ -17,7 +17,6 @@ const ComposeEditPage: React.FC = () => {
   const [body, setBody] = useState("");
   const [aiInstruction, setAiInstruction] = useState("");
 
-  // ✅ ローカルストレージからユーザー情報取得
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
@@ -26,7 +25,6 @@ const ComposeEditPage: React.FC = () => {
     }
   }, []);
 
-  // ✅ draftId & userEmail 取得後にAPI呼び出し
   useEffect(() => {
     if (!draftId || !userEmail) return;
 
@@ -46,7 +44,6 @@ const ComposeEditPage: React.FC = () => {
           return;
         }
 
-        // フォームに反映
         setTo(draft.to);
         setCc(draft.cc);
         setBcc(draft.bcc);
@@ -89,9 +86,14 @@ const ComposeEditPage: React.FC = () => {
   };
 
   const handleSaveDraft = async () => {
+    if (!draftId) {
+      setError("下書きIDが取得できません");
+      return;
+    }
+
     try {
-      const res = await fetch("http://localhost:8000/drafts/", {
-        method: "POST",
+      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
+        method: "PUT",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: userEmail,
@@ -102,21 +104,41 @@ const ComposeEditPage: React.FC = () => {
           body,
         }),
       });
+
       if (!res.ok) {
         const err = await res.json();
-        setError("下書き保存失敗: " + (err.detail || "不明なエラー"));
+        setError("下書き更新失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      alert("下書きを保存しました！");
+      alert("下書きを更新しました！");
       navigate("/compose/drafts");
     } catch {
       setError("通信エラーが発生しました");
     }
   };
 
-  const handleDiscard = () => {
-    if (window.confirm("本当に破棄してもよろしいですか？")) {
+  const handleDiscard = async () => {
+    if (!window.confirm("本当に破棄してもよろしいですか？")) return;
+
+    if (!draftId) {
       navigate("/compose/drafts");
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError("破棄失敗: " + (err.detail || "不明なエラー"));
+        return;
+      }
+      alert("下書きを削除しました");
+      navigate("/compose/drafts");
+    } catch {
+      setError("通信エラーが発生しました");
     }
   };
 
@@ -129,17 +151,7 @@ const ComposeEditPage: React.FC = () => {
   }
 
   return (
-    <div
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#fefefe",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        padding: "2rem",
-        fontFamily: "'Noto Sans JP', sans-serif",
-      }}
-    >
+    <div style={containerStyle}>
       <KotoriHeader message="下書きメール編集ページです" />
 
       <div style={backButtonContainerStyle}>
@@ -208,7 +220,7 @@ const ComposeEditPage: React.FC = () => {
 
 export default ComposeEditPage;
 
-// 共通コンポーネント
+// 共通UI部品
 
 const Input = ({ label, value, onChange }: any) => (
   <div style={{ marginBottom: "1rem" }}>
@@ -260,6 +272,16 @@ const Button = ({ color, text, onClick }: any) => (
     {text}
   </button>
 );
+
+const containerStyle: React.CSSProperties = {
+  minHeight: "100vh",
+  backgroundColor: "#fefefe",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  padding: "2rem",
+  fontFamily: "'Noto Sans JP', sans-serif",
+};
 
 const backButtonContainerStyle: React.CSSProperties = {
   marginTop: "1rem",

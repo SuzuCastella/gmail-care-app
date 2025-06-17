@@ -78,7 +78,7 @@ const ComposeEditorPage: React.FC = () => {
         return;
       }
       alert("下書きを保存しました！");
-      navigate("/home");
+      navigate("/compose/drafts");
     } catch (err) {
       setError("通信エラーが発生しました");
     }

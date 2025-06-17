@@ -18,6 +18,7 @@ const ComposeDraftListPage: React.FC = () => {
   const [drafts, setDrafts] = useState<Draft[]>([]);
   const [userEmail, setUserEmail] = useState<string>("");
   const navigate = useNavigate();
+  const [error, setError] = useState<string>("");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -59,6 +60,26 @@ const ComposeDraftListPage: React.FC = () => {
     navigate(`/compose/edit/${draftId}`);
   };
 
+  const handleDeleteDraft = async (draftId: number) => {
+    if (!window.confirm("この下書きを削除しますか？")) return;
+
+    try {
+      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError("削除失敗: " + (err.detail || "不明なエラー"));
+        return;
+      }
+      // 削除成功後リストを更新
+      await fetchDrafts();
+    } catch {
+      setError("通信エラーが発生しました");
+    }
+  };
+
   return (
     <div style={containerStyle}>
       <KotoriHeader message="送信用メールの下書き一覧です" />
@@ -74,28 +95,45 @@ const ComposeDraftListPage: React.FC = () => {
           <div style={emptyTextStyle}>📭 下書きはまだありません</div>
         ) : (
           drafts.map((draft) => (
-            <div
-              key={draft.id}
-              onClick={() => handleOpenDraft(draft.id)}
-              style={cardStyle}
-            >
+            <div key={draft.id} style={cardStyle}>
               <div style={subjectStyle}>{draft.subject || "(件名なし)"}</div>
               <div style={toStyle}>To: {draft.to}</div>
               <div style={bodyStyle}>{draft.body.slice(0, 80)}...</div>
               <div style={dateStyle}>
                 保存日時: {new Date(draft.created_at).toLocaleString()}
               </div>
+
+              <div style={buttonRowStyle}>
+                <button
+                  onClick={() => handleOpenDraft(draft.id)}
+                  style={editButtonStyle}
+                >
+                  編集
+                </button>
+                <button
+                  onClick={() => handleDeleteDraft(draft.id)}
+                  style={deleteButtonStyle}
+                >
+                  削除
+                </button>
+              </div>
             </div>
           ))
         )}
       </div>
+
+      {error && (
+        <div style={{ color: "red", marginTop: "1rem", fontWeight: "bold" }}>
+          ⚠ {error}
+        </div>
+      )}
     </div>
   );
 };
 
 export default ComposeDraftListPage;
 
-// ✅ スタイル定義
+// スタイル
 
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
@@ -125,7 +163,6 @@ const cardStyle: React.CSSProperties = {
   padding: "1.5rem",
   marginBottom: "1.5rem",
   border: "1px solid #e5e7eb",
-  cursor: "pointer",
 };
 
 const subjectStyle: React.CSSProperties = {
@@ -148,6 +185,33 @@ const dateStyle: React.CSSProperties = {
   color: "#999",
   marginTop: "1rem",
   fontSize: "0.85rem",
+};
+
+const buttonRowStyle: React.CSSProperties = {
+  display: "flex",
+  justifyContent: "flex-end",
+  gap: "1rem",
+  marginTop: "1rem",
+};
+
+const editButtonStyle: React.CSSProperties = {
+  backgroundColor: "#3b82f6",
+  color: "white",
+  border: "none",
+  padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  fontWeight: "bold",
+  cursor: "pointer",
+};
+
+const deleteButtonStyle: React.CSSProperties = {
+  backgroundColor: "#ef4444",
+  color: "white",
+  border: "none",
+  padding: "0.5rem 1.5rem",
+  borderRadius: "0.5rem",
+  fontWeight: "bold",
+  cursor: "pointer",
 };
 
 const backButtonContainerStyle: React.CSSProperties = {
