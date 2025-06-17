@@ -61,7 +61,7 @@ const ComposeEditPage: React.FC = () => {
 
   const handleSend = async () => {
     try {
-      const res = await fetch("/send", {
+      const res = await fetch("http://localhost:8000/mail/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

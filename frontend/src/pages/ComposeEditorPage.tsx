@@ -28,7 +28,7 @@ const ComposeEditorPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("/send", {
+      const res = await fetch("http://localhost:8000/mail/send", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

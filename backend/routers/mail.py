@@ -24,6 +24,14 @@ class Mail(BaseModel):
 class MailRequest(BaseModel):
     email: str
 
+class SendRequest(BaseModel):
+    user_email: str
+    to: str
+    cc: str = ""
+    bcc: str = ""
+    subject: str
+    body: str
+
 class ReplySendRequest(BaseModel):
     to: str
     cc: str = ""
@@ -34,6 +42,22 @@ class ForwardSendRequest(BaseModel):
     to: str
     cc: str = ""
     bcc: str = ""
+
+
+### ===================================
+### 新規送信API (今回追加部分)
+### ===================================
+
+@router.post("/send")
+def send_mail(req: SendRequest):
+    try:
+        check_token_exists(req.user_email)
+        service = get_gmail_service(req.user_email)
+        raw_message = create_mime_message(req.user_email, req.to, req.cc, req.bcc, req.subject, req.body)
+        service.users().messages().send(userId="me", body={"raw": raw_message}).execute()
+        return {"status": "success", "message": "送信完了"}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 ### ===================================
