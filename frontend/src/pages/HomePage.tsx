@@ -9,9 +9,7 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
   const navigate = useNavigate();
   const [email, setEmail] = useState<string | null>(null);
   const [gmailStatus, setGmailStatus] = useState<string>("");
-  const [kotoriMessage, setKotoriMessage] = useState<string>(
-    "分からないことがあったら、色々聞いてください！"
-  );
+  const [kotoriMessage, setKotoriMessage] = useState<string>("ホーム画面です");
   const [loading, setLoading] = useState<boolean>(false);
 
   useEffect(() => {

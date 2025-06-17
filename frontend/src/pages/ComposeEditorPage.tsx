@@ -6,6 +6,7 @@ const ComposeEditorPage: React.FC = () => {
   const navigate = useNavigate();
 
   const [userEmail, setUserEmail] = useState<string>("");
+  const [userIcon, setUserIcon] = useState<string>("/images/user_default.png");
   const [to, setTo] = useState("");
   const [cc, setCc] = useState("");
   const [bcc, setBcc] = useState("");
@@ -14,13 +15,14 @@ const ComposeEditorPage: React.FC = () => {
   const [aiInstruction, setAiInstruction] = useState("");
   const [error, setError] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
-  const [confirmDiscard, setConfirmDiscard] = useState(false); // ✅ 破棄確認フラグ追加
+  const [confirmDiscard, setConfirmDiscard] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const parsed = JSON.parse(storedUser);
       setUserEmail(parsed.email);
+      setUserIcon(`/images/${parsed.icon || "icon1"}.png`);
     }
   }, []);
 
@@ -50,7 +52,7 @@ const ComposeEditorPage: React.FC = () => {
       }
       setSuccessMessage("メールを送信しました！");
       setTimeout(() => navigate("/home"), 1500);
-    } catch (err) {
+    } catch {
       setError("通信エラーが発生しました");
     }
   };
@@ -81,33 +83,51 @@ const ComposeEditorPage: React.FC = () => {
       }
       setSuccessMessage("下書きを保存しました！");
       setTimeout(() => navigate("/compose/drafts"), 1500);
-    } catch (err) {
+    } catch {
       setError("通信エラーが発生しました");
     }
   };
 
-  const handleDiscard = () => {
-    setConfirmDiscard(true);
-  };
-
+  const handleDiscard = () => setConfirmDiscard(true);
   const confirmAndDiscard = () => {
     setConfirmDiscard(false);
     navigate("/home");
   };
 
-  const handleAiAssist = () => {
-    setBody(body + "\n（AI補助文章がここに挿入されます）");
+  // ✅ AI補助：実際のバックエンド呼び出しに変更
+  const handleAiAssist = async () => {
+    if (!aiInstruction.trim()) {
+      setError("AIへの指示を入力してください");
+      return;
+    }
+
+    try {
+      const res = await fetch("http://localhost:8000/gpt/assist", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          original_text: body,
+          instruction: aiInstruction,
+        }),
+      });
+
+      if (!res.ok) {
+        const err = await res.json();
+        setError("AI生成失敗: " + (err.detail || "不明なエラー"));
+        return;
+      }
+
+      const data = await res.json();
+      setBody(data.result);
+      setAiInstruction("");
+    } catch {
+      setError("AIとの通信に失敗しました");
+    }
   };
 
   return (
     <div style={containerStyle}>
       <KotoriHeader message="新規メールの作成ページです" />
-
-      <div style={backButtonContainerStyle}>
-        <button onClick={() => navigate(-1)} style={backButtonStyle}>
-          戻る
-        </button>
-      </div>
 
       <div style={contentStyle}>
         <Input label="送り先" value={to} onChange={setTo} />
@@ -116,19 +136,22 @@ const ComposeEditorPage: React.FC = () => {
         <Input label="件名" value={subject} onChange={setSubject} />
         <Textarea label="本文" value={body} onChange={setBody} />
 
-        <div style={{ marginTop: "2rem" }}>
-          <div style={{ fontWeight: "bold", marginBottom: "0.5rem" }}>
-            AI補助の指示
+        <div style={aiSectionStyle}>
+          <div style={avatarContainerStyle}>
+            <img src="/images/kotori.png" alt="kotori" style={avatarStyle} />
+            <div>ことりが文面のアイデア等のお手伝いをします！</div>
           </div>
-          <div style={{ display: "flex", gap: "1rem" }}>
+
+          <div style={avatarContainerStyle}>
+            <img src={userIcon} alt="user" style={avatarStyle} />
             <input
               value={aiInstruction}
               onChange={(e) => setAiInstruction(e.target.value)}
+              placeholder="（例: もっと丁寧に・柔らかく）"
               style={instructionInputStyle}
-              placeholder="例: もっと丁寧に"
             />
             <button onClick={handleAiAssist} style={aiButtonStyle}>
-              AI生成
+              ことりに依頼
             </button>
           </div>
         </div>
@@ -161,7 +184,6 @@ const ComposeEditorPage: React.FC = () => {
         {successMessage && (
           <div style={successMessageStyle}>✅ {successMessage}</div>
         )}
-
         {error && <div style={errorStyle}>⚠ {error}</div>}
       </div>
     </div>
@@ -170,8 +192,7 @@ const ComposeEditorPage: React.FC = () => {
 
 export default ComposeEditorPage;
 
-// 共通コンポーネントとスタイル
-
+// 共通UIパーツ
 const Input = ({ label, value, onChange }: any) => (
   <div style={{ marginBottom: "1rem" }}>
     <div style={{ fontWeight: "bold", marginBottom: "0.25rem" }}>{label}</div>
@@ -213,47 +234,50 @@ const Button = ({ color, text, onClick }: any) => (
   </button>
 );
 
+// スタイル定義
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "center",
   padding: "2rem",
   fontFamily: "'Noto Sans JP', sans-serif",
 };
-
-const contentStyle: React.CSSProperties = { width: "100%", maxWidth: "800px" };
-
+const contentStyle: React.CSSProperties = {
+  width: "100%",
+  maxWidth: "800px",
+  margin: "0 auto",
+};
 const inputStyle: React.CSSProperties = {
   width: "100%",
   padding: "0.75rem",
   borderRadius: "0.5rem",
   border: "1px solid #ccc",
 };
-
-const backButtonContainerStyle: React.CSSProperties = {
-  marginTop: "1rem",
-  marginBottom: "1rem",
+const aiSectionStyle: React.CSSProperties = {
+  marginTop: "2rem",
+  display: "flex",
+  flexDirection: "column",
+  gap: "1rem",
+  border: "1px solid #ddd",
+  borderRadius: "1rem",
+  padding: "1rem",
 };
-
-const backButtonStyle: React.CSSProperties = {
-  backgroundColor: "#6b7280",
-  color: "white",
-  fontSize: "1rem",
-  padding: "0.5rem 1.5rem",
-  borderRadius: "0.5rem",
-  border: "none",
-  cursor: "pointer",
+const avatarContainerStyle: React.CSSProperties = {
+  display: "flex",
+  alignItems: "center",
+  gap: "1rem",
 };
-
+const avatarStyle: React.CSSProperties = {
+  width: "50px",
+  height: "50px",
+  borderRadius: "50%",
+  border: "1px solid #ccc",
+};
 const instructionInputStyle: React.CSSProperties = {
   flex: 1,
   padding: "0.75rem",
   borderRadius: "0.5rem",
   border: "1px solid #ccc",
 };
-
 const aiButtonStyle: React.CSSProperties = {
   backgroundColor: "#22c55e",
   color: "white",
@@ -263,26 +287,22 @@ const aiButtonStyle: React.CSSProperties = {
   border: "none",
   cursor: "pointer",
 };
-
 const buttonRowStyle: React.CSSProperties = {
   marginTop: "2rem",
   display: "flex",
   gap: "1.5rem",
 };
-
 const successMessageStyle: React.CSSProperties = {
   color: "green",
   marginTop: "1.5rem",
   fontWeight: "bold",
   fontSize: "1.2rem",
 };
-
 const errorStyle: React.CSSProperties = {
   color: "red",
   marginTop: "1.5rem",
   fontWeight: "bold",
 };
-
 const yesButtonStyle: React.CSSProperties = {
   backgroundColor: "#ef4444",
   color: "white",
@@ -291,7 +311,6 @@ const yesButtonStyle: React.CSSProperties = {
   border: "none",
   cursor: "pointer",
 };
-
 const noButtonStyle: React.CSSProperties = {
   backgroundColor: "#6b7280",
   color: "white",

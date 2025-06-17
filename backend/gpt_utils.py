@@ -137,3 +137,21 @@ def call_gpt_api(prompt: str) -> str:
         temperature=0.7,
     )
     return response.choices[0].message.content.strip()
+
+def compose_ai_assist_v2(current_text: str, instruction: str) -> str:
+    """
+    簡易AI補助：Compose用の本文生成
+    """
+    prompt = (
+        "あなたはメール文章の編集を手伝います。\n"
+        "以下の既存本文と指示に従って、より良い文章にしてください。\n\n"
+        f"【本文】\n{current_text}\n\n【指示】\n{instruction}\n\n改善後:"
+    )
+
+    response = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=[{"role": "user", "content": prompt}],
+        temperature=0.7,
+    )
+
+    return response.choices[0].message.content.strip()
