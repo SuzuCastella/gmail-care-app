@@ -34,7 +34,7 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
       );
       const data = await res.json();
       if (res.ok) {
-        setGmailStatus("✅ Gmail連携が完了しました！");
+        setGmailStatus("Gmail連携が完了しました！");
       } else {
         setGmailStatus(`❌ 失敗: ${data.error || "原因不明です"}`);
       }
@@ -58,7 +58,6 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
 
   return (
     <div style={containerStyle}>
-      {/* ヘッダー */}
       <div style={headerStyle}>
         <img
           src="/images/home.png"
@@ -76,18 +75,32 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
         </div>
       </div>
 
-      {/* Gmail連携 */}
       {email && (
         <div style={{ marginTop: "2rem", display: "flex", gap: "1.5rem" }}>
-          <button onClick={handleGmailAuth} style={gmailButtonStyle}>
-            Gmailと連携する
+          <button
+            onClick={handleGmailAuth}
+            style={gmailButtonStyle}
+            onMouseEnter={(e) =>
+              Object.assign(e.currentTarget.style, gmailButtonHoverStyle)
+            }
+            onMouseLeave={(e) =>
+              Object.assign(e.currentTarget.style, gmailButtonStyle)
+            }
+          >
+            Gmailと連携
           </button>
           <button
             onClick={handleFetchMailsWithKotori}
             disabled={loading}
             style={updateButtonStyle(loading)}
+            onMouseEnter={(e) =>
+              Object.assign(e.currentTarget.style, updateButtonHoverStyle)
+            }
+            onMouseLeave={(e) =>
+              Object.assign(e.currentTarget.style, updateButtonStyle(loading))
+            }
           >
-            {loading ? "更新中..." : "最新のGmailを取得する"}
+            {loading ? "更新中..." : "最新のメールを取得"}
           </button>
         </div>
       )}
@@ -98,31 +111,26 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
         </p>
       )}
 
-      {/* メインボタン */}
       <div style={menuGridStyle}>
-        {[
-          { label: "受信トレイ", path: "/inbox", disabled: false },
-          { label: "送信済み", path: "/sent", disabled: false },
-          {
-            label: "ことり日記",
-            path: "/kotori-menu",
-            disabled: !kotoriEnabled,
-          }, // ✅ ここ
-          { label: "新規メール", path: "/compose", disabled: false },
-          { label: "ゴミ箱", path: "/trash", disabled: false },
-          { label: "設定/使い方", path: "/settings", disabled: false },
-        ].map((btn) => (
+        {menuItems.map((btn) => (
           <button
             key={btn.label}
             onClick={() => handleNavigate(btn.path)}
+            disabled={btn.disabled}
             style={{
               ...menuButtonStyle,
-              backgroundColor: btn.disabled ? "#9ca3af" : "#3b82f6",
+              backgroundColor: btn.disabled ? "#9ca3af" : "#ffffff",
               cursor: btn.disabled ? "not-allowed" : "pointer",
             }}
-            disabled={btn.disabled}
+            onMouseEnter={(e) =>
+              (e.currentTarget.style.transform = "translateY(-5px)")
+            }
+            onMouseLeave={(e) =>
+              (e.currentTarget.style.transform = "translateY(0px)")
+            }
           >
-            {btn.label}
+            <img src={btn.icon} alt={btn.label} style={iconStyle} />
+            <div>{btn.label}</div>
           </button>
         ))}
       </div>
@@ -132,7 +140,47 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
 
 export default HomePage;
 
-// --- CSS スタイル ---
+// --- メニュー定義 (アイコンパスは /images/配下前提) ---
+const menuItems = [
+  {
+    label: "受信トレイ",
+    path: "/inbox",
+    icon: "/images/inbox.png",
+    disabled: false,
+  },
+  {
+    label: "送信済み",
+    path: "/sent",
+    icon: "/images/sent.png",
+    disabled: false,
+  },
+  {
+    label: "ことり日記",
+    path: "/kotori-menu",
+    icon: "/images/diary.png",
+    disabled: false,
+  },
+  {
+    label: "新規メール",
+    path: "/compose",
+    icon: "/images/compose.png",
+    disabled: false,
+  },
+  {
+    label: "ゴミ箱",
+    path: "/trash",
+    icon: "/images/trash.png",
+    disabled: false,
+  },
+  {
+    label: "設定",
+    path: "/settings",
+    icon: "/images/settings.png",
+    disabled: false,
+  },
+];
+
+// --- CSS定義 ---
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
@@ -142,6 +190,7 @@ const containerStyle: React.CSSProperties = {
   padding: "2rem",
   fontFamily: "'Noto Sans JP', sans-serif",
 };
+
 const headerStyle: React.CSSProperties = {
   display: "flex",
   justifyContent: "space-between",
@@ -149,11 +198,13 @@ const headerStyle: React.CSSProperties = {
   width: "100%",
   maxWidth: "900px",
 };
+
 const kotoriStyle: React.CSSProperties = {
   display: "flex",
   alignItems: "center",
   gap: "1rem",
 };
+
 const kotoriBubble: React.CSSProperties = {
   backgroundColor: "#dbeafe",
   border: "1px solid #60a5fa",
@@ -162,42 +213,70 @@ const kotoriBubble: React.CSSProperties = {
   fontWeight: "bold",
   maxWidth: "400px",
 };
+
 const gmailButtonStyle: React.CSSProperties = {
   backgroundColor: "#2563eb",
   color: "white",
   padding: "1rem 2rem",
   fontSize: "1.25rem",
   fontWeight: "bold",
-  borderRadius: "0.5rem",
+  borderRadius: "0.75rem",
   border: "none",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+  transition: "all 0.2s",
   cursor: "pointer",
-  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+  transform: "translateY(0px)",
 };
+
+const gmailButtonHoverStyle: React.CSSProperties = {
+  transform: "translateY(-5px)",
+  boxShadow: "0 8px 16px rgba(0,0,0,0.3)",
+};
+
 const updateButtonStyle = (loading: boolean): React.CSSProperties => ({
-  backgroundColor: loading ? "#a7f3d0" : "#22c55e",
+  backgroundColor: loading ? "#a7f3d0" : "#2563eb",
   color: "white",
   padding: "1rem 2rem",
   fontSize: "1.25rem",
   fontWeight: "bold",
-  borderRadius: "0.5rem",
+  borderRadius: "0.75rem",
   border: "none",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.2)",
+  transition: "all 0.2s",
   cursor: loading ? "not-allowed" : "pointer",
-  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
+  transform: "translateY(0px)",
 });
+
+const updateButtonHoverStyle: React.CSSProperties = {
+  transform: "translateY(-5px)",
+  boxShadow: "0 8px 16px rgba(0,0,0,0.3)",
+};
+
 const menuGridStyle: React.CSSProperties = {
   display: "grid",
   gridTemplateColumns: "repeat(3, 1fr)",
-  gap: "1.5rem",
+  gap: "2rem",
   marginTop: "3rem",
   width: "100%",
   maxWidth: "800px",
 };
+
 const menuButtonStyle: React.CSSProperties = {
-  fontSize: "1.5rem",
+  fontSize: "1.2rem",
   fontWeight: "bold",
-  padding: "1.5rem",
-  borderRadius: "0.75rem",
-  border: "none",
-  color: "white",
-  boxShadow: "0 2px 6px rgba(0, 0, 0, 0.1)",
+  padding: "1rem",
+  borderRadius: "1rem",
+  border: "2px solid #3b82f6",
+  boxShadow: "0 4px 10px rgba(0,0,0,0.1)",
+  transition: "all 0.2s",
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+};
+
+const iconStyle: React.CSSProperties = {
+  width: "60px",
+  height: "60px",
+  marginBottom: "0.5rem",
 };

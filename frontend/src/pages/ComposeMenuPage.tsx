@@ -5,21 +5,29 @@ import KotoriHeader from "../components/KotoriHeader";
 const ComposeMenuPage: React.FC = () => {
   const navigate = useNavigate();
 
+  const buttons = [
+    {
+      label: "新規メール作成",
+      icon: "/images/compose_page1.png",
+      onClick: () => navigate("/compose/new"), // ✅ 正しいパスに修正
+    },
+    {
+      label: "下書き一覧",
+      icon: "/images/compose_page2.png",
+      onClick: () => navigate("/compose/drafts"), // ✅ 正しいパスに修正
+    },
+  ];
+
   return (
     <div style={containerStyle}>
       <KotoriHeader message="メールの作成ページです" />
-
       <div style={buttonContainerStyle}>
-        <ActionButton
-          text="新規メール作成"
-          color="#3b82f6"
-          onClick={() => navigate("/compose/new")}
-        />
-        <ActionButton
-          text="下書き一覧"
-          color="#10b981"
-          onClick={() => navigate("/compose/drafts")}
-        />
+        {buttons.map((btn, idx) => (
+          <button key={idx} onClick={btn.onClick} style={buttonStyle}>
+            <img src={btn.icon} alt={btn.label} style={iconStyle} />
+            <span>{btn.label}</span>
+          </button>
+        ))}
       </div>
     </div>
   );
@@ -27,35 +35,7 @@ const ComposeMenuPage: React.FC = () => {
 
 export default ComposeMenuPage;
 
-// ✅ 共通ボタンコンポーネント
-const ActionButton = ({
-  text,
-  color,
-  onClick,
-}: {
-  text: string;
-  color: string;
-  onClick: () => void;
-}) => (
-  <button
-    onClick={onClick}
-    style={{
-      backgroundColor: color,
-      color: "white",
-      fontSize: "1.5rem",
-      padding: "1rem 2rem",
-      borderRadius: "0.75rem",
-      border: "none",
-      cursor: "pointer",
-      boxShadow: "0 2px 6px rgba(0, 0, 0, 0.15)",
-      width: "100%",
-      maxWidth: "300px",
-    }}
-  >
-    {text}
-  </button>
-);
-
+// --- スタイル ---
 const containerStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",
@@ -68,7 +48,42 @@ const containerStyle: React.CSSProperties = {
 
 const buttonContainerStyle: React.CSSProperties = {
   display: "flex",
-  flexDirection: "column",
+  justifyContent: "center",
+  flexWrap: "wrap",
   gap: "2rem",
   marginTop: "3rem",
 };
+
+const buttonStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
+  justifyContent: "center",
+  width: "220px",
+  height: "200px",
+  border: "2px solid #3b82f6",
+  borderRadius: "1rem",
+  backgroundColor: "#fff",
+  color: "#111",
+  fontSize: "1.5rem",
+  fontWeight: "bold",
+  cursor: "pointer",
+  transition: "transform 0.2s, box-shadow 0.2s",
+  boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+};
+
+const iconStyle: React.CSSProperties = {
+  width: "80px",
+  height: "80px",
+  marginBottom: "1rem",
+};
+
+// ✅ ホバー用にCSS追加 (追記すると統一感が出ます)
+const style = document.createElement("style");
+style.innerHTML = `
+  button:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+  }
+`;
+document.head.appendChild(style);
