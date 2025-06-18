@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../components/UserContext";
+import { fetchWithAuth } from "../api";
 
 const LoginPage: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +19,9 @@ const LoginPage: React.FC = () => {
     try {
       const res = await fetch("/auth/login", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+        },
         body: JSON.stringify(formData),
       });
 
@@ -29,11 +32,14 @@ const LoginPage: React.FC = () => {
 
       const data = await res.json();
 
+      // ✅ トークンを保存
+      localStorage.setItem("token", data.access_token);
+
       login({
         email: data.user.email,
         name: data.user.name,
         token: data.access_token,
-        icon: "",
+        icon: data.user.icon || "",
       });
 
       navigate("/home");
@@ -118,7 +124,7 @@ const buttonStyle: React.CSSProperties = {
   width: "100%",
   padding: "1rem",
   fontSize: "1.1rem",
-  backgroundColor: "#3b82f6", // blue-500
+  backgroundColor: "#3b82f6",
   color: "#fff",
   border: "none",
   borderRadius: "0.5rem",

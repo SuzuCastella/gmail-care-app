@@ -108,7 +108,7 @@ def refine_reply(original: str, instruction: str) -> str:
 
 def call_gpt_compose_assist(text: str, instruction: str) -> str:
     """
-    ✨新規Compose用のAI補助API（今回追加部分）
+    新規Compose用のAI補助API
     """
     prompt = (
         "あなたは文章作成をお手伝いするAIアシスタントです。\n"

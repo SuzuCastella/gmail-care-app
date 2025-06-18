@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import KotoriHeader from "../components/KotoriHeader";
 import { useUser } from "../components/UserContext";
 import { useNavigate } from "react-router-dom";
+import { fetchWithAuth } from "../api";
 
 const KotoriDiaryPage: React.FC = () => {
   const { user } = useUser();
@@ -36,7 +37,6 @@ const KotoriDiaryPage: React.FC = () => {
     try {
       const res = await fetch("/kotori-diary/add", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: user.email,
           condition,

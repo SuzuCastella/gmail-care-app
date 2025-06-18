@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MailCardSimple from "../components/MailCardSimple";
 import { useUser } from "../components/UserContext";
+import { fetchWithAuth } from "../api"; // ✅ 追加
 
 interface Mail {
   id: string;
@@ -43,11 +44,15 @@ const MailListPage: React.FC<Props> = ({ reloadKey, mode }) => {
       if (!user) return;
       setLoading(true);
       try {
-        const res = await fetch(getListEndpoint(), {
+        const res = await fetchWithAuth(getListEndpoint(), {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: user.email }),
         });
+
+        if (!res.ok) {
+          throw new Error(`サーバーエラー: ${res.status}`);
+        }
+
         const data = await res.json();
         setMails(data.slice(0, 15));
       } catch (e) {

@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, Request
+from fastapi import APIRouter, HTTPException, Depends
 from pydantic import BaseModel
 from typing import List
 import os
@@ -7,6 +7,8 @@ from backend.gmail_utils import (
     fetch_and_cache_emails, load_cached_emails, get_token_path,
     get_gmail_service, create_mime_message
 )
+from backend.utils.auth_utils import get_current_user
+from backend.schemas.user import UserInDB
 
 router = APIRouter(tags=["Mail"])
 
@@ -19,11 +21,7 @@ class Mail(BaseModel):
     snippet: str
     spam_score: int = 0
 
-class MailRequest(BaseModel):
-    email: str
-
 class SendRequest(BaseModel):
-    user_email: str
     to: str
     cc: str = ""
     bcc: str = ""
@@ -41,44 +39,42 @@ class ForwardSendRequest(BaseModel):
     cc: str = ""
     bcc: str = ""
 
-
 ### ===================================
-### 新規送信API (今回追加部分)
+### 新規送信API
 ### ===================================
 
 @router.post("/send")
-def send_mail(req: SendRequest):
+def send_mail(req: SendRequest, user: UserInDB = Depends(get_current_user)):
     try:
-        check_token_exists(req.user_email)
-        service = get_gmail_service(req.user_email)
-        raw_message = create_mime_message(req.user_email, req.to, req.cc, req.bcc, req.subject, req.body)
+        check_token_exists(user.email)
+        service = get_gmail_service(user.email)
+        raw_message = create_mime_message(user.email, req.to, req.cc, req.bcc, req.subject, req.body)
         service.users().messages().send(userId="me", body={"raw": raw_message}).execute()
         return {"status": "success", "message": "送信完了"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
 
 ### ===================================
 ### 各フォルダの共通キャッシュ取得API
 ### ===================================
 
 @router.post("/list", response_model=List[Mail])
-def list_inbox(request: MailRequest):
-    return _list_common("inbox", request.email, lambda e: request.email in e.get("to", ""))
+def list_inbox(user: UserInDB = Depends(get_current_user)):
+    return _list_common("inbox", user.email, lambda e: user.email in e.get("to", ""))
 
 @router.post("/list_sent", response_model=List[Mail])
-def list_sent(request: MailRequest):
-    return _list_common("sent", request.email, lambda e: request.email in e.get("from_", ""))
+def list_sent(user: UserInDB = Depends(get_current_user)):
+    return _list_common("sent", user.email, lambda e: user.email in e.get("from_", ""))
 
 @router.post("/list_trash", response_model=List[Mail])
-def list_trash(request: MailRequest):
-    return _list_common("trash", request.email, lambda e: "labels" in e and "TRASH" in e["labels"])
-
+def list_trash(user: UserInDB = Depends(get_current_user)):
+    return _list_common("trash", user.email, lambda e: "labels" in e and "TRASH" in e["labels"])
 
 def _list_common(mode: str, user_email: str, filter_fn):
     try:
         emails = load_cached_emails(mode)
-        return emails
+        filtered = list(filter(filter_fn, emails))  # ← ここが必要！！
+        return filtered
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
@@ -88,16 +84,16 @@ def _list_common(mode: str, user_email: str, filter_fn):
 ### ===================================
 
 @router.post("/fetch")
-def fetch_inbox(mail_request: MailRequest):
-    return _fetch_common(mail_request.email, "inbox")
+def fetch_inbox(user: UserInDB = Depends(get_current_user)):
+    return _fetch_common(user.email, "inbox")
 
 @router.post("/fetch_sent")
-def fetch_sent(mail_request: MailRequest):
-    return _fetch_common(mail_request.email, "sent")
+def fetch_sent(user: UserInDB = Depends(get_current_user)):
+    return _fetch_common(user.email, "sent")
 
 @router.post("/fetch_trash")
-def fetch_trash(mail_request: MailRequest):
-    return _fetch_common(mail_request.email, "trash")
+def fetch_trash(user: UserInDB = Depends(get_current_user)):
+    return _fetch_common(user.email, "trash")
 
 def _fetch_common(email: str, mode: str):
     try:
@@ -113,7 +109,7 @@ def _fetch_common(email: str, mode: str):
 ### ===================================
 
 @router.get("/detail/{mail_id}")
-def get_mail_detail(mail_id: str):
+def get_mail_detail(mail_id: str, user: UserInDB = Depends(get_current_user)):
     try:
         for mode in ["inbox", "sent", "trash"]:
             emails = load_cached_emails(mode)
@@ -136,15 +132,14 @@ def get_mail_detail(mail_id: str):
 ### ===================================
 
 @router.post("/reply/{mail_id}")
-def reply_mail(mail_id: str, request: Request, req: ReplySendRequest):
+def reply_mail(mail_id: str, req: ReplySendRequest, user: UserInDB = Depends(get_current_user)):
     try:
-        user_email = get_user_email(request)
-        service = get_gmail_service(user_email)
+        service = get_gmail_service(user.email)
         msg = service.users().messages().get(userId='me', id=mail_id, format='metadata').execute()
         subject = next((h['value'] for h in msg.get("payload", {}).get("headers", [])
                         if h['name'].lower() == 'subject'), "(No Subject)")
         full_subject = f"Re: {subject}"
-        raw_message = create_mime_message(user_email, req.to, req.cc, req.bcc, full_subject, req.body)
+        raw_message = create_mime_message(user.email, req.to, req.cc, req.bcc, full_subject, req.body)
         service.users().messages().send(userId="me", body={"raw": raw_message}).execute()
         return {"status": "success", "message": "返信完了"}
     except Exception as e:
@@ -156,10 +151,9 @@ def reply_mail(mail_id: str, request: Request, req: ReplySendRequest):
 ### ===================================
 
 @router.post("/forward/{mail_id}")
-def forward_mail(mail_id: str, request: Request, req: ForwardSendRequest):
+def forward_mail(mail_id: str, req: ForwardSendRequest, user: UserInDB = Depends(get_current_user)):
     try:
-        user_email = get_user_email(request)
-        service = get_gmail_service(user_email)
+        service = get_gmail_service(user.email)
         msg = service.users().messages().get(userId='me', id=mail_id, format='full').execute()
         headers = msg.get("payload", {}).get("headers", [])
         snippet = msg.get("snippet", "")
@@ -167,7 +161,7 @@ def forward_mail(mail_id: str, request: Request, req: ForwardSendRequest):
         from_sender = next((h['value'] for h in headers if h['name'].lower() == 'from'), "")
         forward_body = f"----- 転送元: {from_sender} -----\n\n{snippet}"
         full_subject = f"FWD: {subject}"
-        raw_message = create_mime_message(user_email, req.to, req.cc, req.bcc, full_subject, forward_body)
+        raw_message = create_mime_message(user.email, req.to, req.cc, req.bcc, full_subject, forward_body)
         service.users().messages().send(userId="me", body={"raw": raw_message}).execute()
         return {"status": "success", "message": "転送完了"}
     except Exception as e:
@@ -179,12 +173,11 @@ def forward_mail(mail_id: str, request: Request, req: ForwardSendRequest):
 ### ===================================
 
 @router.delete("/delete/{mail_id}")
-def delete_mail(mail_id: str, request: Request):
+def delete_mail(mail_id: str, user: UserInDB = Depends(get_current_user)):
     try:
-        user_email = get_user_email(request)
-        service = get_gmail_service(user_email)
+        service = get_gmail_service(user.email)
         service.users().messages().trash(userId="me", id=mail_id).execute()
-        fetch_and_cache_emails(user_email, mode="inbox")
+        fetch_and_cache_emails(user.email, mode="inbox")
         return {"status": "success", "message": "ゴミ箱に移動しました"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
@@ -198,9 +191,3 @@ def check_token_exists(email: str):
     token_path = get_token_path(email)
     if not os.path.exists(token_path):
         raise HTTPException(status_code=400, detail="Gmail認証トークンが存在しません")
-
-def get_user_email(request: Request) -> str:
-    user_email = request.headers.get("X-User-Email")
-    if not user_email:
-        raise HTTPException(status_code=400, detail="User email missing")
-    return user_email

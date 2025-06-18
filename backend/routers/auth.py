@@ -6,6 +6,8 @@ from backend.schemas.user import UserCreate, UserLogin, UserOut
 from backend.models.user import User
 from backend.utils.auth_utils import hash_password, verify_password, create_access_token
 from backend import gmail_utils
+from backend.utils.auth_utils import get_current_user
+from backend.schemas.user import UserInDB
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
@@ -54,9 +56,9 @@ def login(user_login: UserLogin, db: Session = Depends(get_db)):
 
 
 @router.get("/gmail_auth")
-def gmail_auth(email: str):
+def gmail_auth(current_user: UserInDB = Depends(get_current_user)):
     try:
-        gmail_utils.get_gmail_service(user_email=email)
+        gmail_utils.get_gmail_service(user_email=current_user.email)
         return JSONResponse(content={"status": "Gmail認証成功"})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": f"Gmail認証失敗: {str(e)}"})

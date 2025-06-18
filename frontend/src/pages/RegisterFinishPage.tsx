@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { fetchWithAuth } from "../api";
 
 const RegisterFinishPage: React.FC = () => {
   const navigate = useNavigate();
@@ -17,7 +18,6 @@ const RegisterFinishPage: React.FC = () => {
     try {
       const res = await fetch("/auth/register", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           email: form.email,
           password: form.password,

@@ -18,3 +18,6 @@ class UserOut(BaseModel):
     icon: str
 
     model_config = ConfigDict(from_attributes=True)
+
+class UserInDB(BaseModel):
+    email: str

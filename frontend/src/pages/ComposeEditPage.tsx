@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import KotoriHeader from "../components/KotoriHeader";
+import { fetchWithAuth } from "../api";
 
 const ComposeEditPage: React.FC = () => {
   const navigate = useNavigate();
@@ -73,7 +74,6 @@ const ComposeEditPage: React.FC = () => {
     try {
       const res = await fetch("http://localhost:8000/mail/send", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: userEmail,
           to,
@@ -104,7 +104,6 @@ const ComposeEditPage: React.FC = () => {
     try {
       const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: userEmail,
           to,
@@ -157,7 +156,6 @@ const ComposeEditPage: React.FC = () => {
     try {
       const res = await fetch("http://localhost:8000/gpt/assist", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           original_text: body,
           instruction: aiInstruction,

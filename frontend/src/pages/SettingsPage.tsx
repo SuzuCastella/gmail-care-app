@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import KotoriHeader from "../components/KotoriHeader";
+import { fetchWithAuth } from "../api";
 
 const SettingsPage: React.FC = () => {
   const navigate = useNavigate();
@@ -55,7 +56,6 @@ const SettingsPage: React.FC = () => {
     try {
       const res = await fetch("http://localhost:8000/user/update_info", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: userInfo.email,
           name: newName,
@@ -89,7 +89,6 @@ const SettingsPage: React.FC = () => {
     try {
       const res = await fetch("http://localhost:8000/user/change_password", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           user_email: userInfo.email,
           current_password: currentPassword,
@@ -122,7 +121,6 @@ const SettingsPage: React.FC = () => {
         "http://localhost:8000/kotori-diary/family/register",
         {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
             user_email: userInfo.email,
             family_email: familyEmail,

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import MailViewer from "../components/MailViewer";
 import { useUser } from "../components/UserContext";
+import { fetchWithAuth } from "../api";
 
 const MailDetailPage: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -52,7 +53,6 @@ const MailDetailPage: React.FC = () => {
     try {
       await fetch(`/mail/delete/${id}`, {
         method: "DELETE",
-        headers: { "X-User-Email": user?.email || "" },
       });
       navigate("/inbox");
     } catch {
@@ -68,7 +68,6 @@ const MailDetailPage: React.FC = () => {
     try {
       await fetch(`/mail/restore/${id}`, {
         method: "POST",
-        headers: { "X-User-Email": user?.email || "" },
       });
       navigate("/inbox");
     } catch {
@@ -82,10 +81,6 @@ const MailDetailPage: React.FC = () => {
     try {
       const res = await fetch(`/mail/reply/${id}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-Email": user?.email || "",
-        },
         body: JSON.stringify({
           to: replyTo,
           cc: replyCc,
@@ -109,10 +104,6 @@ const MailDetailPage: React.FC = () => {
     try {
       const res = await fetch(`/mail/forward/${id}`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-Email": user?.email || "",
-        },
         body: JSON.stringify({ to: forwardTo, cc: forwardCc, bcc: forwardBcc }),
       });
       const data = await res.json();

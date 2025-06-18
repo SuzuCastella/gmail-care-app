@@ -9,7 +9,7 @@ load_dotenv()
 
 router = APIRouter()
 
-# 音声ファイルの保存先（フロントから参照される静的フォルダ）
+# 音声ファイルの保存先
 AUDIO_DIR = os.getenv("VOICE_OUTPUT_DIR", "frontend/static/audio")
 os.makedirs(AUDIO_DIR, exist_ok=True)
 

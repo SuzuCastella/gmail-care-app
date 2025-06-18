@@ -29,6 +29,7 @@ import KotoriMenuPage from "../src/pages/KotoriMenuPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useUser } from "./components/UserContext";
 import "./styles/ui.css";
+import { fetchWithAuth } from "./api";
 
 const App: React.FC = () => {
   const [reloadKey, setReloadKey] = useState(0);
@@ -54,19 +55,16 @@ const App: React.FC = () => {
     try {
       const resInbox = await fetch("/mail/fetch", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 
       const resSent = await fetch("/mail/fetch_sent", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 
       const resTrash = await fetch("/mail/fetch_trash", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: user.email }),
       });
 

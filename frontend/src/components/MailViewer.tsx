@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useUser } from "../components/UserContext"; // ✅ ここでユーザー情報からアイコン取得
 import "../styles/ui.css";
+import { fetchWithAuth } from "../api";
 
 interface MailDetail {
   id: string;
@@ -65,7 +66,6 @@ const MailViewer: React.FC = () => {
       setIsProcessing(true);
       const res = await fetch("/gpt/summarize", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: mail.body }),
       });
       const data = await res.json();
@@ -88,7 +88,6 @@ const MailViewer: React.FC = () => {
       setIsProcessing(true);
       const res = await fetch("/voice/speak", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: mail.body }),
       });
       const data = await res.json();
@@ -108,7 +107,6 @@ const MailViewer: React.FC = () => {
       setIsProcessing(true);
       const res = await fetch("/reply/generate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ text: mail.body }),
       });
       const data = await res.json();
@@ -126,7 +124,6 @@ const MailViewer: React.FC = () => {
       setIsRefining(true);
       const res = await fetch("/reply/refine", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           original: reply,
           instruction: instruction,
