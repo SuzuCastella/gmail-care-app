@@ -9,12 +9,12 @@ const ComposeMenuPage: React.FC = () => {
     {
       label: "新規メール作成",
       icon: "/images/compose_page1.png",
-      onClick: () => navigate("/compose/new"), // ✅ 正しいパスに修正
+      onClick: () => navigate("/compose/new"),
     },
     {
       label: "下書き一覧",
       icon: "/images/compose_page2.png",
-      onClick: () => navigate("/compose/drafts"), // ✅ 正しいパスに修正
+      onClick: () => navigate("/compose/drafts"),
     },
   ];
 
@@ -78,7 +78,7 @@ const iconStyle: React.CSSProperties = {
   marginBottom: "1rem",
 };
 
-// ✅ ホバー用にCSS追加 (追記すると統一感が出ます)
+// ホバー用にCSS追加
 const style = document.createElement("style");
 style.innerHTML = `
   button:hover {

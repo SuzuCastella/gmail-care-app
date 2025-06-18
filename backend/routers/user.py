@@ -93,16 +93,3 @@ def get_icon(user_id: int):
     if not os.path.exists(save_path):
         raise HTTPException(status_code=404, detail="アイコンが存在しません")
     return FileResponse(save_path)
-
-# ✅ ことり機能ON/OFF更新API
-@router.put("/update_kotori_flag")
-def update_kotori_flag(payload: KotoriFlagUpdateRequest, db: Session = Depends(get_db)):
-    user_email = payload.user_email
-    enabled = payload.enabled
-
-    user = db.query(User).filter(User.email == user_email).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    user.kotori_enabled = enabled
-    db.commit()
-    return {"message": "Updated kotori flag"}

@@ -6,7 +6,7 @@ class Draft(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     user_email = Column(String, index=True, nullable=False)
-    to = Column(String, nullable=False)  # to_ ではなく to に統一
+    to = Column(String, nullable=False)
     cc = Column(String, nullable=True)
     bcc = Column(String, nullable=True)
     subject = Column(String, nullable=True)

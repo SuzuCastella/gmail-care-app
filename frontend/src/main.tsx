@@ -11,7 +11,6 @@ root.render(
   <React.StrictMode>
     <UserProvider>
       {" "}
-      {/* ✅ 追加で App をラップ */}
       <App />
     </UserProvider>
   </React.StrictMode>

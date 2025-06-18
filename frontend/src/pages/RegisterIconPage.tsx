@@ -61,7 +61,7 @@ const RegisterIconPage: React.FC = () => {
           }}
         >
           <p style={{ margin: 0 }}>
-            次に、お気に入りのアイコン（写真）を選んでください！
+            次に、お気に入りのアイコンを選んでください！
           </p>
           <div
             style={{

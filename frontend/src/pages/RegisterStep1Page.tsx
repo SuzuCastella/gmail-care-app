@@ -34,7 +34,6 @@ const RegisterStep1Page: React.FC = () => {
       return;
     }
 
-    // ✅ ここではAPIを叩かずに、確認ページへ進むだけに修正！
     navigate("/register/confirm", { state: form });
   };
 

@@ -16,7 +16,6 @@ const KotoriDiaryPage: React.FC = () => {
   const [alreadySubmitted, setAlreadySubmitted] = useState(false);
   const [showPointPopup, setShowPointPopup] = useState(false);
 
-  // ✅ 既存のAPI (/today/check) を使う
   useEffect(() => {
     if (!user) return;
     fetch(
@@ -93,7 +92,7 @@ const KotoriDiaryPage: React.FC = () => {
           <div
             style={{ fontSize: "1.3rem", fontWeight: "bold", color: "#22c55e" }}
           >
-            ✅ 本日の日記は登録済みです！
+            本日の日記は登録済みです！
           </div>
         ) : (
           <>

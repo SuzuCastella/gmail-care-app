@@ -4,7 +4,7 @@ import base64
 from pathlib import Path
 from typing import List
 from email.mime.text import MIMEText
-
+import html
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -95,11 +95,12 @@ def fetch_and_cache_emails(user_email: str, mode: str, max_results: int = 50) ->
         sender = next((h['value'] for h in headers if h['name'].lower() == 'from'), "(Unknown Sender)")
         recipient = next((h['value'] for h in headers if h['name'].lower() == 'to'), user_email)
         date = next((h['value'] for h in headers if h['name'].lower() == 'date'), "(No Date)")
-        body = extract_plain_text(payload)
+        raw_body = extract_plain_text(payload)
+        body = html.escape(raw_body).replace("\n", "<br>")
 
-        spam_input = f"{subject}\n{body}"
-        if len(spam_input) > 5000:
-            spam_input = spam_input[:5000]
+        spam_input = f"{subject}\n{raw_body}"
+        if len(spam_input) > 1000:
+            spam_input = spam_input[:1000]
         spam_score = detect_spam_score(spam_input)
 
         emails.append({
@@ -166,7 +167,7 @@ def create_mime_message(sender: str, to: str, cc: str, bcc: str, subject: str, b
     return raw_message
 
 ### ========================
-### 実際の送信処理 (今回追加)
+### 送信処理
 ### ========================
 
 def send_gmail_actual(user_email: str, to: str, cc: str, bcc: str, subject: str, body: str):

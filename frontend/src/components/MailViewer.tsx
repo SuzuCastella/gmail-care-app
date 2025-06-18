@@ -195,9 +195,10 @@ const MailViewer: React.FC = () => {
       {/* 本文 */}
       <div className="pt-4 border-t">
         <p className="text-sm font-semibold text-gray-700 mb-2">本文：</p>
-        <div className="text-gray-800 text-base whitespace-pre-wrap leading-relaxed">
-          {mail.body}
-        </div>
+        <div
+          className="text-gray-800 text-base leading-relaxed"
+          dangerouslySetInnerHTML={{ __html: mail.body }}
+        />
       </div>
 
       {/* 要約 */}

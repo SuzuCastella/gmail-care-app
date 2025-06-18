@@ -11,7 +11,6 @@ const SettingsPage: React.FC = () => {
   const [openAccount, setOpenAccount] = useState(false);
   const [openPassword, setOpenPassword] = useState(false);
   const [openFamily, setOpenFamily] = useState(false);
-  const [openKotori, setOpenKotori] = useState(false); // ✅ ことりON/OFF新規追加
 
   const [newName, setNewName] = useState("");
   const [newYomi, setNewYomi] = useState("");
@@ -19,7 +18,6 @@ const SettingsPage: React.FC = () => {
   const [newPassword, setNewPassword] = useState("");
   const [newPasswordConfirm, setNewPasswordConfirm] = useState("");
   const [familyEmail, setFamilyEmail] = useState("");
-  const [kotoriEnabled, setKotoriEnabled] = useState(true);
 
   const [error, setError] = useState<string>("");
   const [saveMsg, setSaveMsg] = useState<string>("");
@@ -31,7 +29,6 @@ const SettingsPage: React.FC = () => {
       setUserInfo(parsed);
       setNewName(parsed.name);
       setNewYomi(parsed.yomi || parsed.name_kana);
-      setKotoriEnabled(parsed.kotori_enabled ?? true);
       fetchFamilyEmail(parsed.email);
     }
   }, []);
@@ -138,39 +135,8 @@ const SettingsPage: React.FC = () => {
         setError("登録失敗: " + (err.detail || "不明なエラー"));
         return;
       }
-      setSaveMsg("✅ 家族メールアドレスを保存しました");
+      setSaveMsg("家族メールアドレスを保存しました");
       setTimeout(() => setSaveMsg(""), 2000);
-    } catch {
-      setError("通信エラーが発生しました");
-    }
-  };
-
-  const handleToggleKotori = async (newStatus: boolean) => {
-    setKotoriEnabled(newStatus); // 即時反映
-    try {
-      const res = await fetch("http://localhost:8000/user/update_kotori_flag", {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          user_email: userInfo.email,
-          enabled: newStatus,
-        }),
-      });
-
-      if (!res.ok) {
-        const err = await res.json();
-        setError("ことり機能更新失敗: " + (err.detail || "不明なエラー"));
-        return;
-      }
-
-      setUserInfo({ ...userInfo, kotori_enabled: newStatus });
-      localStorage.setItem(
-        "user",
-        JSON.stringify({ ...userInfo, kotori_enabled: newStatus })
-      );
-      setError("");
-      setSaveMsg("✅ ことり機能を更新しました");
-      setTimeout(() => setSaveMsg(""), 3000);
     } catch {
       setError("通信エラーが発生しました");
     }

@@ -94,7 +94,7 @@ const ComposeEditorPage: React.FC = () => {
     navigate("/home");
   };
 
-  // ✅ AI補助：実際のバックエンド呼び出しに変更
+  // AI補助
   const handleAiAssist = async () => {
     if (!aiInstruction.trim()) {
       setError("AIへの指示を入力してください");

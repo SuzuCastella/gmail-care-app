@@ -8,7 +8,7 @@ interface Mail {
   snippet: string;
   date: string;
   body: string;
-  spam_score?: number; // ★ スコア型に変更
+  spam_score?: number;
 }
 
 interface Props {
@@ -16,15 +16,15 @@ interface Props {
   onViewDetail: () => void;
 }
 
-// ★ 危険度に応じた背景色生成関数
+// 危険度に応じた背景色生成関数
 const getBackgroundColor = (score: number | undefined) => {
   if (score === undefined) return "white";
 
   // 0-100 を 0-1 に正規化
   const normalized = score / 100;
 
-  // 線形ではなく、強めの非線形マッピング (指数スケーリング)
-  const intensity = Math.pow(normalized, 1.5); // ← ここ重要
+  // 線形ではなく、強めの非線形マッピング
+  const intensity = Math.pow(normalized, 1.5);
 
   const red = 255;
   const green = Math.round(255 * (1 - intensity));

@@ -51,7 +51,7 @@ const KotoriGrowthPage: React.FC = () => {
           style={kotoriStyle}
         />
         <h2 style={{ fontSize: "2rem", margin: "1rem 0" }}>
-          ことり Lv.{level}
+          ことり レベル{level}
         </h2>
         <p style={{ fontSize: "1.2rem", marginBottom: "1rem" }}>
           累計ポイント：{point} pt
@@ -86,8 +86,8 @@ const KotoriGrowthPage: React.FC = () => {
 
 const levelMessages: Record<number, string> = {
   1: "生まれたてのひよこです",
-  2: "ことりが羽ばたきの練習を始めています",
-  3: "ことりはお歌を練習しています",
+  2: "ことりが羽ばたく練習をしています",
+  3: "ことりは歌を練習しています",
   4: "ことりは空を高く飛び回れるようになりました",
   5: "ことりは大人に成長しました",
 };

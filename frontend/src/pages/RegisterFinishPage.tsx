@@ -43,7 +43,7 @@ const RegisterFinishPage: React.FC = () => {
           }
         }
 
-        setError(detail); // 🔥 ポップアップではなく画面に表示
+        setError(detail);
         return;
       }
 
@@ -111,7 +111,7 @@ const RegisterFinishPage: React.FC = () => {
           <br />
           これにて登録は終了です。
           <br />
-          使い方等が分からなければ、ぜひ「ことり」に話しかけてくださいね！
+          メールアプリFUMIを使ってみましょう！
           <div
             style={{
               position: "absolute",

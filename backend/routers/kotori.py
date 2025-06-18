@@ -1,7 +1,7 @@
 # backend/routers/kotori.py
 
 from fastapi import APIRouter, HTTPException, Request
-from backend.gpt_utils import call_gpt_api  # 既存の GPT 呼び出し関数を使います
+from backend.gpt_utils import call_gpt_api 
 
 router = APIRouter(prefix="/kotori", tags=["kotori"])
 

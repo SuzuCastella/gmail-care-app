@@ -83,7 +83,7 @@ const LoginPage: React.FC = () => {
   );
 };
 
-// 🌈 スタイル定義
+// スタイル定義
 const pageStyle: React.CSSProperties = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",

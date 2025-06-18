@@ -12,7 +12,7 @@ from backend.gmail_utils import send_gmail_actual
 
 router = APIRouter(prefix="/kotori-diary", tags=["kotori_diary"])
 
-# ✅ Pydanticスキーマ定義
+# Pydanticスキーマ定義
 class DiaryRequest(BaseModel):
     user_email: str
     condition: str
@@ -27,7 +27,7 @@ class FamilyRegisterRequest(BaseModel):
 class FamilyGetRequest(BaseModel):
     user_email: str
 
-# ✅ 迷惑メール件数カウント（ここが新規）
+# 迷惑メール件数カウント
 def count_spam_today(user_email: str, date: datetime.date, threshold: float = 0.8) -> int:
     try:
         cache_path = "data/cache/mail_cache_inbox.json"
@@ -52,7 +52,7 @@ def count_spam_today(user_email: str, date: datetime.date, threshold: float = 0.
         print(f"迷惑メールカウントエラー: {e}")
         return 0
 
-# ✅ 日記の新規登録
+# 日記の新規登録
 @router.post("/add")
 def add_diary(payload: DiaryRequest, db: Session = Depends(get_db)):
     diary = KotoriDiary(
@@ -76,14 +76,14 @@ def add_diary(payload: DiaryRequest, db: Session = Depends(get_db)):
     send_summary_to_family(payload.user_email, db)
     return {"message": "日記を保存しました"}
 
-# ✅ ポイント取得API
+# ポイント取得API
 @router.get("/point")
 def get_point(user_email: str, db: Session = Depends(get_db)):
     point_obj = db.query(KotoriPoint).filter(KotoriPoint.user_email == user_email).first()
     point = point_obj.point if point_obj else 0
     return {"point": point}
 
-# ✅ 日記一覧取得API
+# 日記一覧取得API
 @router.get("/list")
 def get_diary_list(user_email: str, db: Session = Depends(get_db)):
     diaries = db.query(KotoriDiary).filter(KotoriDiary.user_email == user_email).order_by(KotoriDiary.date.desc()).all()
@@ -98,7 +98,7 @@ def get_diary_list(user_email: str, db: Session = Depends(get_db)):
     ]
     return result
 
-# ✅ 家族メール登録
+# 家族メール登録
 @router.post("/family/register")
 def register_family(payload: FamilyRegisterRequest, db: Session = Depends(get_db)):
     user_email = payload.user_email
@@ -112,13 +112,13 @@ def register_family(payload: FamilyRegisterRequest, db: Session = Depends(get_db
     db.commit()
     return {"message": "家族のメールアドレスを登録しました"}
 
-# ✅ 家族メール取得API
+# 家族メール取得API
 @router.get("/family/get")
 def get_family(user_email: str, db: Session = Depends(get_db)):
     existing = db.query(KotoriFamilyEmail).filter(KotoriFamilyEmail.user_email == user_email).first()
     return {"family_email": existing.family_email if existing else None}
 
-# ✅ サマリー送信（迷惑メール件数も追加）
+# サマリー送信
 def send_summary_to_family(user_email: str, db: Session):
     user = db.query(User).filter(User.email == user_email).first()
     family = db.query(KotoriFamilyEmail).filter(KotoriFamilyEmail.user_email == user_email).first()
@@ -152,12 +152,12 @@ def send_summary_to_family(user_email: str, db: Session):
 
 @router.get("/today/check")
 def check_today_diary(user_email: str, db: Session = Depends(get_db)):
-    #today = datetime.now().date()
-    #today_diary = db.query(KotoriDiary).filter(
-    #    KotoriDiary.user_email == user_email,
-    #    KotoriDiary.date >= datetime(today.year, today.month, today.day)
-    #).first()
-    today_diary = None
+    today = datetime.now().date()
+    today_diary = db.query(KotoriDiary).filter(
+        KotoriDiary.user_email == user_email,
+        KotoriDiary.date >= datetime(today.year, today.month, today.day)
+    ).first()
+    #today_diary = None
 
     return {"registered": today_diary is not None}
 

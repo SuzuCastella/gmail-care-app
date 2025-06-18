@@ -140,7 +140,7 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
 
 export default HomePage;
 
-// --- メニュー定義 (アイコンパスは /images/配下前提) ---
+// --- メニュー定義 ---
 const menuItems = [
   {
     label: "受信トレイ",

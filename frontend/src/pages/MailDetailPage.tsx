@@ -9,7 +9,7 @@ const MailDetailPage: React.FC = () => {
   const location = useLocation();
   const { user } = useUser();
 
-  // ✅ URLのパスからモード判定
+  // URLのパスからモード判定
   const mode: "inbox" | "sent" | "trash" = location.pathname.includes("/trash")
     ? "trash"
     : location.pathname.includes("/sent")
@@ -214,7 +214,7 @@ const MailDetailPage: React.FC = () => {
   );
 };
 
-// 共通入力フォーム等（※ほぼそのまま）
+// 共通入力フォーム
 
 const Input = ({ label, value, onChange }: any) => (
   <div style={{ margin: "0.5rem 0" }}>
@@ -291,7 +291,7 @@ const HoverButton = ({ onClick, color, disabled, children }: any) => (
   </button>
 );
 
-// スタイル定義そのまま
+// スタイル定義
 const containerStyle = {
   minHeight: "100vh",
   backgroundColor: "#fefefe",

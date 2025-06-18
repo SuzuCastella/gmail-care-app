@@ -151,7 +151,7 @@ const ComposeEditPage: React.FC = () => {
     }
   };
 
-  // ✅ AIアシスト呼び出し（ComposeEditorPage版と統一）
+  // AIアシスト呼び出し
   const handleAiAssist = async () => {
     if (!aiInstruction.trim()) return;
     try {
@@ -250,7 +250,6 @@ const ComposeEditPage: React.FC = () => {
 
 export default ComposeEditPage;
 
-// 共通パーツ（完全統一化）
 const Input = ({ label, value, onChange }: any) => (
   <div style={{ marginBottom: "1rem" }}>
     <div style={{ fontWeight: "bold", marginBottom: "0.25rem" }}>{label}</div>

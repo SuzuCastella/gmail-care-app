@@ -23,12 +23,9 @@ import ComposeEditorPage from "../src/pages/ComposeEditorPage";
 import ComposeDraftListPage from "../src/pages/ComposeDraftListPage";
 import ComposeEditPage from "../src/pages/ComposeEditPage";
 import SettingsPage from "../src/pages/SettingsPage";
-
-// ✅ ことり日記関連ページ新規追加
 import KotoriDiaryPage from "../src/pages/KotoriDiaryPage";
 import KotoriGrowthPage from "../src/pages/KotoriGrowthPage";
 import KotoriMenuPage from "../src/pages/KotoriMenuPage";
-
 import ProtectedRoute from "./components/ProtectedRoute";
 import { useUser } from "./components/UserContext";
 import "./styles/ui.css";
@@ -204,7 +201,6 @@ const App: React.FC = () => {
           }
         />
 
-        {/* ✅ ことり日記関連ルーティング */}
         <Route
           path="/kotori-menu"
           element={
