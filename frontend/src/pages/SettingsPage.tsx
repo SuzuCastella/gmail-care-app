@@ -22,6 +22,7 @@ const SettingsPage: React.FC = () => {
 
   const [error, setError] = useState<string>("");
   const [saveMsg, setSaveMsg] = useState<string>("");
+  const [successMsg, setSuccessMsg] = useState<string>("");
 
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
@@ -36,10 +37,8 @@ const SettingsPage: React.FC = () => {
 
   const fetchFamilyEmail = async (userEmail: string) => {
     try {
-      const res = await fetch(
-        `http://localhost:8000/kotori-diary/family/get?user_email=${encodeURIComponent(
-          userEmail
-        )}`
+      const res = await fetchWithAuth(
+        `/kotori-diary/family/get?user_email=${encodeURIComponent(userEmail)}`
       );
       const data = await res.json();
       if (data?.family_email) setFamilyEmail(data.family_email);
@@ -54,7 +53,7 @@ const SettingsPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/user/update_info", {
+      const res = await fetchWithAuth("/user/update_info", {
         method: "PUT",
         body: JSON.stringify({
           user_email: userInfo.email,
@@ -75,7 +74,8 @@ const SettingsPage: React.FC = () => {
         JSON.stringify({ ...userInfo, name: newName, yomi: newYomi })
       );
       setError("");
-      alert("名前を更新しました");
+      setSuccessMsg("名前を更新しました");
+      setTimeout(() => setSuccessMsg(""), 3000);
     } catch {
       setError("通信エラーが発生しました");
     }
@@ -87,7 +87,7 @@ const SettingsPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/user/change_password", {
+      const res = await fetchWithAuth("/user/change_password", {
         method: "PUT",
         body: JSON.stringify({
           user_email: userInfo.email,
@@ -102,7 +102,8 @@ const SettingsPage: React.FC = () => {
         return;
       }
       setError("");
-      alert("パスワードを変更しました");
+      setSuccessMsg("パスワードを変更しました");
+      setTimeout(() => setSuccessMsg(""), 3000);
       setCurrentPassword("");
       setNewPassword("");
       setNewPasswordConfirm("");
@@ -117,16 +118,13 @@ const SettingsPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(
-        "http://localhost:8000/kotori-diary/family/register",
-        {
-          method: "POST",
-          body: JSON.stringify({
-            user_email: userInfo.email,
-            family_email: familyEmail,
-          }),
-        }
-      );
+      const res = await fetchWithAuth("/kotori-diary/family/register", {
+        method: "POST",
+        body: JSON.stringify({
+          user_email: userInfo.email,
+          family_email: familyEmail,
+        }),
+      });
 
       if (!res.ok) {
         const err = await res.json();
@@ -291,6 +289,7 @@ const SettingsPage: React.FC = () => {
         </div>
       )}
 
+      {successMsg && <div style={successStyle}>✅ {successMsg}</div>}
       {error && <div style={errorStyle}>⚠ {error}</div>}
     </div>
   );
@@ -386,4 +385,11 @@ const toastStyle: React.CSSProperties = {
   zIndex: 9999,
   fontWeight: "bold",
   boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+};
+
+const successStyle: React.CSSProperties = {
+  color: "green",
+  marginTop: "1.5rem",
+  fontWeight: "bold",
+  fontSize: "1.1rem",
 };

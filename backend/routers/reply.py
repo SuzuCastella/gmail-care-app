@@ -2,7 +2,7 @@ from fastapi import APIRouter, HTTPException, Request
 from pydantic import BaseModel
 from backend.gpt_utils import generate_polite_reply, refine_reply
 
-router = APIRouter()
+router = APIRouter(prefix="/reply", tags=["Reply"])
 
 
 @router.post("/generate")

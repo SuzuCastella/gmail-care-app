@@ -24,7 +24,7 @@ const KotoriDiaryPage: React.FC = () => {
     )
       .then((res) => res.json())
       .then((data) => {
-        setAlreadySubmitted(data.already_submitted);
+        setAlreadySubmitted(data.registered);
       })
       .catch(() => {
         setError("判定失敗しました");
@@ -35,7 +35,7 @@ const KotoriDiaryPage: React.FC = () => {
     if (!user) return;
 
     try {
-      const res = await fetch("/kotori-diary/add", {
+      const res = await fetchWithAuth("/kotori-diary/add", {
         method: "POST",
         body: JSON.stringify({
           user_email: user.email,

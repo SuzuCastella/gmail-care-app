@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import KotoriHeader from "../components/KotoriHeader";
-
+import { fetchWithAuth } from "../api";
 interface Draft {
   id: number;
   to: string;
@@ -36,8 +36,8 @@ const ComposeDraftListPage: React.FC = () => {
 
   const fetchDrafts = async () => {
     try {
-      const res = await fetch(
-        `http://localhost:8000/drafts/${encodeURIComponent(userEmail)}`
+      const res = await fetchWithAuth(
+        `/drafts/${encodeURIComponent(userEmail)}`
       );
       if (res.ok) {
         let data = await res.json();

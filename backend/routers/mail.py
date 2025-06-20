@@ -10,7 +10,7 @@ from backend.gmail_utils import (
 from backend.utils.auth_utils import get_current_user
 from backend.schemas.user import UserInDB
 
-router = APIRouter(tags=["Mail"])
+router = APIRouter(prefix="/mail", tags=["Mail"])
 
 ### Pydantic models
 class Mail(BaseModel):

@@ -33,10 +33,9 @@ const ComposeEditorPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/mail/send", {
+      const res = await fetchWithAuth("/mail/send", {
         method: "POST",
         body: JSON.stringify({
-          user_email: userEmail,
           to,
           cc,
           bcc,
@@ -63,7 +62,7 @@ const ComposeEditorPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch("http://localhost:8000/drafts/", {
+      const res = await fetchWithAuth("/drafts/", {
         method: "POST",
         body: JSON.stringify({
           user_email: userEmail,
@@ -101,7 +100,7 @@ const ComposeEditorPage: React.FC = () => {
     }
 
     try {
-      const res = await fetch("http://localhost:8000/gpt/assist", {
+      const res = await fetchWithAuth("/gpt/assist", {
         method: "POST",
         body: JSON.stringify({
           original_text: body,

@@ -14,7 +14,6 @@ from backend.routers import (
     reply,
     voice,
     gpt,
-    kotori,
     auth,
     draft,
     user as user_router,
@@ -38,11 +37,10 @@ app.add_middleware(
 )
 
 # 各ルーターを登録
-app.include_router(mail.router, prefix="/mail", tags=["Mail"])
-app.include_router(reply.router, prefix="/reply", tags=["Reply"])
-app.include_router(voice.router, prefix="/voice", tags=["Voice"])
-app.include_router(gpt.router, prefix="/gpt", tags=["GPT"])
-app.include_router(kotori.router)
+app.include_router(mail.router)
+app.include_router(reply.router)
+app.include_router(voice.router)
+app.include_router(gpt.router)
 app.include_router(auth.router)
 app.include_router(draft.router)
 app.include_router(user_router.router)

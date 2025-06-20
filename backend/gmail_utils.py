@@ -65,7 +65,7 @@ def get_gmail_service(user_email: str) -> object:
 ### メール取得＆キャッシュ
 ### ========================
 
-def fetch_and_cache_emails(user_email: str, mode: str, max_results: int = 50) -> int:
+def fetch_and_cache_emails(user_email: str, mode: str, max_results: int = 15) -> int: #ここのmax_results: int = 15を大きくすれば、メール全件取得も可能。今回はサーバー負荷も考えて、15件にした。
     service = get_gmail_service(user_email)
 
     label_map = {

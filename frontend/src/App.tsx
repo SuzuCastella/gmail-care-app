@@ -53,19 +53,14 @@ const App: React.FC = () => {
       return;
     }
     try {
-      const resInbox = await fetch("/mail/fetch", {
+      const resInbox = await fetchWithAuth("/mail/fetch", { method: "POST" });
+
+      const resSent = await fetchWithAuth("/mail/fetch_sent", {
         method: "POST",
-        body: JSON.stringify({ email: user.email }),
       });
 
-      const resSent = await fetch("/mail/fetch_sent", {
+      const resTrash = await fetchWithAuth("/mail/fetch_trash", {
         method: "POST",
-        body: JSON.stringify({ email: user.email }),
-      });
-
-      const resTrash = await fetch("/mail/fetch_trash", {
-        method: "POST",
-        body: JSON.stringify({ email: user.email }),
       });
 
       if (resInbox.ok && resSent.ok && resTrash.ok) {

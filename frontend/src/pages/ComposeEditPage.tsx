@@ -35,8 +35,8 @@ const ComposeEditPage: React.FC = () => {
 
     const fetchDraft = async () => {
       try {
-        const res = await fetch(
-          `http://localhost:8000/drafts/${encodeURIComponent(userEmail)}`
+        const res = await fetchWithAuth(
+          `/drafts/${encodeURIComponent(userEmail)}`
         );
         if (!res.ok) {
           setError("下書きの取得に失敗しました");
@@ -65,17 +65,16 @@ const ComposeEditPage: React.FC = () => {
 
   const deleteDraftAfterSend = async () => {
     if (!draftId) return;
-    await fetch(`http://localhost:8000/drafts/${draftId}`, {
+    await fetchWithAuth(`/drafts/${draftId}`, {
       method: "DELETE",
     });
   };
 
   const handleSend = async () => {
     try {
-      const res = await fetch("http://localhost:8000/mail/send", {
+      const res = await fetchWithAuth("/mail/send", {
         method: "POST",
         body: JSON.stringify({
-          user_email: userEmail,
           to,
           cc,
           bcc,
@@ -102,7 +101,7 @@ const ComposeEditPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
+      const res = await fetchWithAuth(`/drafts/${draftId}`, {
         method: "PUT",
         body: JSON.stringify({
           user_email: userEmail,
@@ -134,7 +133,7 @@ const ComposeEditPage: React.FC = () => {
       return;
     }
     try {
-      const res = await fetch(`http://localhost:8000/drafts/${draftId}`, {
+      const res = await fetchWithAuth(`/drafts/${draftId}`, {
         method: "DELETE",
       });
       if (!res.ok) {
@@ -154,7 +153,7 @@ const ComposeEditPage: React.FC = () => {
   const handleAiAssist = async () => {
     if (!aiInstruction.trim()) return;
     try {
-      const res = await fetch("http://localhost:8000/gpt/assist", {
+      const res = await fetchWithAuth("/gpt/assist", {
         method: "POST",
         body: JSON.stringify({
           original_text: body,

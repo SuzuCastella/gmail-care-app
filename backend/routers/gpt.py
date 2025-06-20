@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException, Request
 from backend.gpt_utils import summarize_and_simplify
 
-router = APIRouter()
+router = APIRouter(prefix="/gpt", tags=["GPT"])
 
 @router.post("/summarize")
 async def summarize_text(request: Request):

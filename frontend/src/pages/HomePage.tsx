@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-
+import { fetchWithAuth } from "../api";
 interface Props {
   fetchMails: () => void;
 }
@@ -29,7 +29,7 @@ const HomePage: React.FC<Props> = ({ fetchMails }) => {
   const handleGmailAuth = async () => {
     if (!email) return;
     try {
-      const res = await fetch(
+      const res = await fetchWithAuth(
         `/auth/gmail_auth?email=${encodeURIComponent(email)}`
       );
       const data = await res.json();

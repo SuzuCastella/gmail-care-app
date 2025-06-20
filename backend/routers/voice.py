@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-router = APIRouter()
+router = APIRouter(prefix="/voice", tags=["voice"])
 
 # 音声ファイルの保存先
 AUDIO_DIR = os.getenv("VOICE_OUTPUT_DIR", "frontend/static/audio")

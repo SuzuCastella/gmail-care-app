@@ -51,7 +51,7 @@ const MailDetailPage: React.FC = () => {
     setIsDeleting(true);
     setStatusMessage("削除中です。お待ちください！");
     try {
-      await fetch(`/mail/delete/${id}`, {
+      await fetchWithAuth(`/mail/delete/${id}`, {
         method: "DELETE",
       });
       navigate("/inbox");
@@ -66,7 +66,7 @@ const MailDetailPage: React.FC = () => {
     setIsDeleting(true);
     setStatusMessage("復元中です。お待ちください！");
     try {
-      await fetch(`/mail/restore/${id}`, {
+      await fetchWithAuth(`/mail/restore/${id}`, {
         method: "POST",
       });
       navigate("/inbox");
@@ -79,7 +79,7 @@ const MailDetailPage: React.FC = () => {
 
   const handleReplySend = async () => {
     try {
-      const res = await fetch(`/mail/reply/${id}`, {
+      const res = await fetchWithAuth(`/mail/reply/${id}`, {
         method: "POST",
         body: JSON.stringify({
           to: replyTo,
@@ -102,7 +102,7 @@ const MailDetailPage: React.FC = () => {
 
   const handleForwardSend = async () => {
     try {
-      const res = await fetch(`/mail/forward/${id}`, {
+      const res = await fetchWithAuth(`/mail/forward/${id}`, {
         method: "POST",
         body: JSON.stringify({ to: forwardTo, cc: forwardCc, bcc: forwardBcc }),
       });

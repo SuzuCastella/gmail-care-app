@@ -12,7 +12,9 @@ export default defineConfig({
       "/voice": "http://localhost:8000",
       "/gpt": "http://localhost:8000",
       "/emotion": "http://localhost:8000",
-      "/kotori": "http://localhost:8000",
+      "/drafts": "http://localhost:8000",
+      "/user": "http://localhost:8000",
+      "/kotori-diary": "http://localhost:8000",
     },
   },
 });

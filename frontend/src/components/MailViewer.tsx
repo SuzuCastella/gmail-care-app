@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useUser } from "../components/UserContext"; // ✅ ここでユーザー情報からアイコン取得
+import { useUser } from "../components/UserContext";
 import "../styles/ui.css";
 import { fetchWithAuth } from "../api";
 
@@ -23,6 +23,7 @@ const MailViewer: React.FC = () => {
   const [instruction, setInstruction] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isRefining, setIsRefining] = useState(false);
+  const [actionInProgress, setActionInProgress] = useState(false);
 
   useEffect(() => {
     setMail(null);
@@ -34,7 +35,9 @@ const MailViewer: React.FC = () => {
 
     const fetchMailDetail = async () => {
       try {
-        const res = await fetch(`/mail/detail/${id}`);
+        const res = await fetchWithAuth(`/mail/detail/${id}`, {
+          method: "GET",
+        });
         const data = await res.json();
         setMail(data);
       } catch (err) {
@@ -48,7 +51,7 @@ const MailViewer: React.FC = () => {
 
   const formatDateJST = (utcDate: string) => {
     const date = new Date(utcDate);
-    const jstDate = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+    const jstDate = new Date(date.getTime());
     return jstDate.toLocaleString("ja-JP", {
       timeZone: "Asia/Tokyo",
       year: "numeric",
@@ -64,7 +67,8 @@ const MailViewer: React.FC = () => {
     if (!mail) return;
     try {
       setIsProcessing(true);
-      const res = await fetch("/gpt/summarize", {
+      setActionInProgress(true);
+      const res = await fetchWithAuth("/gpt/summarize", {
         method: "POST",
         body: JSON.stringify({ text: mail.body }),
       });
@@ -74,6 +78,7 @@ const MailViewer: React.FC = () => {
       console.error(err);
     } finally {
       setIsProcessing(false);
+      setActionInProgress(false);
     }
   };
 
@@ -86,7 +91,8 @@ const MailViewer: React.FC = () => {
     if (!mail) return;
     try {
       setIsProcessing(true);
-      const res = await fetch("/voice/speak", {
+      setActionInProgress(true);
+      const res = await fetchWithAuth("/voice/speak", {
         method: "POST",
         body: JSON.stringify({ text: mail.body }),
       });
@@ -98,6 +104,7 @@ const MailViewer: React.FC = () => {
       console.error(err);
     } finally {
       setIsProcessing(false);
+      setActionInProgress(false);
     }
   };
 
@@ -105,7 +112,8 @@ const MailViewer: React.FC = () => {
     if (!mail) return;
     try {
       setIsProcessing(true);
-      const res = await fetch("/reply/generate", {
+      setActionInProgress(true);
+      const res = await fetchWithAuth("/reply/generate", {
         method: "POST",
         body: JSON.stringify({ text: mail.body }),
       });
@@ -115,6 +123,7 @@ const MailViewer: React.FC = () => {
       console.error(err);
     } finally {
       setIsProcessing(false);
+      setActionInProgress(false);
     }
   };
 
@@ -122,7 +131,8 @@ const MailViewer: React.FC = () => {
     if (!reply || !instruction) return;
     try {
       setIsRefining(true);
-      const res = await fetch("/reply/refine", {
+      setActionInProgress(true);
+      const res = await fetchWithAuth("/reply/refine", {
         method: "POST",
         body: JSON.stringify({
           original: reply,
@@ -136,6 +146,7 @@ const MailViewer: React.FC = () => {
       console.error(err);
     } finally {
       setIsRefining(false);
+      setActionInProgress(false);
     }
   };
 
@@ -158,7 +169,6 @@ const MailViewer: React.FC = () => {
         </p>
       </div>
 
-      {/* ことり吹き出し */}
       <div className="kotori-assist-with-icon">
         <img src="/images/kotori.png" alt="ことり" className="kotori-icon" />
         <div>
@@ -172,15 +182,21 @@ const MailViewer: React.FC = () => {
               <button
                 onClick={handleSummarize}
                 className="fancy-btn primary-btn"
+                disabled={actionInProgress}
               >
                 要約
               </button>
-              <button onClick={handleSpeak} className="fancy-btn secondary-btn">
+              <button
+                onClick={handleSpeak}
+                className="fancy-btn secondary-btn"
+                disabled={actionInProgress}
+              >
                 読み上げ
               </button>
               <button
                 onClick={handleGenerateReply}
                 className="fancy-btn ai-btn"
+                disabled={actionInProgress}
               >
                 返信生成
               </button>
@@ -189,7 +205,6 @@ const MailViewer: React.FC = () => {
         </div>
       </div>
 
-      {/* 本文 */}
       <div className="pt-4 border-t">
         <p className="text-sm font-semibold text-gray-700 mb-2">本文：</p>
         <div
@@ -198,7 +213,6 @@ const MailViewer: React.FC = () => {
         />
       </div>
 
-      {/* 要約 */}
       {summary && (
         <div className="summary-card">
           <h3>ことりが要約しました</h3>
@@ -206,7 +220,6 @@ const MailViewer: React.FC = () => {
         </div>
       )}
 
-      {/* 読み上げ */}
       {audioSrc && (
         <div className="summary-card">
           <h3>ことりが読み上げます</h3>
@@ -214,7 +227,6 @@ const MailViewer: React.FC = () => {
         </div>
       )}
 
-      {/* AI返信 */}
       {reply &&
         (isRefining ? (
           <div className="summary-card">
@@ -249,8 +261,12 @@ const MailViewer: React.FC = () => {
                 value={instruction}
                 onChange={(e) => setInstruction(e.target.value)}
               />
-              <button onClick={handleRefineReply} className="refine-button">
-                AI再編集
+              <button
+                onClick={handleRefineReply}
+                className="refine-button"
+                disabled={actionInProgress}
+              >
+                ことりに依頼
               </button>
             </div>
           </div>
