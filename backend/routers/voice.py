@@ -1,5 +1,6 @@
 import os
 import uuid
+import re
 from fastapi import APIRouter, HTTPException, Request
 from fastapi.responses import FileResponse
 from gtts import gTTS
@@ -13,6 +14,12 @@ router = APIRouter(prefix="/voice", tags=["voice"])
 AUDIO_DIR = os.getenv("VOICE_OUTPUT_DIR", "frontend/static/audio")
 os.makedirs(AUDIO_DIR, exist_ok=True)
 
+def remove_html_tags(text: str) -> str:
+    """
+    入力テキストからすべてのHTMLタグを除去する
+    """
+    return re.sub(r"<[^>]+>", "", text)
+
 
 @router.post("/speak")
 async def text_to_speech(request: Request):
@@ -25,10 +32,13 @@ async def text_to_speech(request: Request):
         if not text:
             raise ValueError("textフィールドが空です")
 
+        # HTMLタグを除去
+        clean_text = remove_html_tags(text)
+
         filename = f"{uuid.uuid4().hex}.mp3"
         filepath = os.path.join(AUDIO_DIR, filename)
 
-        tts = gTTS(text=text, lang='ja')
+        tts = gTTS(text=clean_text, lang='ja')
         tts.save(filepath)
 
         return {"status": "success", "filename": filename}
